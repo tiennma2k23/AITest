@@ -1,11 +1,12 @@
 import cv2
-import argparse
+#import argparse
 from utils import *
 import mediapipe as mp
 from body_part_angle import BodyPartAngle
 from types_of_exercise import TypeOfExercise
-import time
+#import time
 import tkinter as tk
+import tkinter.messagebox as messagebox
 
 class App(tk.Tk):
     def __init__(self):
@@ -13,103 +14,130 @@ class App(tk.Tk):
         self.geometry("800x480")
         self.title('Demo')
 
+
+        self.protocol("WM_DELETE_WINDOW", self.onClose)
+        self.Authed = tk.BooleanVar(self, False)
+        self.auth = Auth(self)
+        self.main = Main(self)
+
+        self.auth.pack()
+
+    def onClose(self):
+        if (messagebox.askyesno('Quit?', 'U quit?')):
+            self.Authed.set(False)
+            self.destroy()
+
+class Auth(tk.Frame):
+    def __init__(self, parent):
+        super().__init__()
+        self.parent = parent
+        self.username = tk.StringVar(self, '')
+        self.password = tk.StringVar(self, '')
+
+        self.authF = tk.Frame(self)
+        self.usrLabel = tk.Label(self.authF, text="Username: ").pack()
+        self.pswLabel = tk.Label(self.authF, text="Password: ").pack()
+        self.usrEntry = tk.Entry(self.authF, width=20, textvariable=self.username).pack()
+        self.pswEntry = tk.Entry(self.authF, width=20, textvariable=self.password).pack()
+        self.smbBtn = tk.Button(self.authF, text="Login", command=self.UsrAuth).pack()
+        self.authF.pack()
+
+    def UsrAuth(self):
+        if (self.username.get()):
+            print("Access Granted!")
+            self.parent.Authed.set(True)
+            self.parent.main.pack()
+            self.destroy()
+
+class Main(tk.Frame):
+    def __init__(self, parent):
+        super().__init__()
+        self.parent = parent
         self.eType = ('pull-up', 'push-up', 'sit-up', 'squat', 'walk')
         self.tkStr = tk.StringVar(self)
+        
+        self.mainF = tk.Frame(self)
 
-        self.protocol("WM_DELETE_WINDOW", self.onDestroy)
-        self.createWidget()
+        self.label = tk.Label(self.mainF,  text='Select:').pack()
+        # option menu
+        self.option_menu = tk.OptionMenu(
+            self.mainF,
+            self.tkStr,
+            '',
+            *self.eType).pack()
+        self.btn = tk.Button(
+            self.mainF, 
+            text='Show camera',
+            command=self.onShowCameraClicked).pack()
 
-    def onDestroy(self):
-        self.tkStr.set('')
-        self.destroy()
+        self.mainF.pack()
 
     def onShowCameraClicked(self):
         if not (self.tkStr.get()): print('Invalid')
-        else: self.destroy()
+        else: self.quit()
 
-    def createWidget(self):
-        self.label = tk.Label(self,  text='Select:')
-        self.label.pack()
+app = App()
+mp_drawing = mp.solutions.drawing_utils
+mp_pose = mp.solutions.pose
+pose = mp_pose.Pose(min_detection_confidence=0.5,
+                        min_tracking_confidence=0.5)
 
-        # option menu
-        self.option_menu = tk.OptionMenu(
-            self,
-            self.tkStr,
-            '',
-            *self.eType)
-        self.option_menu.pack()
-
-        self.btn = tk.Button(self, text='Show camera',command=self.onShowCameraClicked)
-        self.btn.pack()
-    
 while True:
-    app = App()
     app.mainloop()
-    if not (app.tkStr.get()): break
+    if not (app.Authed.get()): break
 
-    args = [app.tkStr.get(), app.tkStr.get()+".mp4"]
-    print(args)
-
-    mp_drawing = mp.solutions.drawing_utils
-    mp_pose = mp.solutions.pose
-
-    cap = cv2.VideoCapture("Exercise_videos/" + args[1]) #Test videos
+    exType = app.main.tkStr.get()
+    cap = cv2.VideoCapture("Exercise_videos/" + exType + ".mp4") #Test videos
     #cap = cv2.VideoCapture(0)  # webcam
-
     cap.set(3, 800)  # width
     cap.set(4, 480)  # height
 
     # setup mediapipe
-    with mp_pose.Pose(min_detection_confidence=0.5,
-                    min_tracking_confidence=0.5) as pose:
-
-        counter = 0  # movement of exercise
-        status = True  # state of move
-        while cap.isOpened():
-            ret, frame = cap.read()
-            # result_screen = np.zeros((250, 400, 3), np.uint8)
-            try:
-                frame = cv2.resize(frame, (800, 480), interpolation=cv2.INTER_AREA)
-            except:
-                break
-            # recolor frame to RGB
+    counter = 0  # movement of exercise
+    status = False  # state of move
+    while cap.isOpened():
+        frame = cap.read()[1] #np.ndarray format
+        try:
+            frame = cv2.resize(frame, (800, 480), interpolation=cv2.INTER_AREA)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            frame.flags.writeable = False
+        except:
+            break
 
-            # make detection
-            start = time.time()
-            results = pose.process(frame)
-            end = time.time()
-            print(results, end-start)
-            # recolor back to BGR
-            frame.flags.writeable = True
-            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        #start = time.time()
+        results = pose.process(frame) #RGB format required
+        #end = time.time()
+        #print(results, end-start)
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) #openCV requires BGR
 
-            try:
-                landmarks = results.pose_landmarks.landmark
-                counter, status = TypeOfExercise(landmarks).calculate_exercise(
-                    args[0], counter, status)
-            except:
-                pass
+        #Get landmarks and update
+        try:
+            landmarks = results.pose_landmarks.landmark
+            counter, status = TypeOfExercise(landmarks).calculate_exercise(
+                exType, counter, status)
+        except:
+            pass
 
-            frame = score_table(args[0], frame, counter, status)
+        #Start drawing
+        frame.flags.writeable = True #Disable read-only
 
-            # render detections (for landmarks)
-            mp_drawing.draw_landmarks(
-                frame,
-                results.pose_landmarks,
-                mp_pose.POSE_CONNECTIONS,
-                mp_drawing.DrawingSpec(color=(255, 255, 255),
-                                    thickness=2,
-                                    circle_radius=2),
-                mp_drawing.DrawingSpec(color=(174, 139, 45),
-                                    thickness=2,
-                                    circle_radius=2),
-            )
+        #Draw ScoreTable
+        frame = score_table(exType, frame, counter, status)
+        #Draw landmarks and connections
+        mp_drawing.draw_landmarks(
+            frame,
+            results.pose_landmarks,
+            mp_pose.POSE_CONNECTIONS,
+            mp_drawing.DrawingSpec(color=(255, 255, 255),
+                                thickness=2,
+                                circle_radius=2),
+            mp_drawing.DrawingSpec(color=(174, 139, 45),
+                                thickness=2,
+                                circle_radius=2),
+        )
 
-            cv2.imshow('Video', frame)
-            if cv2.waitKey(10) & 0xFF == ord('q'):
-                break
+        cv2.imshow('Video', frame) #Render
+        if cv2.waitKey(10) & 0xFF == ord('q'):
+            break
 
-        cap.release()
-        cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
