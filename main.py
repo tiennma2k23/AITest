@@ -22,8 +22,24 @@ try:
 except Exception as e:
     print(e)
 
+# Save and get data
+import pickle
+def save_object(obj):
+    try:
+        with open("data.pickle", "wb") as f:
+            pickle.dump(obj, f, protocol=pickle.HIGHEST_PROTOCOL)
+    except Exception as ex:
+        print("Error during pickling object (Possibly unsupported):", ex)
+def load_object(filename):
+    try:
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    except Exception as ex:
+        print("Error during unpickling object (Possibly unsupported):", ex)
+ 
+
 db=cluster["excercise_db_test"]
-username="demo"
+# username="demo"
 
 class App(tk.Tk):
     def __init__(self):
@@ -48,23 +64,23 @@ class Auth(tk.Frame):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
-        self.username = tk.StringVar(self, '')
-        self.password = tk.StringVar(self, '')
+    #     self.username = tk.StringVar(self, '')
+    #     self.password = tk.StringVar(self, '')
 
         self.authF = tk.Frame(self)
-        self.usrLabel = tk.Label(self.authF, text="Username: ").pack()
-        self.pswLabel = tk.Label(self.authF, text="Password: ").pack()
-        self.usrEntry = tk.Entry(self.authF, width=20, textvariable=self.username).pack()
-        self.pswEntry = tk.Entry(self.authF, width=20, textvariable=self.password).pack()
+    #     self.usrLabel = tk.Label(self.authF, text="Username: ").pack()
+    #     self.pswLabel = tk.Label(self.authF, text="Password: ").pack()
+    #     self.usrEntry = tk.Entry(self.authF, width=20, textvariable=self.username).pack()
+    #     self.pswEntry = tk.Entry(self.authF, width=20, textvariable=self.password).pack()
         self.smbBtn = tk.Button(self.authF, text="Login", command=self.UsrAuth).pack()
         self.authF.pack()
 
     def UsrAuth(self):
-        if (self.username.get()):
-            print("Access Granted!")
-            self.parent.Authed.set(True)
-            self.parent.main.pack()
-            self.destroy()
+        # if (self.username.get()):
+        print("Access Granted!")
+        self.parent.Authed.set(True)
+        self.parent.main.pack()
+        self.destroy()
 
 class Main(tk.Frame):
     def __init__(self, parent):
@@ -98,10 +114,12 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(min_detection_confidence=0.5,
                         min_tracking_confidence=0.5)
-
+# Get user_db
+user_db=load_object("data.pickle")
+print(user_db)
 while True:
     app.mainloop()
-    if not (app.Authed.get()): break
+    # if not (app.Authed.get()): break
 
     exType = app.main.tkStr.get()
     cap = cv2.VideoCapture("Exercise_videos/" + exType + ".mp4") #Test videos
@@ -153,11 +171,13 @@ while True:
         )
 
         cv2.imshow('Video', frame) #Render
-        if cv2.waitKey(10) & 0xFF == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     exercise_type=exType
     collection=db[exercise_type]
+    
+    username=user_db['username']
     if(collection.count_documents({"username":username})==0):
         collection.insert_one({"_id":username,"username":username,"counter":0})
     collection.update_one({"username":username},{"$inc":{"counter":counter}})
