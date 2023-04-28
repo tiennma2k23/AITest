@@ -502,6 +502,8 @@ class resend(Frame):
 
         self.button_image_2 = PhotoImage(
             file=r'./assets/resendpass/button_2.png')
+        self.button_image_2_hover = PhotoImage(
+            file=r'./assets/resendpass/button_2_hover.png')
         button_2 = canvas.create_image(
             309,
             241,
@@ -510,6 +512,10 @@ class resend(Frame):
         )
         canvas.tag_bind(button_2, '<ButtonPress-1>',
                         lambda _: print("Button_2 clicked"))
+        canvas.tag_bind(button_2, '<Enter>', lambda _: canvas.itemconfigure(
+            button_2, image=self.button_image_2_hover))
+        canvas.tag_bind(button_2, '<Leave>', lambda _: canvas.itemconfigure(
+            button_2, image=self.button_image_2))
 
         canvas.create_text(
             248.0,
