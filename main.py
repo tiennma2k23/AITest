@@ -1,19 +1,20 @@
 import cv2
-#import argparse
-from utils import *
-import mediapipe as mp
-from body_part_angle import BodyPartAngle
-from types_of_exercise import TypeOfExercise
 #import time
+import mediapipe as mp
 import tkinter as tk
 import tkinter.messagebox as messagebox
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import json
-#from userHandle._testLogin import Login
-from Techstart_appUI.UI import UserHandle
+import pickle
+
+# from body_part_angle import BodyPartAngle
+from Utils.Calc.types_of_exercise import TypeOfExercise
+from Utils.Calc.utils import *
+from UI.UI import UserHandle
+
 """
-uri = json.loads(open("adminAuth.json","r").read())["uri"]
+uri = json.loads(open("adminAuth/adminAuth.json","r").read())["uri"]
 cluster=MongoClient(uri, server_api=ServerApi('1'))
 
 #Check connection
@@ -22,12 +23,11 @@ try:
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
-"""
+
 # Save and get data
-import pickle
 def save_object(obj):
     try:
-        with open("data.pickle", "wb") as f:
+        with open("Appdata/userData/data.pickle", "wb") as f:
             pickle.dump(obj, f, protocol=pickle.HIGHEST_PROTOCOL)
     except Exception as ex:
         print("Error during pickling object (Possibly unsupported):", ex)
@@ -38,6 +38,10 @@ def load_object(filename):
     except Exception as ex:
         print("Error during unpickling object (Possibly unsupported):", ex)
 
+# Get user_db
+user_db=load_object("Appdata/userData/data.pickle")
+print(user_db)
+"""
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -90,16 +94,13 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(min_detection_confidence=0.5,
                         min_tracking_confidence=0.5)
-# Get user_db
-user_db=load_object("data.pickle")
-print(user_db)
 
 while True:
     app.mainloop()
     if not (app.Authed.get()): break
 
     exType = app.main.tkStr.get()
-    cap = cv2.VideoCapture("Exercise_videos/" + exType + ".mp4") #Test videos
+    cap = cv2.VideoCapture("_test/videos/" + exType + ".mp4") #Test videos
     #cap = cv2.VideoCapture(0)  # webcam
     cap.set(3, 800)  # width
     cap.set(4, 480)  # height
@@ -152,6 +153,7 @@ while True:
             break
     
     """
+    #Firebase
     exercise_type=exType
     collection=db[exercise_type]
     

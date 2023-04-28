@@ -6,14 +6,14 @@ from pathlib import Path
 
 from tkinter import *
 import tkinter.messagebox as MessageBox
-from Techstart_appUI.authen import Auth
+from Utils.authen import Auth
 
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r".\assets")
+ASSETS_PATH = OUTPUT_PATH / Path(r"./assets")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
