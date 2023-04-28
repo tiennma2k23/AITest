@@ -1,7 +1,7 @@
 from tkinter import *
 import Login
 import Register
-
+import Resend_Password
 
 class root(Tk):
     def __init__(self, *args, **kwargs):
@@ -23,7 +23,7 @@ class root(Tk):
         # We will now create a dictionary of frames
         self.frames = {}
         # we'll create the frames themselves later but let's add the components to the dictionary.
-        for F in (Login.login_frame, Register.sign_up_frame):
+        for F in (Login.login_frame, Register.sign_up_frame, Resend_Password.resend):
             frame = F(container, self)
 
             # the windows class acts as the root window for the frames.

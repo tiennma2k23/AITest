@@ -3,21 +3,15 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
-<<<<<<< HEAD:Techstart_appUI/Login.py
 
 from tkinter import *
 import Register
-=======
-from pathlib import Path
-
-from tkinter import *
->>>>>>> e29b13627ecb4d7a53f565bf5a35027ce1008223:UI/Login.py
+import Resend_Password
 
 # Explicit imports to satisfy Flake8
 #from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
-<<<<<<< HEAD:Techstart_appUI/Login.py
 class login_frame(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
@@ -61,7 +55,7 @@ class login_frame(Frame):
 
         def fgpass_on_click(e):
             forget_pass.configure(fg="#666666")
-            #alert/success j do tinh sau
+            controller.show_frame(Resend_Password.resend)
 
         forget_pass.bind('<Button-1>', fgpass_on_click)
         forget_pass.bind('<Enter>', lambda e: forget_pass.configure(fg="#BBBBBB"))
@@ -189,168 +183,3 @@ class login_frame(Frame):
             self.parent.parent.geometry('800x480')
             self.parent.parent.main.pack()
             self.parent.destroy()
-=======
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r".\assets\frame1")
-
-
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
-
-root = Tk()
-window = Frame(root)
-root.geometry("746x661")
-
-window.pack(side="top", fill="both", expand=True)
-window.configure(bg = "#FFFFFF")
-window.grid_rowconfigure(0, weight=1)
-window.grid_columnconfigure(0, weight=1)
-
-username = StringVar()
-password = StringVar()
-
-canvas = Canvas(
-    window,
-    bg = "#FFFFFF",
-    height = 661,
-    width = 746,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
-)
-
-canvas.place(x = 0, y = 0)
-canvas.create_rectangle(
-    112.0,
-    73.0,
-    634.6497802734375,
-    614.183349609375,
-    fill="#BAB8B8",
-    outline="")
-
-# canvas.create_text(
-#     411.0,
-#     545.0,
-#     anchor="nw",
-#     text="Register here",
-#     fill="#FFFFFF",
-#     font=("Lato Regular", 14 * -1)
-# )
-
-def txt_on_click(e):
-    txt.configure(fg="grey")
-def txt_on_enter(e):
-    txt.configure(fg="#DDDDDD")
-def txt_on_leave(e):
-    txt.configure(fg="white")
-
-
-txt = Label(window, text="Register here", font=("Lato Regular", 14 * -1), fg = "white", bg="#bab8b8")
-txt.place(x=406.0, y=543.0)
-txt.bind('<Button-1>', txt_on_click)
-txt.bind('<Enter>',  txt_on_enter)
-txt.bind('<Leave>', txt_on_leave)
-
-
-canvas.create_text(
-    253.0,
-    545.0,
-    anchor="nw",
-    text="Don’t have an account?",
-    fill="#FFFFFF",
-    font=("Lato Regular", 14 * -1)
-)
-
-button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    window,
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
-    relief="flat"
-)
-button_1.place(
-    x=273.6806335449219,
-    y=480.0,
-    width=198.3193359375,
-    height=54.0
-)
-
-canvas.create_text(
-    221.0,
-    198.0,
-    anchor="nw",
-    text="Username/Email*",
-    fill="#FFFFFF",
-    font=("Lato Regular", 14 * -1)
-)
-
-canvas.create_text(
-    223.0,
-    298.0,
-    anchor="nw",
-    text="Password*",
-    fill="#FFFFFF",
-    font=("Lato Regular", 14 * -1)
-)
-
-canvas.create_text(
-    328.0,
-    94.52175903320312,
-    anchor="nw",
-    text="LOGIN",
-    fill="#FFFFFF",
-    font=("Lato Regular", 29 * -1)
-)
-
-entry_image_1 = PhotoImage(
-    file=relative_to_assets("entry_1.png"))
-entry_bg_1 = canvas.create_image(
-    372.6672668457031,
-    248.09378051757812,
-    image=entry_image_1
-)
-entry_1 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0,
-    font= ("Lato"),
-    textvariable=username
-)
-entry_1.place(
-    x=230.26683902740479,
-    y=224.0,
-    width=284.8008556365967,
-    height=46.18756103515625
-)
-
-entry_image_2 = PhotoImage(
-    file=relative_to_assets("entry_2.png"))
-entry_bg_2 = canvas.create_image(
-    372.8357849121094,
-    344.1086120605469,
-    image=entry_image_2
-)
-entry_2 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0,
-    font=('Lato'),
-    textvariable=password,
-    show="*"
-)
-entry_2.place(
-    x=230.43535709381104,
-    y=320.01483154296875,
-    width=284.8008556365967,
-    height=46.18756103515625
-)
-
-
-root.resizable(True, True)
-window.mainloop()
->>>>>>> e29b13627ecb4d7a53f565bf5a35027ce1008223:UI/Login.py

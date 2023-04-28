@@ -2,23 +2,13 @@
 from pathlib import Path
 
 from tkinter import *
-<<<<<<< HEAD:Techstart_appUI/UI.py
 from PIL import Image, ImageTk
 
-=======
-import tkinter.messagebox as MessageBox
-from Utils.authen import Auth
->>>>>>> e29b13627ecb4d7a53f565bf5a35027ce1008223:UI/UI.py
 
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
-<<<<<<< HEAD:Techstart_appUI/UI.py
-=======
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"./assets")
->>>>>>> e29b13627ecb4d7a53f565bf5a35027ce1008223:UI/UI.py
 
 class root(Tk):
     def __init__(self, *args, **kwargs):
@@ -40,7 +30,7 @@ class root(Tk):
         # We will now create a dictionary of frames
         self.frames = {}
         # we'll create the frames themselves later but let's add the components to the dictionary.
-        for F in (login_frame, sign_up_frame):
+        for F in (login_frame, sign_up_frame, resend):
             frame = F(container, self)
 
             # the windows class acts as the root window for the frames.
@@ -99,7 +89,7 @@ class login_frame(Frame):
 
         def fgpass_on_click(e):
             forget_pass.configure(fg="#666666")
-            # alert/success j do tinh sau
+            controller.show_frame(resend)
 
         forget_pass.bind('<Button-1>', fgpass_on_click)
         forget_pass.bind(
@@ -469,6 +459,90 @@ class sign_up_frame(Frame):
                                 'Please check your email for confirmation!')
             self.parent.show_frame(login_frame)
 
+
+class resend(Frame):
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        self.configure(bg="#FFFFFF")
+
+        canvas = Canvas(
+            self,
+            bg="#FFFFFF",
+            height=480,
+            width=800,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
+        canvas.place(x=0, y=0)
+        canvas.create_rectangle(
+            138.0,
+            2.0,
+            661.0,
+            480.0,
+            fill="#BAB8B8",
+            outline="")
+
+        self.back_img = PhotoImage(file=r'./assets/resendpass/button_1.png')
+        self.back_img_hover = PhotoImage(
+            file=r'./assets/resendpass/back_hover.png')
+
+        back = canvas.create_image(
+            138.0,
+            2.0,
+            anchor="nw",
+            image=self.back_img
+        )
+        canvas.tag_bind(back, '<Button-1>',
+                        lambda _: controller.show_frame(login_frame))
+        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfigure(
+            back, image=self.back_img_hover))
+        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfigure(
+            back, image=self.back_img))
+
+        self.button_image_2 = PhotoImage(
+            file=r'./assets/resendpass/button_2.png')
+        button_2 = canvas.create_image(
+            309,
+            241,
+            image=self.button_image_2,
+            anchor="nw"
+        )
+        canvas.tag_bind(button_2, '<ButtonPress-1>',
+                        lambda _: print("Button_2 clicked"))
+
+        canvas.create_text(
+            248.0,
+            146.0,
+            anchor="nw",
+            text="Send E-mail for resetting password",
+            fill="#FFFFFF",
+            font=("Lato Regular", 14 * -1)
+        )
+
+        self.resend_email = StringVar()
+        self.entry_image_1 = PhotoImage(
+            file=r'./assets/resendpass/entry_1.png')
+        entry_bg_1 = canvas.create_image(
+            399.667236328125,
+            194.09378051757812,
+            image=self.entry_image_1
+        )
+        entry_1 = Entry(
+            self,
+            bd=0,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0,
+            font=('Lato'),
+            textvariable=self.resend_email
+        )
+        entry_1.place(
+            x=257.2668390274048,
+            y=170.0,
+            width=284.80079460144043,
+            height=46.18756103515625
+        )
 
 if __name__ == "__main__":
     testObj = root()
