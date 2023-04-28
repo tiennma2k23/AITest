@@ -10,8 +10,9 @@ import tkinter.messagebox as messagebox
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import json
-
-
+#from userHandle._testLogin import Login
+from Techstart_appUI.UI import UserHandle
+"""
 uri = json.loads(open("adminAuth.json","r").read())["uri"]
 cluster=MongoClient(uri, server_api=ServerApi('1'))
 
@@ -44,13 +45,13 @@ db=cluster["excercise_db_test"]
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("800x480")
+        self.geometry("746x661")
         self.title('Demo')
 
 
         self.protocol("WM_DELETE_WINDOW", self.onClose)
         self.Authed = tk.BooleanVar(self, False)
-        self.auth = Auth(self)
+        self.auth = UserHandle(self)
         self.main = Main(self)
 
         self.auth.pack()
@@ -60,6 +61,7 @@ class App(tk.Tk):
             self.Authed.set(False)
             self.destroy()
 
+"""
 class Auth(tk.Frame):
     def __init__(self, parent):
         super().__init__()
@@ -76,11 +78,11 @@ class Auth(tk.Frame):
         self.authF.pack()
 
     def UsrAuth(self):
-        # if (self.username.get()):
-        print("Access Granted!")
-        self.parent.Authed.set(True)
-        self.parent.main.pack()
-        self.destroy()
+        if (self.username.get()):
+            print("Access Granted!")
+            self.parent.Authed.set(True)
+            self.parent.main.pack()
+            self.destroy()
 
 class Main(tk.Frame):
     def __init__(self, parent):
@@ -101,11 +103,12 @@ class Main(tk.Frame):
         self.btn = tk.Button(
             self.mainF, 
             text='Show camera',
-            command=self.onShowCameraClicked).pack()
+            command=lambda: self.onShowCameraClicked()).pack()
 
         self.mainF.pack()
 
     def onShowCameraClicked(self):
+        print('show camera clicked')
         if not (self.tkStr.get()): print('Invalid')
         else: self.quit()
 
@@ -119,7 +122,7 @@ user_db=load_object("data.pickle")
 print(user_db)
 while True:
     app.mainloop()
-    # if not (app.Authed.get()): break
+    if not (app.Authed.get()): break
 
     exType = app.main.tkStr.get()
     cap = cv2.VideoCapture("Exercise_videos/" + exType + ".mp4") #Test videos
@@ -173,7 +176,8 @@ while True:
         cv2.imshow('Video', frame) #Render
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
+    
+    """
     exercise_type=exType
     collection=db[exercise_type]
     
@@ -181,5 +185,6 @@ while True:
     if(collection.count_documents({"username":username})==0):
         collection.insert_one({"_id":username,"username":username,"counter":0})
     collection.update_one({"username":username},{"$inc":{"counter":counter}})
+    """
     cap.release()
     cv2.destroyAllWindows()
