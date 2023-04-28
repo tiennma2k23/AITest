@@ -4,9 +4,9 @@ import tkinter as tk
 from requests.exceptions import HTTPError
 from pathlib import Path
 
-CURRENT_WD = Path(__file__).parent
+CURRENT_WD = Path(__file__).parent.parent
 
-config=json.load(open(CURRENT_WD / 'firebase_config.json', 'r'))
+config=json.load(open(CURRENT_WD / 'adminAuth/firebase_config.json', 'r'))
 firebase=pyrebase.initialize_app(config)
 auth=firebase.auth()
 
