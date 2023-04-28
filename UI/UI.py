@@ -2,13 +2,23 @@
 from pathlib import Path
 
 from tkinter import *
+<<<<<<< HEAD:Techstart_appUI/UI.py
 from PIL import Image, ImageTk
 
+=======
+import tkinter.messagebox as MessageBox
+from Utils.authen import Auth
+>>>>>>> e29b13627ecb4d7a53f565bf5a35027ce1008223:UI/UI.py
 
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
+<<<<<<< HEAD:Techstart_appUI/UI.py
+=======
+OUTPUT_PATH = Path(__file__).parent
+ASSETS_PATH = OUTPUT_PATH / Path(r"./assets")
+>>>>>>> e29b13627ecb4d7a53f565bf5a35027ce1008223:UI/UI.py
 
 class root(Tk):
     def __init__(self, *args, **kwargs):
