@@ -1,1 +1,0 @@
-Hiện đang có một lỗi là run main.py r chạy với 1 môn nào đó r bấm q để thoát r bấm x để quit ctrinh thì ctrinh lại chạy về cửa sổ chạy môn đó ? Đó là bug hay là tính năng
