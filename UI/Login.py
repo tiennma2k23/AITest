@@ -139,7 +139,7 @@ class login_frame(Frame):
         )
 
         # create textboxes
-        self.username = StringVar()
+        self.email = StringVar()
         self.password = StringVar()
 
         self.entry_image_1 = PhotoImage(file=finddir("entry_1.png", scriptdir))

@@ -5,6 +5,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 import os
 import sys
+from Utils.authen import Auth
 
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
@@ -46,6 +47,7 @@ class UserHandle(Frame):
 
 class login_frame(Frame):
     def __init__(self, parent, controller):
+        self.parent = parent
         Frame.__init__(self, parent)
         self.configure(bg="#FFFFFF")
 
@@ -177,7 +179,7 @@ class login_frame(Frame):
         )
 
         # create textboxes
-        self.username = StringVar()
+        self.email = StringVar()
         self.password = StringVar()
 
         self.entry_image_1 = PhotoImage(file=finddir("entry_1.png", scriptdir))
@@ -193,7 +195,7 @@ class login_frame(Frame):
             fg="#000716",
             highlightthickness=0,
             font=("Lato"),
-            textvariable=self.username
+            textvariable=self.email
         )
         entry_1.place(
             x=257.2668390274048,
