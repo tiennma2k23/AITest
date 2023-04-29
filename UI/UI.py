@@ -6,7 +6,7 @@ from pathlib import Path
 
 from tkinter import *
 import tkinter.messagebox as MessageBox
-from Utils.authen import Auth
+from Utils.Sources.authen import Auth
 
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage

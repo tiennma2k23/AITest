@@ -3,21 +3,28 @@ import json
 import tkinter as tk
 from requests.exceptions import HTTPError
 from pathlib import Path
-
-CURRENT_WD = Path(__file__).parent.parent
-
+from Database_processing.User_db.get import *
+from Utils.Sources.savedata_pickle import save_object
+CURRENT_WD = Path(__file__).parent.parent.parent
 config=json.load(open(CURRENT_WD / 'adminAuth/firebase_config.json', 'r'))
 firebase=pyrebase.initialize_app(config)
 auth=firebase.auth()
 
 class Auth():
     def __init__(self, *args):
+        
         self._username = args[0].get() #Should have getter setter but
         self._password = args[1].get() #I'm too lazy
-
+        # _username=args[0].get()
     def UserAuth(self) -> bool:
         try:
-            self.user = auth.sign_in_with_email_and_password(self._username, self._password)
+            
+            f=find_user(self._username)
+            if (f['status']):
+                tmp=f['data']
+                email=tmp['email']
+                self.user = auth.sign_in_with_email_and_password(email, self._password)
+                save_object(tmp)
             print("Access Granted!")
             return True
         except HTTPError as e:
