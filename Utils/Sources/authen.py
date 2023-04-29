@@ -22,8 +22,10 @@ class Auth():
             f=find_user(self._username)
             if (f['status']):
                 tmp=f['data']
-                email=tmp['email']
-                self.user = auth.sign_in_with_email_and_password(email, self._password)
+                print(tmp)
+                # email="abc@gmail.com"
+                _email=tmp["email"]
+                self.user = auth.sign_in_with_email_and_password(_email, self._password)
                 save_object(tmp)
             print("Access Granted!")
             return True
