@@ -2,6 +2,8 @@ from tkinter import *
 import Login
 import Register
 import Resend_Password
+import os
+import sys
 
 class root(Tk):
     def __init__(self, *args, **kwargs):

@@ -5,6 +5,8 @@
 
 
 from tkinter import *
+import os
+import sys
 import Register
 import Resend_Password
 
@@ -12,10 +14,18 @@ import Resend_Password
 #from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
+
 class login_frame(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.configure(bg="#FFFFFF")
+
+        scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
+        def finddir(name, path):
+            for root, dirs, files in os.walk(path):
+                if name in files:
+                    return os.path.join(root, name)
+
         canvas = Canvas(
             self,
             bg="#FFFFFF",
@@ -72,9 +82,9 @@ class login_frame(Frame):
         )
 
         # create login button
-        self.button_image_1 = PhotoImage(file=r'.\assets\frame1\button_1.png')
-        self.button_image_2 = PhotoImage(file=r'.\assets\frame1\button_1_hover.png')
-        self.button_image_3 = PhotoImage(file=r'.\assets\frame1\button_1_onclick.png')
+        self.button_image_1 = PhotoImage(file=finddir("login_1.png", scriptdir))
+        self.button_image_2 = PhotoImage(file=finddir("login_1_hover.png", scriptdir))
+        self.button_image_3 = PhotoImage(file=finddir("login_1_onclick.png", scriptdir))
         
         def button_1_onclick():
             button_1.configure(image=self.button_image_3)
@@ -132,7 +142,7 @@ class login_frame(Frame):
         self.username = StringVar()
         self.password = StringVar()
 
-        self.entry_image_1 = PhotoImage(file=r'.\assets\frame1\entry_1.png')
+        self.entry_image_1 = PhotoImage(file=finddir("entry_1.png", scriptdir))
         entry_bg_1 = canvas.create_image(
             399.667236328125,
             183.09378051757812,
@@ -154,7 +164,7 @@ class login_frame(Frame):
             height=46.18756103515625
         )
 
-        self.entry_image_2 = PhotoImage(file=r'.\assets\frame1\entry_2.png')
+        self.entry_image_2 = PhotoImage(file=finddir("entry_2.png", scriptdir))
         entry_bg_2 = canvas.create_image(
             399.667236328125,
             261.1086120605469,

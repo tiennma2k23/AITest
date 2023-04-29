@@ -1,5 +1,7 @@
 import Login
 from tkinter import *
+import os
+import sys
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -8,6 +10,13 @@ class resend(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.configure(bg="#FFFFFF")
+
+        scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
+
+        def finddir(name, path):
+            for root, dirs, files in os.walk(path):
+                if name in files:
+                    return os.path.join(root, name)
     
         canvas = Canvas(
             self,
@@ -27,8 +36,8 @@ class resend(Frame):
             fill="#BAB8B8",
             outline="")
 
-        self.back_img = PhotoImage(file=r'./assets/resendpass/button_1.png')
-        self.back_img_hover = PhotoImage(file=r'./assets/resendpass/back_hover.png')
+        self.back_img = PhotoImage(file=finddir("back.png", scriptdir))
+        self.back_img_hover = PhotoImage(file=finddir("back_hover.png", scriptdir))
 
         back = canvas.create_image(
             138.0,
@@ -40,9 +49,9 @@ class resend(Frame):
         canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfigure(back, image=self.back_img_hover))
         canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfigure(back, image=self.back_img))
 
-
-        self.button_image_2 = PhotoImage(file=r'./assets/resendpass/button_2.png')
-        self.button_image_2_hover = PhotoImage(file=r'./assets/resendpass/button_2_hover.png')
+        self.button_image_2 = PhotoImage(file=finddir("button_2.png", scriptdir))
+        self.button_image_2_hover = PhotoImage(
+            file=finddir("button_2_hover.png", scriptdir))
         button_2 = canvas.create_image(
             309,
             241,
@@ -64,7 +73,7 @@ class resend(Frame):
         )
 
         self.resend_email = StringVar()
-        self.entry_image_1 = PhotoImage(file=r'./assets/resendpass/entry_1.png')
+        self.entry_image_1 = PhotoImage(file=finddir("entry_1.png", scriptdir))
         entry_bg_1 = canvas.create_image(
             399.667236328125,
             194.09378051757812,
