@@ -33,6 +33,7 @@ class Auth():
 
     def UserReg(self) -> bool:
         try: #Reg new user
+            
             self.user = auth.create_user_with_email_and_password(self._username, self._password)
             print("User Created!")
             auth.send_email_verification(self.user['idToken'])
