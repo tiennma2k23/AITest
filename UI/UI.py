@@ -2,10 +2,12 @@
 from pathlib import Path
 
 from tkinter import *
+from tkinter import messagebox
 from PIL import Image, ImageTk
 import os
 import sys
-from Utils.authen import Auth
+from Utils.Sources.authen import Auth
+# from Utils.Sources.authen import resendEmail
 
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
@@ -451,12 +453,12 @@ class sign_up_frame(Frame):
 
     def onRegisterClick(self):
         if (self.password.get() != self.repeated_pass.get()):
-            MessageBox.showerror('Please retry!',
+            messagebox.showerror('Please retry!',
                                  'Repeated password mismatch!')
             return
 
-        if (Auth(self.Email, self.password).UserReg()):
-            MessageBox.showinfo('Register Successfully!',
+        if (Auth(self.Email, self.password,self.username).UserReg()):
+            messagebox.showinfo('Register Successfully!',
                                 'Please check your email for confirmation!')
             self.parent.show_frame(login_frame)
 
@@ -521,7 +523,7 @@ class resend(Frame):
             anchor="nw"
         )
         canvas.tag_bind(button_2, '<ButtonPress-1>',
-                        lambda _: print("Button_2 clicked"))
+                        lambda _: self.resend_email_reset())
         canvas.tag_bind(button_2, '<Enter>', lambda _: canvas.itemconfigure(
             button_2, image=self.button_image_2_hover))
         canvas.tag_bind(button_2, '<Leave>', lambda _: canvas.itemconfigure(
@@ -558,6 +560,18 @@ class resend(Frame):
             width=284.80079460144043,
             height=46.18756103515625
         )
+    
+    def resend_email_reset(self):
+        if (Auth(self.resend_email).Resend()):
+            messagebox.showinfo('Send Email Reset Password Successfully!',
+                                'Please check your email for confirmation!')
+            self.parent.show_frame(login_frame)
+        else:
+            messagebox.showinfo('Send Email Reset Password Fail!',
+                                'Please check email again, email not exist')
+            self.parent.show_frame(login_frame)
+
+
 
 
 # if __name__ == "__main__":
