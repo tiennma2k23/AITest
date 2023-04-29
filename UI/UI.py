@@ -285,7 +285,7 @@ class sign_up_frame(Frame):
 
         # create signup button
         self.button_image_1 = PhotoImage(
-            file=finddir("button_1.png", scriptdir))
+            file=r'./UI/assets/frame0/button_1.png')
         self.button_image_2 = PhotoImage(
             file=finddir("button_1_hover.png", scriptdir))
         self.button_image_3 = PhotoImage(
@@ -558,6 +558,6 @@ class resend(Frame):
         )
 
 
-if __name__ == "__main__":
-    testObj = root()
-    testObj.mainloop()
+# if __name__ == "__main__":
+#     testObj = UserHandle(self)
+#     testObj.mainloop()
