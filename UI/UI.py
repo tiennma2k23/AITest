@@ -250,6 +250,7 @@ class login_frame(Frame):
 class sign_up_frame(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
+        self.parent = parent
         self.configure(bg="#FFFFFF")
 
         # create canvas
@@ -469,6 +470,7 @@ class sign_up_frame(Frame):
 class resend(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
+        self.parent = parent
         self.configure(bg="#FFFFFF")
 
         
