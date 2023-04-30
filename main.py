@@ -5,9 +5,6 @@ from pymongo.server_api import ServerApi
 import json
 import pickle
 
-# from body_part_angle import BodyPartAngle
-from Utils.Calc.types_of_exercise import TypeOfExercise
-from Utils.Calc.utils import *
 from UI.UI import UserHandle
 from UI.chooseEx import chooseEx
 """
@@ -34,7 +31,6 @@ def load_object(filename):
             return pickle.load(f)
     except Exception as ex:
         print("Error during unpickling object (Possibly unsupported):", ex)
-
 
 # Get user_db
 user_db=load_object("Appdata/userData/data.pickle")
