@@ -25,10 +25,6 @@ _db=load_object("Appdata/userData/data.pickle")
 user_db=_db['data']
 # print(user_db)
 
-# Get user_db
-user_db=load_object("Appdata/userData/data.pickle")
-print(user_db)
-
 class App(tk.Tk):
     def __init__(self):
         super().__init__()

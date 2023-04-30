@@ -15,12 +15,6 @@ from Utils.Sources.authen import Auth
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
-
-
-class UserHandle(Frame):
-    def __init__(self, parent):
-        super().__init__()
-        self.parent = parent
 class UserHandle(Frame):
     def __init__(self, parent):
         super().__init__()
@@ -65,7 +59,6 @@ class UserHandle(Frame):
 class login_frame(Frame):
     def __init__(self, parent, controller):
         self.parent = parent
-        self.parent = parent
         Frame.__init__(self, parent)
         self.configure(bg="#FFFFFF")
 
@@ -97,7 +90,7 @@ class login_frame(Frame):
         txt = Label(self, text="Register here", font=(
             "Lato Regular", 14 * -1), fg="white", bg="#A9A9A9")
         txt.place(x=430, y=393.77)
-        txt.bind('<Button-1>', txt_on_click)
+        txt.bind('<Button-1>', lambda e: controller.show_frame(sign_up_frame))
         txt.bind('<Enter>', lambda e: txt.configure(fg="#BBBBBB"))
         txt.bind('<Leave>', lambda e: txt.configure(fg="white"))
 
@@ -144,6 +137,10 @@ class login_frame(Frame):
         )
         canvas.tag_bind(button_1, '<ButtonPress-1>', lambda _: self.onLoginClick())
 
+        canvas.tag_bind(button_1, '<Enter>', lambda _: canvas.itemconfig(
+            button_1, image=self.button_image_2))
+        canvas.tag_bind(button_1, '<Leave>', lambda _: canvas.itemconfig(
+            button_1, image=self.button_image_1))
         canvas.create_text(
             221.0,
             198.0,
@@ -273,9 +270,9 @@ class sign_up_frame(Frame):
         )
         canvas.tag_bind(back, '<Button-1>',
                         lambda _: controller.show_frame(login_frame))
-        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfigure(
+        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfig(
             back, image=self.back_img_hover))
-        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfigure(
+        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfig(
             back, image=self.back_img))
 
         # create signup button
