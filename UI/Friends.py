@@ -68,10 +68,10 @@ class Friends_frame(tk.Frame):
 
         acpBtn = tk.Button(person, 
                            text='Accept',
-                           command=lambda: print('Acp clicked'))
+                           command=lambda: print('Acp clicked'+usr))
         denBtn = tk.Button(person, 
                            text='Deny',
-                           command=lambda: print('Den clicked'))
+                           command=lambda: print('Den clicked'+usr))
         acpBtn.grid(row=0, column=1)
         denBtn.grid(row=1, column=1)
         person.grid(row=len(self.friendReqFrs))
