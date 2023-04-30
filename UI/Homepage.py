@@ -10,13 +10,11 @@ class homepage(Frame):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
-        
+
         self.mainF = Frame(self)
         self.friends = Friends_frame(self)
 
-
         OUTPUT_PATH = Path(__file__).parent
-
 
         ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/homepage")
 
@@ -26,7 +24,7 @@ class homepage(Frame):
 
         #create BG
         self.canvas = Canvas(
-            self.mainF,
+            self,
             bg="#FFFF0F",
             height=480,
             width=800,
@@ -208,7 +206,8 @@ class homepage(Frame):
         self.destroy()
 
     def onFriendsClicked(self):
-        self.friends.mainF.pack()
+        print('onFriends cliked')
+        self.friends.pack()
         self.destroy()
 
 
