@@ -9,7 +9,6 @@ from Utils.Sources.authen import Auth
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
-
 class UserHandle(Frame):
     def __init__(self, parent):
         super().__init__()
@@ -284,9 +283,9 @@ class sign_up_frame(Frame):
         )
         canvas.tag_bind(back, '<Button-1>',
                         lambda _: controller.show_frame(login_frame))
-        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfigure(
+        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfig(
             back, image=self.back_img_hover))
-        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfigure(
+        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfig(
             back, image=self.back_img))
 
         # create signup button
