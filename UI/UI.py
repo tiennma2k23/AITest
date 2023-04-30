@@ -5,20 +5,22 @@
 from pathlib import Path
 
 from tkinter import *
-import tkinter.messagebox as MessageBox
-from Utils.authen import Auth
+from tkinter import messagebox
+from PIL import Image, ImageTk
+import os
+import sys
+from Utils.Sources.authen import Auth
+# from Utils.Sources.authen import resendEmail
 
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"./assets")
 
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
-
-
+class UserHandle(Frame):
+    def __init__(self, parent):
+        super().__init__()
+        self.parent = parent
 class UserHandle(Frame):
     def __init__(self, parent):
         super().__init__()
@@ -28,15 +30,23 @@ class UserHandle(Frame):
         # container = Frame(self)
         # Specify the region where the frame is packed in root
         self.pack(side="top", fill="both", expand=True)
+        # Create a frame and assigning it to container
+        # container = Frame(self)
+        # Specify the region where the frame is packed in root
+        self.pack(side="top", fill="both", expand=True)
 
+        # Configure container's location with grid
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
         # Configure container's location with grid
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
         # Create a dictionary of frames
+        # Create a dictionary of frames
         self.frames = {}
         # we'll create the frames themselves later but let's add the components to the dictionary.
-        for F in (login_frame, sign_up_frame):
+        for F in (login_frame, sign_up_frame,resend):
             frame = F(self, self)
 
             # the windows class acts as the root window for the frames.
@@ -55,8 +65,17 @@ class UserHandle(Frame):
 class login_frame(Frame):
     def __init__(self, parent, controller):
         self.parent = parent
+        self.parent = parent
         Frame.__init__(self, parent)
         self.configure(bg="#FFFFFF")
+
+        scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
+
+        def finddir(name, path):
+            for root, dirs, files in os.walk(path):
+                if name in files:
+                    return os.path.join(root, name)
+
         canvas = Canvas(
             self,
             bg="#FFFFFF",
@@ -76,11 +95,26 @@ class login_frame(Frame):
             outline="")
 
         txt = Label(self, text="Register here", font=(
-            "Lato Regular", 14 * -1), fg="white", bg="#989898")
-        txt.place(x=406.0, y=543.0)
-        txt.bind('<Button-1>', lambda _: controller.show_frame(sign_up_frame))
-        txt.bind('<Enter>',  lambda _: txt.configure(fg="#DDDDDD"))
-        txt.bind('<Leave>', lambda _: txt.configure(fg="white"))
+            "Lato Regular", 14 * -1), fg="white", bg="#A9A9A9")
+        txt.place(x=430, y=393.77)
+        txt.bind('<Button-1>', txt_on_click)
+        txt.bind('<Enter>', lambda e: txt.configure(fg="#BBBBBB"))
+        txt.bind('<Leave>', lambda e: txt.configure(fg="white"))
+
+        # forget pass
+        forget_pass = Label(self, text="Forget password?", font=(
+            "Lato Regular", 14 * -1), fg="white", bg="#A9A9A9")
+        forget_pass.place(x=432, y=288)
+
+        def fgpass_on_click(e):
+            forget_pass.configure(fg="#666666")
+            controller.show_frame(resend)
+
+        forget_pass.bind('<Button-1>', fgpass_on_click)
+        forget_pass.bind(
+            '<Enter>', lambda e: forget_pass.configure(fg="#BBBBBB"))
+        forget_pass.bind(
+            '<Leave>', lambda e: forget_pass.configure(fg="white"))
 
         canvas.create_text(
             253.0,
@@ -91,7 +125,18 @@ class login_frame(Frame):
             font=("Lato Regular", 14 * -1)
         )
 
-        self.button_image_1 = PhotoImage(file=relative_to_assets('frame1/button_1.png'))
+        # create login button
+        self.button_image_1 = PhotoImage(
+            file=finddir("login_1.png", scriptdir))
+        self.button_image_2 = PhotoImage(
+            file=finddir("login_1_hover.png", scriptdir))
+        self.button_image_3 = PhotoImage(
+            file=finddir("login_1_onclick.png", scriptdir))
+
+        def button_1_onclick():
+            button_1.configure(image=self.button_image_3)
+            # nhảy sang home page tính sau
+
         button_1 = canvas.create_image(
             273.6806335449219, 480.0,
             anchor='nw',
@@ -126,10 +171,11 @@ class login_frame(Frame):
             font=("Lato Regular", 29 * -1)
         )
 
+        # create textboxes
         self.email = StringVar()
         self.password = StringVar()
 
-        self.entry_image_1 = PhotoImage(file=relative_to_assets('frame1/entry_1.png'))
+        self.entry_image_1 = PhotoImage(file=finddir("entry_1.png", scriptdir))
         entry_bg_1 = canvas.create_image(
             372.6672668457031,
             248.09378051757812,
@@ -151,7 +197,7 @@ class login_frame(Frame):
             height=46.18756103515625
         )
 
-        self.entry_image_2 = PhotoImage(file=relative_to_assets('frame1/entry_2.png'))
+        self.entry_image_2 = PhotoImage(file=finddir("entry_2.png", scriptdir))
         entry_bg_2 = canvas.create_image(
             372.8357849121094,
             344.1086120605469,
@@ -187,6 +233,14 @@ class sign_up_frame(Frame):
         self.parent = parent
         self.configure(bg="#FFFFFF")
 
+        scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
+
+        def finddir(name, path):
+            for root, dirs, files in os.walk(path):
+                if name in files:
+                    return os.path.join(root, name)
+
+        # create canvas
         canvas = Canvas(
             self,
             bg="#FFFFFF",
@@ -206,15 +260,47 @@ class sign_up_frame(Frame):
             fill="#989898",
             outline="")
 
-        self.button_image_1 = PhotoImage(file=relative_to_assets('frame0/button_1.png'))
+        # create Back button
+        self.back_img = PhotoImage(file=finddir("back.png", scriptdir))
+        self.back_img_hover = PhotoImage(
+            file=finddir("back_hover.png", scriptdir))
+
+        back = canvas.create_image(
+            138.0,
+            2.0,
+            anchor="nw",
+            image=self.back_img
+        )
+        canvas.tag_bind(back, '<Button-1>',
+                        lambda _: controller.show_frame(login_frame))
+        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfigure(
+            back, image=self.back_img_hover))
+        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfigure(
+            back, image=self.back_img))
+
+        # create signup button
+        self.button_image_1 = PhotoImage(
+            file=r'./UI/assets/frame0/button_1.png')
+        self.button_image_2 = PhotoImage(
+            file=finddir("button_1_hover.png", scriptdir))
+        self.button_image_3 = PhotoImage(
+            file=finddir("button_1_onclick.png", scriptdir))
+
         button_1 = canvas.create_image(
             273.6806640625,
             480.0,
             anchor='nw',
             image=self.button_image_1
         )
-        canvas.tag_bind(button_1, '<Button-1>', lambda _: self.onRegisterClick())
-        
+        canvas.tag_bind(button_1, '<Button-1>',
+                        lambda _: self.onRegisterClick())
+        # hover button
+        canvas.tag_bind(button_1, '<Enter>', lambda _: canvas.itemconfig(
+            button_1, image=self.button_image_2))
+        canvas.tag_bind(button_1, '<Leave>', lambda _: canvas.itemconfig(
+            button_1, image=self.button_image_1))
+
+        # create texts above textboxes
         canvas.create_text(
             223.0,
             148.0,
@@ -278,7 +364,7 @@ class sign_up_frame(Frame):
         self.password = StringVar()
         self.repeated_pass = StringVar()
 
-        self.entry_image_1 = PhotoImage(file=relative_to_assets('frame0/entry_1.png'))
+        self.entry_image_1 = PhotoImage(file=finddir("entry_1.png", scriptdir))
         entry_bg_1 = canvas.create_image(
             373.6672668457031,
             196.09378051757812,
@@ -300,7 +386,7 @@ class sign_up_frame(Frame):
             height=46.18756103515625
         )
 
-        self.entry_image_2 = PhotoImage(file=relative_to_assets('frame0/entry_4.png'))
+        self.entry_image_2 = PhotoImage(file=finddir("entry_2.png", scriptdir))
         entry_bg_2 = canvas.create_image(
             372.8357849121094,
             269.9739227294922,
@@ -322,7 +408,7 @@ class sign_up_frame(Frame):
             height=46.18756103515625
         )
 
-        self.entry_image_3 = PhotoImage(file=relative_to_assets('frame0/entry_3.png'))
+        self.entry_image_3 = PhotoImage(file=finddir("entry_3.png", scriptdir))
         entry_bg_3 = canvas.create_image(
             372.8357849121094,
             344.1086120605469,
@@ -345,7 +431,7 @@ class sign_up_frame(Frame):
             height=46.18756103515625
         )
 
-        self.entry_image_4 = PhotoImage(file=relative_to_assets('frame0/entry_2.png'))
+        self.entry_image_4 = PhotoImage(file=finddir("entry_4.png", scriptdir))
         entry_bg_4 = canvas.create_image(
             372.8357849121094,
             418.24334716796875,
@@ -370,15 +456,127 @@ class sign_up_frame(Frame):
 
     def onRegisterClick(self):
         if (self.password.get() != self.repeated_pass.get()):
-            MessageBox.showerror('Please retry!',
+            messagebox.showerror('Please retry!',
                                  'Repeated password mismatch!')
             return
 
-        if (Auth(self.Email, self.password).UserReg()):
-            MessageBox.showinfo('Register Successfully!', 
+        if (Auth(self.Email, self.password,self.username).UserReg()):
+            messagebox.showinfo('Register Successfully!',
                                 'Please check your email for confirmation!')
             self.parent.show_frame(login_frame)
 
+
+class resend(Frame):
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        self.configure(bg="#FFFFFF")
+
+
+        scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
+        #finding files
+        def finddir(name, path):
+            for root, dirs, files in os.walk(path):
+                if name in files:
+                    return os.path.join(root, name)
+        
+
+        canvas = Canvas(
+            self,
+            bg="#FFFFFF",
+            height=480,
+            width=800,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
+        canvas.place(x=0, y=0)
+        canvas.create_rectangle(
+            138.0,
+            2.0,
+            661.0,
+            480.0,
+            fill="#BAB8B8",
+            outline="")
+
+        self.back_img = PhotoImage(file=finddir("back.png", scriptdir))
+        self.back_img_hover = PhotoImage(
+            file=finddir("back_hover.png", scriptdir))
+
+        back = canvas.create_image(
+            138.0,
+            2.0,
+            anchor="nw",
+            image=self.back_img
+        )
+        canvas.tag_bind(back, '<Button-1>',
+                        lambda _: controller.show_frame(login_frame))
+        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfigure(
+            back, image=self.back_img_hover))
+        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfigure(
+            back, image=self.back_img))
+
+        self.button_image_2 = PhotoImage(
+            file=finddir("button_2.png", scriptdir))
+        self.button_image_2_hover = PhotoImage(
+            file=finddir("button_2_hover.png", scriptdir))
+        button_2 = canvas.create_image(
+            309,
+            241,
+            image=self.button_image_2,
+            anchor="nw"
+        )
+        canvas.tag_bind(button_2, '<ButtonPress-1>',
+                        lambda _: self.resend_email_reset())
+        canvas.tag_bind(button_2, '<Enter>', lambda _: canvas.itemconfigure(
+            button_2, image=self.button_image_2_hover))
+        canvas.tag_bind(button_2, '<Leave>', lambda _: canvas.itemconfigure(
+            button_2, image=self.button_image_2))
+
+        canvas.create_text(
+            248.0,
+            146.0,
+            anchor="nw",
+            text="Send E-mail for resetting password",
+            fill="#FFFFFF",
+            font=("Lato Regular", 14 * -1)
+        )
+
+        self.resend_email = StringVar()
+        self.entry_image_1 = PhotoImage(file=finddir("entry_1.png", scriptdir))
+        entry_bg_1 = canvas.create_image(
+            399.667236328125,
+            194.09378051757812,
+            image=self.entry_image_1
+        )
+        entry_1 = Entry(
+            self,
+            bd=0,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0,
+            font=('Lato'),
+            textvariable=self.resend_email
+        )
+        entry_1.place(
+            x=257.2668390274048,
+            y=170.0,
+            width=284.80079460144043,
+            height=46.18756103515625
+        )
+    
+    def resend_email_reset(self):
+        if (Auth(self.resend_email).Resend()):
+            messagebox.showinfo('Send Email Reset Password Successfully!',
+                                'Please check your email for confirmation!')
+            self.parent.show_frame(login_frame)
+        else:
+            messagebox.showinfo('Send Email Reset Password Fail!',
+                                'Please check email again, email not exist')
+            self.parent.show_frame(login_frame)
+
+
+
+
 # if __name__ == "__main__":
-#     testObj = root()
+#     testObj = UserHandle(self)
 #     testObj.mainloop()

@@ -3,174 +3,193 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
-from pathlib import Path
 
 from tkinter import *
+import os
+import sys
+import Register
+import Resend_Password
 
 # Explicit imports to satisfy Flake8
 #from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r".\assets\frame1")
 
+class login_frame(Frame):
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        self.configure(bg="#FFFFFF")
 
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+        scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
+        def finddir(name, path):
+            for root, dirs, files in os.walk(path):
+                if name in files:
+                    return os.path.join(root, name)
 
-root = Tk()
-window = Frame(root)
-root.geometry("746x661")
+        canvas = Canvas(
+            self,
+            bg="#FFFFFF",
+            height=480,
+            width=800,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
 
-window.pack(side="top", fill="both", expand=True)
-window.configure(bg = "#FFFFFF")
-window.grid_rowconfigure(0, weight=1)
-window.grid_columnconfigure(0, weight=1)
+        # create canvas
+        canvas.place(x=0, y=0)
+        canvas.create_rectangle(
+            138.0,
+            0.0,
+            661.0,
+            480.0,
+            fill="#A9A9A9",
+            outline="")
 
-username = StringVar()
-password = StringVar()
+        # create hyperlink
+        def txt_on_click(e):
+            txt.configure(fg="#666666")
+            controller.show_frame(Register.sign_up_frame)
 
-canvas = Canvas(
-    window,
-    bg = "#FFFFFF",
-    height = 661,
-    width = 746,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
-)
+        txt = Label(self, text="Register here", font=(
+            "Lato Regular", 14 * -1), fg="white", bg="#A9A9A9")
+        txt.place(x=430, y=393.77)
+        txt.bind('<Button-1>', txt_on_click)
+        txt.bind('<Enter>', lambda e: txt.configure(fg="#BBBBBB"))
+        txt.bind('<Leave>', lambda e: txt.configure(fg="white"))
 
-canvas.place(x = 0, y = 0)
-canvas.create_rectangle(
-    112.0,
-    73.0,
-    634.6497802734375,
-    614.183349609375,
-    fill="#BAB8B8",
-    outline="")
+        #forget pass
+        forget_pass = Label(self, text="Forget password?", font=(
+            "Lato Regular", 14 * -1), fg="white", bg="#A9A9A9")
+        forget_pass.place(x=432, y=288)
 
-# canvas.create_text(
-#     411.0,
-#     545.0,
-#     anchor="nw",
-#     text="Register here",
-#     fill="#FFFFFF",
-#     font=("Lato Regular", 14 * -1)
-# )
+        def fgpass_on_click(e):
+            forget_pass.configure(fg="#666666")
+            controller.show_frame(Resend_Password.resend)
 
-def txt_on_click(e):
-    txt.configure(fg="grey")
-def txt_on_enter(e):
-    txt.configure(fg="#DDDDDD")
-def txt_on_leave(e):
-    txt.configure(fg="white")
+        forget_pass.bind('<Button-1>', fgpass_on_click)
+        forget_pass.bind('<Enter>', lambda e: forget_pass.configure(fg="#BBBBBB"))
+        forget_pass.bind('<Leave>', lambda e: forget_pass.configure(fg="white"))
 
+        # create other text
+        canvas.create_text(
+            279.0,
+            397.0,
+            anchor="nw",
+            text="Don’t have an account?",
+            fill="#FFFFFF",
+            font=("Lato Regular", 14 * -1)
+        )
 
-txt = Label(window, text="Register here", font=("Lato Regular", 14 * -1), fg = "white", bg="#bab8b8")
-txt.place(x=406.0, y=543.0)
-txt.bind('<Button-1>', txt_on_click)
-txt.bind('<Enter>',  txt_on_enter)
-txt.bind('<Leave>', txt_on_leave)
+        # create login button
+        self.button_image_1 = PhotoImage(file=finddir("login_1.png", scriptdir))
+        self.button_image_2 = PhotoImage(file=finddir("login_1_hover.png", scriptdir))
+        self.button_image_3 = PhotoImage(file=finddir("login_1_onclick.png", scriptdir))
+        
+        def button_1_onclick():
+            button_1.configure(image=self.button_image_3)
+            # nhảy sang home page tính sau
 
+        button_1 = canvas.create_image(
+            301.0,
+            328.0,
+            image=self.button_image_1,
+            anchor='nw',
+        )
+        canvas.tag_bind(button_1, '<ButtonPress-1>',lambda _: self.onLoginClick())
 
-canvas.create_text(
-    253.0,
-    545.0,
-    anchor="nw",
-    text="Don’t have an account?",
-    fill="#FFFFFF",
-    font=("Lato Regular", 14 * -1)
-)
+        #hover button
+        canvas.tag_bind(button_1, '<Enter>', lambda _: canvas.itemconfig(button_1, image=self.button_image_2))
+        canvas.tag_bind(button_1, '<Leave>', lambda _: canvas.itemconfig(button_1, image=self.button_image_1))
 
-button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    window,
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
-    relief="flat"
-)
-button_1.place(
-    x=273.6806335449219,
-    y=480.0,
-    width=198.3193359375,
-    height=54.0
-)
+        # # place button
+        # button_1.place(
+        #     x=301.0,
+        #     y=328.0,
+        #     width=198.3193359375,
+        #     height=54.0
+        # )
 
-canvas.create_text(
-    221.0,
-    198.0,
-    anchor="nw",
-    text="Username/Email*",
-    fill="#FFFFFF",
-    font=("Lato Regular", 14 * -1)
-)
+        # create texts above textboxes
+        canvas.create_text(
+            248.0,
+            141.0,
+            anchor="nw",
+            text="Username/Email*",
+            fill="#FFFFFF",
+            font=("Lato Regular", 14 * -1)
+        )
 
-canvas.create_text(
-    223.0,
-    298.0,
-    anchor="nw",
-    text="Password*",
-    fill="#FFFFFF",
-    font=("Lato Regular", 14 * -1)
-)
+        canvas.create_text(
+            248.0,
+            219.0,
+            anchor="nw",
+            text="Password*",
+            fill="#FFFFFF",
+            font=("Lato Regular", 14 * -1)
+        )
 
-canvas.create_text(
-    328.0,
-    94.52175903320312,
-    anchor="nw",
-    text="LOGIN",
-    fill="#FFFFFF",
-    font=("Lato Regular", 29 * -1)
-)
+        canvas.create_text(
+            355.0,
+            57.0,
+            anchor="nw",
+            text="LOGIN",
+            fill="#FFFFFF",
+            font=("Lato Regular", 29 * -1)
+        )
 
-entry_image_1 = PhotoImage(
-    file=relative_to_assets("entry_1.png"))
-entry_bg_1 = canvas.create_image(
-    372.6672668457031,
-    248.09378051757812,
-    image=entry_image_1
-)
-entry_1 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0,
-    font= ("Lato"),
-    textvariable=username
-)
-entry_1.place(
-    x=230.26683902740479,
-    y=224.0,
-    width=284.8008556365967,
-    height=46.18756103515625
-)
+        # create textboxes
+        self.email = StringVar()
+        self.password = StringVar()
 
-entry_image_2 = PhotoImage(
-    file=relative_to_assets("entry_2.png"))
-entry_bg_2 = canvas.create_image(
-    372.8357849121094,
-    344.1086120605469,
-    image=entry_image_2
-)
-entry_2 = Entry(
-    bd=0,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0,
-    font=('Lato'),
-    textvariable=password,
-    show="*"
-)
-entry_2.place(
-    x=230.43535709381104,
-    y=320.01483154296875,
-    width=284.8008556365967,
-    height=46.18756103515625
-)
+        self.entry_image_1 = PhotoImage(file=finddir("entry_1.png", scriptdir))
+        entry_bg_1 = canvas.create_image(
+            399.667236328125,
+            183.09378051757812,
+            image=self.entry_image_1
+        )
+        entry_1 = Entry(
+            self,
+            bd=0,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0,
+            font=("Lato"),
+            textvariable=self.username
+        )
+        entry_1.place(
+            x=257.2668390274048,
+            y=159.0,
+            width=284.80079460144043,
+            height=46.18756103515625
+        )
 
+        self.entry_image_2 = PhotoImage(file=finddir("entry_2.png", scriptdir))
+        entry_bg_2 = canvas.create_image(
+            399.667236328125,
+            261.1086120605469,
+            image=self.entry_image_2
+        )
+        entry_2 = Entry(
+            self,
+            bd=0,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0,
+            font=('Lato'),
+            textvariable=self.password,
+            show="*"
+        )
+        entry_2.place(
+            x=257.2668390274048,
+            y=237.01483154296875,
+            width=284.8008556365967,
+            height=46.18756103515625
+        )
 
-root.resizable(True, True)
-window.mainloop()
+    def onLoginClick(self):
+        if (Auth(self.email, self.password).UserAuth()):
+            self.parent.parent.Authed.set(True)
+            self.parent.parent.geometry('800x480')
+            self.parent.parent.main.pack()
+            self.parent.destroy()
