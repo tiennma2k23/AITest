@@ -1,6 +1,7 @@
 from tkinter import *
 from UI.Friends import Friends_frame
 from pathlib import Path
+import os
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -201,6 +202,7 @@ class homepage(Frame):
 
     def onLogoutClicked(self):
         #Do sth with pickle
+        os.remove("Appdata/userData/data.pickle")
         self.parent.Authed.set(False)
         self.parent.run()
         self.destroy()
