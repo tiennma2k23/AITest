@@ -2,6 +2,7 @@ import tkinter as tk
 from queue import Queue
 from threading import Thread
 import Utils.camera as camera
+from .Friends import Friends_frame
 from PIL import ImageTk, Image
 
 ENABLE_WEBCAM = False #True to enable webcam
@@ -10,6 +11,7 @@ class chooseEx(tk.Frame):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
+        self.friends = Friends_frame(self)
         self.eType = ('pull-up', 'push-up', 'sit-up', 'squat', 'walk')
         self.tkStr = tk.StringVar(self)
         self.frameQueue = Queue(30)
@@ -25,13 +27,23 @@ class chooseEx(tk.Frame):
             '',
             *self.eType)
         self.option_menu.grid(column=1,row=0)
-        self.btn = tk.Button(
+        self.btnCamera = tk.Button(
             self.mainF, 
             text='Show camera',
-            command=lambda: self.onShowCameraClicked())
-        self.btn.grid(column=2,row=0)
-
+            command=lambda: self.onShowCameraClicked()
+        )
+        self.btnCamera.grid(column=2,row=0)
+        self.btnFriends = tk.Button(
+            self.mainF,
+            text='Friends and Reqs',
+            command=lambda: self.onShowFriendsClicked()
+        )
+        self.btnFriends.grid(column=3, row=0)
         self.mainF.pack()
+
+    def onShowFriendsClicked(self):
+        self.friends.mainF.pack()
+        self.destroy()
 
     def onShowCameraClicked(self):
         print('show camera clicked')
