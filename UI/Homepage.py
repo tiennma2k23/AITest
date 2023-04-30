@@ -1,4 +1,3 @@
-import UI.Login
 from tkinter import *
 from UI.Friends import Friends_frame
 from pathlib import Path
@@ -10,15 +9,15 @@ class homepage(Frame):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
-        self.friends = Friends_frame(self)
+        
         self.mainF = Frame(self)
-        self.login = UI.Login.login_frame
+        self.friends = Friends_frame(self)
 
 
         OUTPUT_PATH = Path(__file__).parent
 
 
-        ASSETS_PATH = OUTPUT_PATH / Path(r".\assets\homepage")
+        ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/homepage")
 
 
         def relative_to_assets(path: str) -> Path:
@@ -201,9 +200,9 @@ class homepage(Frame):
         self.mainF.pack()
 
     def onLogoutClicked(self):
-        #làm j đó
-        # self.login.pack()
-        self.friends.mainF.pack()
+        #Do sth with pickle
+        self.parent.Authed.set(False)
+        self.parent.run()
         self.destroy()
 
     def onFriendsClicked(self):

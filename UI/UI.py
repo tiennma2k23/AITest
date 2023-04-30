@@ -1,6 +1,6 @@
 
 from pathlib import Path
-
+import tkinter.messagebox as MessageBox
 from tkinter import *
 from PIL import Image, ImageTk
 
@@ -239,10 +239,11 @@ class login_frame(Frame):
 
     def onLoginClick(self):
         if (Auth(self.email, self.password).UserAuth()):
-            self.parent.parent.Authed.set(True)
-            self.parent.parent.geometry('800x480')
-            self.parent.parent.main.pack()
-            self.parent.destroy()
+            #Perform as-if prelogin
+            originRootF = self.parent.parent
+            originRootF.Authed.set(True)
+            originRootF.auth.destroy()
+            originRootF.main.pack()
 
 
 class sign_up_frame(Frame):

@@ -8,7 +8,7 @@ import pickle
 from UI.UI import UserHandle
 from Utils.Sources.getdata_pickle import load_object
 from Database_processing.Exercise_db.update import update
-from UI.chooseEx import chooseEx
+# from UI.chooseEx import chooseEx
 from UI.Homepage import homepage
 """
 uri = json.loads(open("adminAuth/adminAuth.json","r").read())["uri"]
@@ -32,20 +32,22 @@ class App(tk.Tk):
         self.geometry("800x480")
         # self.resizable(False, False)
         self.title('Demo')
-
-
         self.protocol("WM_DELETE_WINDOW", self.onClose)
-        if(_db['status']==False): 
-            self.Authed = tk.BooleanVar(self, False)
-            self.auth = UserHandle(self)
-            self.main = homepage(self)
+        self.Authed = tk.BooleanVar(self, True)
+        self.run()
+
+    def run(self):
+        self.auth = UserHandle(self)
+        self.main = homepage(self)
+
+        #if(_db['status']==False): #Not pre-login
+        if (True):
+            self.Authed.set(False)
             self.auth.pack()
         else: 
-            self.Authed = tk.BooleanVar(self, True)
-            self.main=chooseEx(self)
-            self.main.pack()
-
-        
+            self.Authed.set(True)
+            auth.destroy()
+            main.pack()
 
     def onClose(self):
         if (messagebox.askyesno('Quit?', 'U quit?')):

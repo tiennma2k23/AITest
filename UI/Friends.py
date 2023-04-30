@@ -4,8 +4,8 @@ class Friends_frame(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-        self.mainF = tk.Frame()
-        
+        self.mainF = tk.Frame(self)
+
         self.friendReqs = [
             {'username': 'friendrq1', 'rank': 125},
             {'username': 'friendrq2', 'rank': 69}
