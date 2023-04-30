@@ -6,6 +6,8 @@ import json
 import pickle
 
 from UI.UI import UserHandle
+from Utils.Sources.getdata_pickle import load_object
+from Database_processing.Exercise_db.update import update
 from UI.chooseEx import chooseEx
 """
 uri = json.loads(open("adminAuth/adminAuth.json","r").read())["uri"]
@@ -18,19 +20,10 @@ try:
 except Exception as e:
     print(e)
 """
-# Save and get data
-def save_object(obj):
-    try:
-        with open("Appdata/userData/data.pickle", "wb") as f:
-            pickle.dump(obj, f, protocol=pickle.HIGHEST_PROTOCOL)
-    except Exception as ex:
-        print("Error during pickling object (Possibly unsupported):", ex)
-def load_object(filename):
-    try:
-        with open(filename, "rb") as f:
-            return pickle.load(f)
-    except Exception as ex:
-        print("Error during unpickling object (Possibly unsupported):", ex)
+
+_db=load_object("Appdata/userData/data.pickle")
+user_db=_db['data']
+# print(user_db)
 
 # Get user_db
 user_db=load_object("Appdata/userData/data.pickle")
@@ -44,11 +37,17 @@ class App(tk.Tk):
 
 
         self.protocol("WM_DELETE_WINDOW", self.onClose)
-        self.Authed = tk.BooleanVar(self, False)
-        self.auth = UserHandle(self)
-        self.main = chooseEx(self)
+        if(_db['status']==False): 
+            self.Authed = tk.BooleanVar(self, False)
+            self.auth = UserHandle(self)
+            self.main = chooseEx(self)
+            self.auth.pack()
+        else: 
+            self.Authed = tk.BooleanVar(self, True)
+            self.main=chooseEx(self)
+            self.main.pack()
 
-        self.auth.pack()
+        
 
     def onClose(self):
         if (messagebox.askyesno('Quit?', 'U quit?')):
