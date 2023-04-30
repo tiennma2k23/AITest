@@ -40,14 +40,13 @@ class App(tk.Tk):
         self.auth = UserHandle(self)
         self.main = homepage(self)
 
-        #if(_db['status']==False): #Not pre-login
-        if (True):
+        if(_db['status']==False): #Not pre-login
             self.Authed.set(False)
             self.auth.pack()
         else: 
             self.Authed.set(True)
-            auth.destroy()
-            main.pack()
+            self.auth.destroy()
+            self.main.pack()
 
     def onClose(self):
         if (messagebox.askyesno('Quit?', 'U quit?')):
