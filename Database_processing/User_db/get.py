@@ -14,14 +14,14 @@ def get_by_username(username):
     f=collection.find_one({'username':username})
     if (f is not None): 
         return {'status':True,'data':f}
-    return {'status':False,'data':''}
+    return {'status':False,'data':f}
 
 def get_by_email(email):
     collection=db['User_db']
     f=collection.find_one({'email':email})
     if (f is not None): 
         return {'status':True,'data':f}
-    return {'status':False,'data':''}
+    return {'status':False,'data':f}
 
 def find_user(info):
     l1=get_by_username(info)

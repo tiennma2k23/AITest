@@ -2,10 +2,12 @@ import cv2
 import mediapipe as mp
 from threading import Thread
 from queue import Queue
+from Database_processing.Exercise_db.update import update
 
 # from body_part_angle import BodyPartAngle
 from Utils.Calc.types_of_exercise import TypeOfExercise
 from Utils.Calc.utils import *
+from Utils.Sources.getdata_pickle import load_object
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -18,6 +20,7 @@ status = False
 _endOfQueue = object()
 isRunning = True
 
+# print(_username)
 def capture(exType: str, frame: np.ndarray, _fq: Queue):
     global fr, counter, status, isRunning
     try:
@@ -85,7 +88,10 @@ def __main__(exType: str, webcam: bool, _fq: Queue):
     status = False
 
     # setup mediapipe
+    tmp=0
     while (isRunning) & cap.isOpened():
+        tmp+=1
+        if(tmp==10000):break
         frame = cap.read()[1] #np.ndarray format
         renderThread = Thread(daemon=True, target=capture, args=(exType, frame, _fq))
         renderThread.start()
@@ -94,8 +100,14 @@ def __main__(exType: str, webcam: bool, _fq: Queue):
         # cv2.imshow('Video', fr) #Render
         # if cv2.waitKey(1) & 0xFF == ord('q'):
         #     break
+    __=load_object("Appdata/userData/data.pickle")
+    user_db=__['data']
+    _username=user_db['username']
+    print(_username,counter,exType)
+    update(_username,counter,exType)
     cap.release()
     _fq.put(_endOfQueue)
+    
     cv2.destroyAllWindows()
 
 #__main__('pull-up')

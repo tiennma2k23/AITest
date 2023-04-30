@@ -53,7 +53,7 @@ class chooseEx(tk.Frame):
         def getFrame():
             frameData = self.frameQueue.get(True)
             if (frameData is camera._endOfQueue): 
-                self.btn["state"] = 'normal'
+                self.btnCamera["state"] = 'normal'
                 self.cameraCanvas.destroy()
                 return
 
@@ -65,7 +65,7 @@ class chooseEx(tk.Frame):
             #Call again after 30ms (Simulate ~30FPS)
             self.cameraCanvas.after(30, getFrame)
         
-        self.btn["state"] = 'disabled'
+        self.btnCamera["state"] = 'disabled'
         exType = self.tkStr.get()
         #Start rendering in seperated thread
         cameraThread = Thread(target=camera.__main__,

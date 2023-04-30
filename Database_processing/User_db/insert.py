@@ -16,7 +16,7 @@ collection=db['User_db']
 def insert(username,email,password):
     
     if(collection.count_documents({"username":username})==0):
-        collection.insert_one({'username':username,'email':email,'password':password,'friend_list':[],'friend_request':[]})
+        collection.insert_one({'username':username,'email':email,'password':password,'friend_list':[],'friend_request':[],'friend_requested':[]})
         return {'status':"OK"}
     else:
         return {'status':"Username already exist"}

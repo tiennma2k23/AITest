@@ -2,6 +2,7 @@
 from pathlib import Path
 import tkinter.messagebox as MessageBox
 from tkinter import *
+from tkinter import messagebox
 from PIL import Image, ImageTk
 
 from Utils.Sources.authen import Auth
@@ -455,12 +456,12 @@ class sign_up_frame(Frame):
 
     def onRegisterClick(self):
         if (self.password.get() != self.repeated_pass.get()):
-            MessageBox.showerror('Please retry!',
+            messagebox.showerror('Please retry!',
                                  'Repeated password mismatch!')
             return
 
-        if (Auth(self.Email, self.password).UserReg()):
-            MessageBox.showinfo('Register Successfully!',
+        if (Auth(self.Email, self.password,self.username).UserReg()):
+            messagebox.showinfo('Register Successfully!',
                                 'Please check your email for confirmation!')
             self.parent.show_frame(login_frame)
 

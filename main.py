@@ -23,7 +23,7 @@ except Exception as e:
 """
 
 _db=load_object("Appdata/userData/data.pickle")
-user_db=_db['data']
+# user_db=_db['data']
 # print(user_db)
 
 class App(tk.Tk):
