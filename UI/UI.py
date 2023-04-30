@@ -3,8 +3,7 @@ from pathlib import Path
 
 from tkinter import *
 from PIL import Image, ImageTk
-import os
-import sys
+
 from Utils.Sources.authen import Auth
 
 # Explicit imports to satisfy Flake8
@@ -252,13 +251,6 @@ class sign_up_frame(Frame):
         Frame.__init__(self, parent)
         self.configure(bg="#FFFFFF")
 
-        scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
-
-        def finddir(name, path):
-            for root, dirs, files in os.walk(path):
-                if name in files:
-                    return os.path.join(root, name)
-
         # create canvas
         canvas = Canvas(
             self,
@@ -478,14 +470,7 @@ class resend(Frame):
         Frame.__init__(self, parent)
         self.configure(bg="#FFFFFF")
 
-        scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
-        # finding files
-
-        def finddir(name, path):
-            for root, dirs, files in os.walk(path):
-                if name in files:
-                    return os.path.join(root, name)
-
+        
         canvas = Canvas(
             self,
             bg="#FFFFFF",

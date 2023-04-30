@@ -11,7 +11,7 @@ import pickle
 # from body_part_angle import BodyPartAngle
 from Utils.Calc.types_of_exercise import TypeOfExercise
 from Utils.Calc.utils import *
-from UI.UI import UserHandle
+from UI.UI_fewercode import UserHandle
 from Utils.Sources.getdata_pickle import load_object
 from Database_processing.Exercise_db.update import update
 
