@@ -5,8 +5,7 @@
 
 
 from tkinter import *
-import os
-import sys
+
 # import Register
 # import Resend_Password
 import UI.Register
@@ -28,7 +27,7 @@ class login_frame(Frame):
         #     for root, dirs, files in os.walk(path):
         #         if name in files:
         #             return os.path.join(root, name)
-
+        
         canvas = Canvas(
             self,
             bg="#FFFFFF",

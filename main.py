@@ -9,6 +9,7 @@ from UI.UI import UserHandle
 from Utils.Sources.getdata_pickle import load_object
 from Database_processing.Exercise_db.update import update
 from UI.chooseEx import chooseEx
+from UI.Homepage import homepage
 """
 uri = json.loads(open("adminAuth/adminAuth.json","r").read())["uri"]
 cluster=MongoClient(uri, server_api=ServerApi('1'))
@@ -29,7 +30,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.geometry("800x480")
-        self.resizable(False, False)
+        # self.resizable(False, False)
         self.title('Demo')
 
 
@@ -37,7 +38,7 @@ class App(tk.Tk):
         if(_db['status']==False): 
             self.Authed = tk.BooleanVar(self, False)
             self.auth = UserHandle(self)
-            self.main = chooseEx(self)
+            self.main = homepage(self)
             self.auth.pack()
         else: 
             self.Authed = tk.BooleanVar(self, True)

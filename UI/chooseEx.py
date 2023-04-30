@@ -15,9 +15,7 @@ class chooseEx(tk.Frame):
         self.eType = ('pull-up', 'push-up', 'sit-up', 'squat', 'walk')
         self.tkStr = tk.StringVar(self)
         self.frameQueue = Queue(30)
-
         self.mainF = tk.Frame(self)
-
         self.label = tk.Label(self.mainF,  text='Select:')
         self.label.grid(column=0, row=0)
         # option menu

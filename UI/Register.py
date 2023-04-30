@@ -1,6 +1,4 @@
 
-import os
-import sys
 #import Login
 import UI.Login
 from tkinter import *
