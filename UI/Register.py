@@ -1,7 +1,8 @@
 
 import os
 import sys
-import Login
+#import Login
+import UI.Login
 from tkinter import *
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
@@ -11,13 +12,6 @@ class sign_up_frame(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.configure(bg="#FFFFFF")
-
-        scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
-
-        def finddir(name, path):
-            for root, dirs, files in os.walk(path):
-                if name in files:
-                    return os.path.join(root, name)
 
         # create canvas
         canvas = Canvas(
@@ -40,24 +34,30 @@ class sign_up_frame(Frame):
             outline="")
 
         # create Back button
-        self.back_img = PhotoImage(file=finddir("back.png", scriptdir))
-        self.back_img_hover = PhotoImage(file=finddir("back_hover.png", scriptdir))
-
+        self.back_img = PhotoImage(file=r"./UI/assets/frame0/back.png")
+        self.back_img_hover = PhotoImage(
+            file=r"./UI/assets/frame0/back_hover.png")
 
         back = canvas.create_image(
             138.0,
             2.0,
             anchor="nw",
-            image = self.back_img
+            image=self.back_img
         )
-        canvas.tag_bind(back, '<Button-1>', lambda _: controller.show_frame(Login.login_frame))
-        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfigure(back, image = self.back_img_hover))
-        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfigure(back, image = self.back_img))
+        canvas.tag_bind(back, '<Button-1>',
+                        lambda _: controller.show_frame(UI.Login.login_frame))
+        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfigure(
+            back, image=self.back_img_hover))
+        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfigure(
+            back, image=self.back_img))
 
         # create signup button
-        self.button_image_1 = PhotoImage(file=finddir("button_1.png", scriptdir))
-        self.button_image_2 = PhotoImage(file=finddir("button_1_hover.png", scriptdir))
-        self.button_image_3 = PhotoImage(file=finddir("button_1_onclick.png", scriptdir))
+        self.button_image_1 = PhotoImage(
+            file=r'./UI/assets/frame0/button_1.png')
+        self.button_image_2 = PhotoImage(
+            file=r"./UI/assets/frame0/button_1_hover.png")
+        self.button_image_3 = PhotoImage(
+            file=r"./UI/assets/frame0/button_1_onclick.png")
 
         button_1 = canvas.create_image(
             301.0,
@@ -65,10 +65,13 @@ class sign_up_frame(Frame):
             image=self.button_image_1,
             anchor='nw',
         )
-        canvas.tag_bind(button_1, '<Button-1>',lambda _: self.onRegisterClick())
+        canvas.tag_bind(button_1, '<Button-1>',
+                        lambda _: self.onRegisterClick())
         # hover button
-        canvas.tag_bind(button_1, '<Enter>', lambda _: canvas.itemconfig(button_1, image=self.button_image_2))
-        canvas.tag_bind(button_1, '<Leave>', lambda _: canvas.itemconfig(button_1, image=self.button_image_1))
+        canvas.tag_bind(button_1, '<Enter>', lambda _: canvas.itemconfig(
+            button_1, image=self.button_image_2))
+        canvas.tag_bind(button_1, '<Leave>', lambda _: canvas.itemconfig(
+            button_1, image=self.button_image_1))
 
         # create texts above textboxes
         canvas.create_text(
@@ -122,7 +125,7 @@ class sign_up_frame(Frame):
         self.Email = StringVar()
         self.repeated_pass = StringVar()
 
-        self.entry_image_1 = PhotoImage(file=finddir("entry_1.png", scriptdir))
+        self.entry_image_1 = PhotoImage(file=r"./UI/assets/frame0/entry_1.png")
         entry_bg_1 = canvas.create_image(
             399.6672668457031,
             125.09378051757812,
@@ -144,7 +147,7 @@ class sign_up_frame(Frame):
             height=46.18756103515625
         )
 
-        self.entry_image_2 = PhotoImage(file=finddir("entry_2.png", scriptdir))
+        self.entry_image_2 = PhotoImage(file=r"./UI/assets/frame0/entry_2.png")
         entry_bg_2 = canvas.create_image(
             399.6672668457031,
             326.0937805175781,
@@ -167,7 +170,7 @@ class sign_up_frame(Frame):
             height=46.18756103515625
         )
 
-        self.entry_image_3 = PhotoImage(file=finddir("entry_3.png", scriptdir))
+        self.entry_image_3 = PhotoImage(file=r"./UI/assets/frame0/entry_3.png")
         entry_bg_3 = canvas.create_image(
             399.6672668457031,
             260.0937805175781,
@@ -190,7 +193,7 @@ class sign_up_frame(Frame):
             height=46.18756103515625
         )
 
-        self.entry_image_4 = PhotoImage(file=finddir("entry_4.png", scriptdir))
+        self.entry_image_4 = PhotoImage(file=r"./UI/assets/frame0/entry_4.png")
         entry_bg_4 = canvas.create_image(
             399.6672668457031,
             194.09378051757812,
@@ -221,4 +224,4 @@ class sign_up_frame(Frame):
         if (Auth(self.Email, self.password).UserReg()):
             MessageBox.showinfo('Register Successfully!',
                                 'Please check your email for confirmation!')
-            self.parent.show_frame(Login.login_frame)
+            self.parent.show_frame(UI.Login.login_frame)

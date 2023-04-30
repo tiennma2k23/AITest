@@ -1,7 +1,6 @@
-import Login
+#import Login
+import UI.Login
 from tkinter import *
-import os
-import sys
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -11,13 +10,7 @@ class resend(Frame):
         Frame.__init__(self, parent)
         self.configure(bg="#FFFFFF")
 
-        scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
 
-        def finddir(name, path):
-            for root, dirs, files in os.walk(path):
-                if name in files:
-                    return os.path.join(root, name)
-    
         canvas = Canvas(
             self,
             bg="#FFFFFF",
@@ -36,8 +29,9 @@ class resend(Frame):
             fill="#BAB8B8",
             outline="")
 
-        self.back_img = PhotoImage(file=finddir("back.png", scriptdir))
-        self.back_img_hover = PhotoImage(file=finddir("back_hover.png", scriptdir))
+        self.back_img = PhotoImage(file=r"./UI/assets/resendpass/button_1.png")
+        self.back_img_hover = PhotoImage(
+            file=r"./UI/assets/resendpass/back_hover.png")
 
         back = canvas.create_image(
             138.0,
@@ -45,23 +39,29 @@ class resend(Frame):
             anchor="nw",
             image=self.back_img
         )
-        canvas.tag_bind(back, '<Button-1>',lambda _: controller.show_frame(Login.login_frame))
-        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfigure(back, image=self.back_img_hover))
-        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfigure(back, image=self.back_img))
+        canvas.tag_bind(back, '<Button-1>',
+                        lambda _: controller.show_frame(UI.Login.login_frame))
+        canvas.tag_bind(back, '<Enter>', lambda _: canvas.itemconfigure(
+            back, image=self.back_img_hover))
+        canvas.tag_bind(back, '<Leave>', lambda _: canvas.itemconfigure(
+            back, image=self.back_img))
 
-        self.button_image_2 = PhotoImage(file=finddir("button_2.png", scriptdir))
+        self.button_image_2 = PhotoImage(
+            file=r"./UI/assets/resendpass/button_2.png")
         self.button_image_2_hover = PhotoImage(
-            file=finddir("button_2_hover.png", scriptdir))
+            file=r"./UI/assets/resendpass/button_2_hover.png")
         button_2 = canvas.create_image(
             309,
             241,
             image=self.button_image_2,
             anchor="nw"
         )
-        canvas.tag_bind(button_2, '<ButtonPress-1>', lambda _: print("Button_2 clicked"))
-        canvas.tag_bind(button_2, '<Enter>', lambda _: canvas.itemconfigure(button_2, image=self.button_image_2_hover))
-        canvas.tag_bind(button_2, '<Leave>', lambda _: canvas.itemconfigure(button_2, image=self.button_image_2))
-
+        canvas.tag_bind(button_2, '<ButtonPress-1>',
+                        lambda _: print("Button_2 clicked"))
+        canvas.tag_bind(button_2, '<Enter>', lambda _: canvas.itemconfigure(
+            button_2, image=self.button_image_2_hover))
+        canvas.tag_bind(button_2, '<Leave>', lambda _: canvas.itemconfigure(
+            button_2, image=self.button_image_2))
 
         canvas.create_text(
             248.0,
@@ -73,7 +73,8 @@ class resend(Frame):
         )
 
         self.resend_email = StringVar()
-        self.entry_image_1 = PhotoImage(file=finddir("entry_1.png", scriptdir))
+        self.entry_image_1 = PhotoImage(
+            file=r"./UI/assets/resendpass/entry_1.png")
         entry_bg_1 = canvas.create_image(
             399.667236328125,
             194.09378051757812,
@@ -94,4 +95,3 @@ class resend(Frame):
             width=284.80079460144043,
             height=46.18756103515625
         )
-        

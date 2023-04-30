@@ -28,7 +28,8 @@ user_db=_db['data']
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("746x661")
+        self.geometry("800x480")
+        self.resizable(False, False)
         self.title('Demo')
 
 
