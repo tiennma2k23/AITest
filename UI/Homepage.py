@@ -1,5 +1,6 @@
 from tkinter import *
-from UI.Friends import Friends_frame
+import UI.Friends
+import UI.Login
 from pathlib import Path
 import os
 # Explicit imports to satisfy Flake8
@@ -8,11 +9,11 @@ import os
 
 class homepage(Frame):
     def __init__(self, parent):
-        super().__init__()
+        super().__init__(parent)
         self.parent = parent
 
         self.mainF = Frame(self)
-        self.friends = Friends_frame(self)
+        # self.friends = Friends_frame(self)
 
         OUTPUT_PATH = Path(__file__).parent
 
@@ -196,19 +197,20 @@ class homepage(Frame):
         self.canvas.tag_bind(button_5, '<ButtonPress-1>',
                         lambda _: print(1))
 
-        self.mainF.pack()
+        # self.mainF.pack()
 
     def onLogoutClicked(self):
         #Do sth with pickle
-        os.remove("Appdata/userData/data.pickle")
-        self.parent.Authed.set(False)
-        self.parent.run()
-        self.destroy()
+        # os.remove("Appdata/userData/data.pickle")
+        self.parent.parent.Authed.set(False)
+        self.parent.parent.run()
+        self.parent.destroy()
 
     def onFriendsClicked(self):
         print('onFriends cliked')
-        self.friends.pack()
-        self.destroy()
+        # self.friends.pack()
+        self.parent.show_frame(UI.Friends.Friends_frame)
+        # self.parent.destroy()
 
 
 

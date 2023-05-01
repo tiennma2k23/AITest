@@ -2,9 +2,9 @@ import tkinter as tk
 
 class Friends_frame(tk.Frame):
     def __init__(self, parent):
-        super().__init__()
+        super().__init__(parent)
         self.parent = parent
-        self.mainF = tk.Frame(self)
+        # self.mainF = tk.Frame(self)
         self.friendReqs = [
             {'username': 'friendrq1', 'rank': 125},
             {'username': 'friendrq2', 'rank': 69}
@@ -17,13 +17,13 @@ class Friends_frame(tk.Frame):
         ] #{ {'username': <rank>} }
 
         self.listFriendFr = tk.LabelFrame(
-            self.mainF,
+            self,
             bg="#fff",
             text='Friends'
         ) #container
 
         self.listFriendReqFr = tk.LabelFrame(
-            self.mainF,
+            self,
             bg="#fff",
             text='Friends Req'
         ) #container
@@ -36,7 +36,7 @@ class Friends_frame(tk.Frame):
             self.addFriendReqFrame(friendReq['username'], friendReq['rank'])
         self.listFriendFr.pack()
         self.listFriendReqFr.pack()
-        self.mainF.pack()
+        # self.mainF.pack()
 
 
     def addFriendFrame(self, usr: str, rank: int):
