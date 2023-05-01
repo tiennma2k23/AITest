@@ -1,5 +1,6 @@
 from tkinter import *
 import UI.Friends
+import UI.Friends_list
 import UI.chooseEx
 from pathlib import Path
 import os
@@ -209,8 +210,8 @@ class homepage(Frame):
     def onFriendsClicked(self):
         print('onFriends cliked')
         # self.friends.pack()
-        self.parent.show_frame(UI.Friends.Friends_frame)
-        # self.parent.destroy()
+        self.parent.show_frame(UI.Friends_list.Friendslist)
+        # self.destroy()
 
 
 

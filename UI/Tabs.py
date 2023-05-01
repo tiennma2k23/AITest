@@ -3,7 +3,8 @@ from tkinter import *
 from UI.Homepage import homepage
 from UI.Friends import Friends_frame
 from Utils.Sources.authen import Auth
-from UI.Login import login_frame
+from UI.Friends_list import Friendslist
+
 
 # import Login
 # import Register
@@ -26,7 +27,7 @@ class Tabs(Frame):
         # Create a dictionary of frames
         self.frames = {}
         # we'll create the frames themselves later but let's add the components to the dictionary.
-        for F in (homepage, Friends_frame):
+        for F in (homepage, Friends_frame, Friendslist):
             frame = F(self)
 
             # the windows class acts as the root window for the frames.
