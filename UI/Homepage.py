@@ -1,6 +1,6 @@
 from tkinter import *
 import UI.Friends
-import UI.Login
+import UI.chooseEx
 from pathlib import Path
 import os
 # Explicit imports to satisfy Flake8
@@ -150,7 +150,7 @@ class homepage(Frame):
             anchor = "nw",
         )
         self.canvas.tag_bind(button_1, '<ButtonPress-1>',
-                        lambda _: print(1))
+                        lambda _: UI.chooseEx.chooseEx(self, 'pull-up').update())
         #button2
         self.button_image_2 = PhotoImage(
             file=relative_to_assets("button_2.png"))
@@ -161,7 +161,7 @@ class homepage(Frame):
             anchor="nw",
         )
         self.canvas.tag_bind(button_2, '<ButtonPress-1>',
-                        lambda _: print(1))
+                        lambda _: UI.chooseEx.chooseEx(self, 'push-up').update())
                     
         #button3
         self.button_image_3 = PhotoImage(
@@ -173,7 +173,7 @@ class homepage(Frame):
             anchor="nw",
         )
         self.canvas.tag_bind(button_3, '<ButtonPress-1>',
-                        lambda _: print(1))
+                        lambda _: UI.chooseEx.chooseEx(self, 'squat').update())
         #button4
         self.button_image_4 = PhotoImage(
             file=relative_to_assets("button_4.png"))
@@ -184,7 +184,7 @@ class homepage(Frame):
             anchor="nw",
         )
         self.canvas.tag_bind(button_4, '<ButtonPress-1>',
-                        lambda _: print(1))
+                        lambda _: UI.chooseEx.chooseEx(self, 'sit-up').update())
         #button5
         self.button_image_5 = PhotoImage(
             file=relative_to_assets("button_5.png"))
@@ -195,7 +195,7 @@ class homepage(Frame):
             anchor="nw",
         )
         self.canvas.tag_bind(button_5, '<ButtonPress-1>',
-                        lambda _: print(1))
+                        lambda _: UI.chooseEx.chooseEx(self, 'walk').update())
 
         # self.mainF.pack()
 

@@ -29,6 +29,7 @@ def capture(exType: str, frame: np.ndarray, _fq: Queue):
     except:
         isRunning = False
         return
+    
     results = pose.process(frame) #RGB format required
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) #openCV requires BGR
 
@@ -92,7 +93,7 @@ def __main__(exType: str, webcam: bool, _fq: Queue):
     while (isRunning) & cap.isOpened():
         tmp+=1
         if(tmp==10000):break
-        frame = cap.read()[1] #np.ndarray format
+        _, frame = cap.read() #np.ndarray format
         renderThread = Thread(daemon=True, target=capture, args=(exType, frame, _fq))
         renderThread.start()
         renderThread.join()
@@ -100,14 +101,12 @@ def __main__(exType: str, webcam: bool, _fq: Queue):
         # cv2.imshow('Video', fr) #Render
         # if cv2.waitKey(1) & 0xFF == ord('q'):
         #     break
-    __=load_object("Appdata/userData/data.pickle")
-    user_db=__['data']
-    _username=user_db['username']
-    print(_username,counter,exType)
-    update(_username,counter,exType)
+    # __=load_object("Appdata/userData/data.pickle")
+    # user_db=__['data']
+    # _username=user_db['username']
+    # print(_username,counter,exType)
+    # update(_username,counter,exType)
     cap.release()
     _fq.put(_endOfQueue)
-    
-    cv2.destroyAllWindows()
 
 #__main__('pull-up')

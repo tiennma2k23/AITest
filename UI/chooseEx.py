@@ -7,44 +7,21 @@ from PIL import ImageTk, Image
 
 ENABLE_WEBCAM = False #True to enable webcam
 
-class chooseEx(tk.Frame):
-    def __init__(self, parent):
+class chooseEx(tk.Toplevel):
+    def __init__(self, parent, exType: str):
         super().__init__()
         self.parent = parent
-        self.friends = Friends_frame(self)
+        self.geometry('800x480')
         self.eType = ('pull-up', 'push-up', 'sit-up', 'squat', 'walk')
         self.tkStr = tk.StringVar(self)
+        self.tkStr.set(exType)
         self.frameQueue = Queue(30)
-        self.mainF = tk.Frame(self)
-        self.label = tk.Label(self.mainF,  text='Select:')
-        self.label.grid(column=0, row=0)
-        # option menu
-        self.option_menu = tk.OptionMenu(
-            self.mainF,
-            self.tkStr,
-            '',
-            *self.eType)
-        self.option_menu.grid(column=1,row=0)
-        self.btnCamera = tk.Button(
-            self.mainF, 
-            text='Show camera',
-            command=lambda: self.onShowCameraClicked()
-        )
-        self.btnCamera.grid(column=2,row=0)
-        self.btnFriends = tk.Button(
-            self.mainF,
-            text='Friends and Reqs',
-            command=lambda: self.onShowFriendsClicked()
-        )
-        self.btnFriends.grid(column=3, row=0)
-        self.mainF.pack()
-
-    def onShowFriendsClicked(self):
-        self.friends.mainF.pack()
-        self.destroy()
+        self.protocol("WM_DELETE_WINDOW", self.onClose)
+        self.onShowCameraClicked()
 
     def onShowCameraClicked(self):
         print('show camera clicked')
+        isRunning = False
         
         if not (self.tkStr.get()): 
             print('Invalid')
@@ -52,8 +29,8 @@ class chooseEx(tk.Frame):
 
         def getFrame():
             frameData = self.frameQueue.get(True)
+            #True = Wait until got a frame
             if (frameData is camera._endOfQueue): 
-                self.btnCamera["state"] = 'normal'
                 self.cameraCanvas.destroy()
                 return
 
@@ -64,15 +41,20 @@ class chooseEx(tk.Frame):
 
             #Call again after 30ms (Simulate ~30FPS)
             self.cameraCanvas.after(30, getFrame)
-        
-        self.btnCamera["state"] = 'disabled'
+
+
         exType = self.tkStr.get()
         #Start rendering in seperated thread
-        cameraThread = Thread(target=camera.__main__,
+        self.cameraThread = Thread(target=camera.__main__,
                               args= (exType, ENABLE_WEBCAM, self.frameQueue),
                               daemon=True)
-        cameraThread.start()
+        self.cameraThread.start()
 
-        self.cameraCanvas = tk.Label(self.mainF)
-        self.cameraCanvas.grid(column=0, row=1, columnspan=3)
+        self.cameraCanvas = tk.Label(self)
+        self.cameraCanvas.grid(column=0, row=1)
         getFrame()
+
+    def onClose(self):
+        camera.isRunning = False
+        self.cameraThread.join()
+        self.withdraw()
