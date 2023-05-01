@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import tkinter.messagebox as MessageBox
 class Friends_frame(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
@@ -40,6 +40,23 @@ class Friends_frame(tk.Frame):
 
 
     def addFriendFrame(self, usr: str, rank: int):
+
+        
+        def onaddfriendBtnClick():
+            if (MessageBox.askyesno('Unfr', 'U sure?')):
+                print('Addfr succ')
+                addFriendBtn.grid_forget()
+                unfriendBtn.grid(row=0, column=1, rowspan=2)
+            else:
+                print('Addfr canceled')
+
+        def onunfriendBtnClick():
+            if (MessageBox.askyesno('Unfr', 'U sure?')):
+                print('Unfr succ')
+                unfriendBtn.grid_forget()
+                addFriendBtn.grid(row=0, column=1, rowspan=2)
+            else:
+                print('Unfr canceled')
         person = tk.Frame(self.listFriendFr,
                           padx=10, pady=10,
                           borderwidth=2,
@@ -50,6 +67,13 @@ class Friends_frame(tk.Frame):
         personRank = tk.Label(person,
                               text='Rank: '+str(rank))
         personRank.grid(row=1)
+
+        unfriendBtn = tk.Button(person, text='Unfr',
+                                command=lambda: onunfriendBtnClick())
+        unfriendBtn.grid(row=0, column=1, rowspan=2)
+        addFriendBtn = tk.Button(person, text='Add fr',
+                                command=lambda: onaddfriendBtnClick())
+        
         person.grid(row=len(self.friendFrs))
         self.friendFrs.append(person)
 
