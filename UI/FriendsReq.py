@@ -2,30 +2,25 @@ from tkinter import *
 from pathlib import Path
 import UI.Homepage
 import tkinter.messagebox as messagebox
-import UI.FriendsReq 
+import UI.Friends_list
 
 
-class Friendslist(Frame):
+class requests(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
         OUTPUT_PATH = Path(__file__).parent
 
-
         ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/friendslist")
-
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
-        
 
-        self.friends = [
-            {'username': 'friend1', 'rank': 123},
-            {'username': 'friend2', 'rank': 15},
-            {'username': 'friend3', 'rank': 727}
-        ]  # { {'username': <rank>} }
-        self.friendsnum = str(self.friends.__len__())
-
+        self.friendReqs = [
+            {'username': 'friendrq1', 'rank': 125},
+            {'username': 'friendrq2', 'rank': 69}
+        ]
+        self.reqsnum = str(self.friendReqs.__len__())
 
         self.canvas = Canvas(
             self,
@@ -44,9 +39,8 @@ class Friendslist(Frame):
             self.canvas.tag_bind(sometxt, '<Leave>', lambda _: self.canvas.itemconfig(
                 sometxt, fill="#FFFFFF"))
             self.canvas.tag_bind(sometxt, '<ButtonPress-1>',
-                             lambda _: print("profile"))
+                                 lambda _: print("profile"))
 
-        
         self.image_image_1 = PhotoImage(
             file=relative_to_assets("image_1.png"))
         image_1 = self.canvas.create_image(
@@ -64,7 +58,7 @@ class Friendslist(Frame):
             fill="#ADAAAA",
             outline="")
         # home text
-        home_txt=self.canvas.create_text(
+        home_txt = self.canvas.create_text(
             287.0,
             27.0,
             anchor="nw",
@@ -142,16 +136,15 @@ class Friendslist(Frame):
         hovertxt(shop_txt)
         self.canvas.tag_bind(shop_txt, '<ButtonPress-1>',
                              lambda _: print("Shop"))
-        #number of friends text
+        # number of friends text
         self.canvas.create_text(
             142.0,
             89.0,
             anchor="nw",
-            text="All Friends -  " + self.friendsnum,
+            text="Requests -  " + self.reqsnum,
             fill="#807B7B",
             font=("Lato", 18 * -1, "bold")
         )
-
 
         self.canvas.create_rectangle(
             0.0,
@@ -160,31 +153,33 @@ class Friendslist(Frame):
             480.0,
             fill="#B5B5B5",
             outline="")
-        
-        #Friends List Text
+
+        # Friends List Text
         list_txt = self.canvas.create_text(
             13.0,
             189.0,
             anchor="nw",
             text="Friends List",
-            fill="#5F5F5F",
-            font=("Lato Regular", 18 * -1, "underline")
+            fill="#FFFFFF",
+            font=("Lato Regular", 18 * -1,)
         )
-        #hovertxt(list_txt)
-        
-        #request_txt
+        hovertxt(list_txt)
+        self.canvas.tag_bind(list_txt, '<ButtonPress-1>',
+                             lambda _: self.onFriendslistClicked())
+
+        # request_txt
         req_txt = self.canvas.create_text(
             22.0,
             268.0,
             anchor="nw",
             text="Requests",
-            fill="#FFFFFF",
-            font=("Lato Regular", 18 * -1)
+            fill="#5F5F5F",
+            font=("Lato Regular", 18 * -1, "underline")
         )
-        hovertxt(req_txt)
-        self.canvas.tag_bind(req_txt, '<ButtonPress-1>',
-                             lambda _: self.onFriendsReqClicked())
-        #add addfr txt
+        # hovertxt(req_txt)
+        # self.canvas.tag_bind(req_txt, '<ButtonPress-1>',
+        #                      lambda _: print("req"))
+        # add addfr txt
         addfr_txt = self.canvas.create_text(
             16.0,
             347.0,
@@ -197,19 +192,15 @@ class Friendslist(Frame):
         self.canvas.tag_bind(addfr_txt, '<ButtonPress-1>',
                              lambda _: print("addfr"))
 
-
-        
-        self.friendFrs = []  # List of friend frames
-        self.unfr = []  # List of friendReq frames
-        for friend in self.friends:
+        self.Reqs = []  # List of friend frames
+        for friend in self.friendReqs:
             self.addFriendFrame(friend['username'], friend['rank'])
-        
-        
+
     def addFriendFrame(self, usr: str, rank: int):
-        posy = int(126 + 68*len(self.friendFrs))
-        #create rec
+        posy = int(126 + 68*len(self.Reqs))
+        # create rec
         person = self.canvas.create_rectangle(
-            117, 
+            117,
             posy,
             800,
             posy + 67,
@@ -217,16 +208,16 @@ class Friendslist(Frame):
             outline="white",
 
         )
-        #create username txt
-        self.canvas.create_text (
+        # create username txt
+        self.canvas.create_text(
             134,
             posy + 5,
             anchor="nw",
-            text='Username: '+ usr,
+            text='Username: ' + usr,
             fill="#FFFFFF",
             font=("Lato Regular", 18 * -1, "bold")
         )
-        #create rank txt
+        # create rank txt
         self.canvas.create_text(
             134,
             posy + 36,
@@ -235,64 +226,75 @@ class Friendslist(Frame):
             fill="#FFFFFF",
             font=("Lato Regular", 18 * -1)
         )
-        #create button
-        unfr = Button(
+        # create button
+        deny = Button(
             self.canvas,
-            text="Unfriend",
+            text="Deny",
             font=('Lato', 18 * -1),
-            fg = "#7F7F7F",
-            bg = "#DEDEDE",
+            fg="#7F7F7F",
+            bg="#DEDEDE",
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: onunfriendBtnClick(),
+            command=lambda: onDenyBtnClick(),
             relief="flat"
         )
-        unfr.place(
+        deny.place(
             x=662,
             y=posy + 19.0,
             width=122.0,
             height=27.98065185546875
         )
-        addButton = Button(
+        accept = Button(
             self.canvas,
-            text="Add friend",
+            text="Accept",
             font=('Lato', 18 * -1),
             fg="#E4E4E4",
             bg="#676767",
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: onaddfriendBtnClick(),
+            command=lambda: onAcceptBtnClick(),
             relief="flat"
         )
+        accept.place(
+            x=504,
+            y=posy + 19.0,
+            width=122.0,
+            height=27.98065185546875
+        )
 
-        #unfriend command
+        # unfriend command
 
-        def onaddfriendBtnClick():
-            #do sth
-            print("addfr succ")
-            addButton.place_forget()
-            unfr.place(
-                x=662,
-                y=posy + 19.0,
-                width=122.0,
-                height=27.98065185546875
+        def onAcceptBtnClick():
+            # do sth
+            print("Accept")
+            accept.place_forget()
+            deny.place_forget()
+            self.canvas.create_text(
+                584,
+                posy + 21,
+                anchor="nw",
+                text="Request Accepted!",
+                fill="#FFFFFF",
+                font=("Lato Regular", 20 * -1, "bold")
             )
 
-        def onunfriendBtnClick():
-            if (messagebox.askyesno('Unfriend', 'Are you sure to unfriend with ' + usr + '?')):
-                print('Unfr succ')
-                unfr.place_forget()
-                addButton.place(
-                    x=662,
-                    y=posy + 19.0,
-                    width=122.0,
-                    height=27.98065185546875
-                )
-            else:
-                print('Unfr canceled')
-        
-        self.friendFrs.append(person)
+        def onDenyBtnClick():
+            # do sth
+            print("Deny")
+            accept.place_forget()
+            deny.place_forget()
+            self.canvas.create_text(
+                584,
+                posy + 21,
+                anchor="nw",
+                text="Request Denied!",
+                fill="#FFFFFF",
+                font=("Lato Regular", 20 * -1, "bold")
+            )
 
+
+
+        self.Reqs.append(person)
 
     def onLogoutClicked(self):
         # Do sth with pickle
@@ -306,11 +308,9 @@ class Friendslist(Frame):
         # self.friends.pack()
         self.parent.show_frame(UI.Homepage.homepage)
         # self.grid_forget()
-    
-    def onFriendsReqClicked(self):
-        # print('onFriends cliked')
-        # self.friends.pack()
-        self.parent.show_frame(UI.FriendsReq.requests)
-        # self.grid_forget()
 
-        
+    def onFriendslistClicked(self):
+        print('onFriends cliked')
+        # self.friends.pack()
+        self.parent.show_frame(UI.Friends_list.Friendslist)
+        # self.destroy()
