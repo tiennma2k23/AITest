@@ -8,11 +8,12 @@ class TypeOfExercise():
     def __init__(self):
         # super().__init__(landmarks)
         self.max_walk_dist = MIN_WALKING_DIST
+        
         print('typeofEx inti')
 
     def push_up(self, counter, status):
-        left_arm_angle = self.angle_of_the_left_arm()
-        right_arm_angle = self.angle_of_the_left_arm()
+        left_arm_angle = self.calcAngle.angle_of_the_left_arm()
+        right_arm_angle = self.calcAngle.angle_of_the_left_arm()
         avg_arm_angle = (left_arm_angle + right_arm_angle) // 2
 
         if status:
@@ -44,8 +45,8 @@ class TypeOfExercise():
         return [counter, status]
 
     def squat(self, counter, status):
-        left_leg_angle = self.angle_of_the_right_leg()
-        right_leg_angle = self.angle_of_the_left_leg()
+        left_leg_angle = self.calcAngle.angle_of_the_right_leg()
+        right_leg_angle = self.calcAngle.angle_of_the_left_leg()
         avg_leg_angle = (left_leg_angle + right_leg_angle) // 2
 
         if status:
@@ -88,7 +89,7 @@ class TypeOfExercise():
         return [counter, status]
 
     def sit_up(self, counter, status):
-        angle = self.angle_of_the_abdomen()
+        angle = self.calcAngle.angle_of_the_abdomen()
         if status:
             if angle < 55:
                 counter += 1
@@ -101,6 +102,7 @@ class TypeOfExercise():
 
     def calculate_exercise(self, landmarks, exercise_type, counter, status):
         self.landmarks = landmarks
+        self.calcAngle = BodyPartAngle(self.landmarks)
         if exercise_type == "push-up":
             counter, status = self.push_up(
                 counter, status)
