@@ -19,10 +19,11 @@ counter = 0
 status = False
 _endOfQueue = object()
 isRunning = True
+calcFunc = TypeOfExercise().calculate_exercise
 
 # print(_username)
 def capture(exType: str, frame: np.ndarray, _fq: Queue):
-    global fr, counter, status, isRunning
+    global fr, counter, status, isRunning, calcFunc
     try:
         frame = cv2.resize(frame, (800, 480), interpolation=cv2.INTER_AREA)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -35,9 +36,10 @@ def capture(exType: str, frame: np.ndarray, _fq: Queue):
 
     #Get landmarks and update
     try:
-        landmarks = results.pose_landmarks.landmark
-        counter, status = TypeOfExercise(landmarks).calculate_exercise(
-            exType, counter, status)
+        if (exType != 'walk'): landmarks = results.pose_landmarks.landmark
+        else: landmarks = results.pose_world_landmarks.landmark
+        counter, status = calcFunc(
+            landmarks, exType, counter, status)
     except:
         pass #In case mediapipe desync
 
@@ -45,7 +47,7 @@ def capture(exType: str, frame: np.ndarray, _fq: Queue):
     frame.flags.writeable = True #Disable read-only
 
     #Draw ScoreTable
-    frame = score_table(exType, frame, counter, status)
+    frame = score_table(exType, frame, round(counter, 2), status)
     #Draw landmarks and connections
     mp_drawing.draw_landmarks(
         frame,

@@ -21,6 +21,24 @@ def calculate_angle(a, b, c):
     return angle
 
 
+def aprox_same_plane(bp1, bp2, axis, epsilon):
+    match axis:
+        case 'x': val = 0
+        case 'y': val = 1
+        case 'z': val = 2
+        case _: val = 0
+    return (
+        abs(bp1[val] - bp2[val]) <= epsilon
+    )
+
+def get_body_part_cords(landmarks, body_part_name):
+    #IRL cords
+    return [
+        landmarks[mp_pose.PoseLandmark[body_part_name].value].x,
+        landmarks[mp_pose.PoseLandmark[body_part_name].value].y,
+        landmarks[mp_pose.PoseLandmark[body_part_name].value].z,
+        landmarks[mp_pose.PoseLandmark[body_part_name].value].visibility
+    ]
 
 def detection_body_part(landmarks, body_part_name):
     return [
