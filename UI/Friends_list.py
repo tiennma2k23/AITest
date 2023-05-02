@@ -4,6 +4,7 @@ import UI.Homepage
 import tkinter.messagebox as messagebox
 import UI.FriendsReq 
 import UI.Addfriend
+import UI.Rank
 
 
 class Friendslist(Frame):
@@ -129,7 +130,7 @@ class Friendslist(Frame):
         )
         hovertxt(rank_txt)
         self.canvas.tag_bind(rank_txt, '<ButtonPress-1>',
-                             lambda _: print("ranking"))
+                             lambda _: self.onRankClick())
 
         # shop text
         shop_txt = self.canvas.create_text(
@@ -316,5 +317,8 @@ class Friendslist(Frame):
     
     def onAddfrClick(self):
         UI.Addfriend.Addfriend(self).update()
+    
+    def onRankClick(self):
+        self.parent.show_frame(UI.Rank.rank)
 
         

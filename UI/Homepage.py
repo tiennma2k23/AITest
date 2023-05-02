@@ -2,6 +2,7 @@ from tkinter import *
 import UI.Friends
 import UI.Friends_list
 import UI.chooseEx
+import UI.Rank
 from pathlib import Path
 import os
 # Explicit imports to satisfy Flake8
@@ -122,7 +123,7 @@ class homepage(Frame):
         self.canvas.tag_bind(rank_txt, '<Leave>', lambda _: self.canvas.itemconfig(
             rank_txt, fill="#FFFFFF"))
         self.canvas.tag_bind(rank_txt, '<ButtonPress-1>',
-                        lambda _: print("ranking"))
+                        lambda _: self.onRankClick())
 
         #shop text
         shop_txt = self.canvas.create_text(
@@ -212,6 +213,9 @@ class homepage(Frame):
         # self.friends.pack()
         self.parent.show_frame(UI.Friends_list.Friendslist)
         # self.destroy()
+
+    def onRankClick(self):
+        self.parent.show_frame(UI.Rank.rank)
 
 
 

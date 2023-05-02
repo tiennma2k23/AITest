@@ -4,6 +4,7 @@ from UI.Homepage import homepage
 from Utils.Sources.authen import Auth
 from UI.Friends_list import Friendslist
 from UI.FriendsReq import requests
+from UI.Rank import rank
 
 
 # import Login
@@ -27,7 +28,7 @@ class Tabs(Frame):
         # Create a dictionary of frames
         self.frames = {}
         # we'll create the frames themselves later but let's add the components to the dictionary.
-        for F in (homepage, Friendslist, requests):
+        for F in (homepage, Friendslist, requests, rank):
             frame = F(self)
 
             # the windows class acts as the root window for the frames.
