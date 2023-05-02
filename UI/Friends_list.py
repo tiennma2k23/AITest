@@ -1,6 +1,8 @@
 from tkinter import *
 from pathlib import Path
 import UI.Homepage
+import tkinter.messagebox as messagebox
+
 
 class Friendslist(Frame):
     def __init__(self, parent):
@@ -197,13 +199,13 @@ class Friendslist(Frame):
 
         
         self.friendFrs = []  # List of friend frames
-        self.friendReqFrs = []  # List of friendReq frames
+        self.unfr = []  # List of friendReq frames
         for friend in self.friends:
             self.addFriendFrame(friend['username'], friend['rank'])
         
         
     def addFriendFrame(self, usr: str, rank: int):
-        posy = int(133 + 68*len(self.friendFrs))
+        posy = int(126 + 68*len(self.friendFrs))
         #create rec
         person = self.canvas.create_rectangle(
             117, 
@@ -212,6 +214,7 @@ class Friendslist(Frame):
             posy + 67,
             fill="#ADAAAA",
             outline="white",
+
         )
         #create username txt
         self.canvas.create_text (
@@ -232,30 +235,64 @@ class Friendslist(Frame):
             font=("Lato Regular", 18 * -1)
         )
         #create button
-        unfr = self.canvas.create_image(
-            662, 
-            posy + 19,
-            image = PhotoImage(file=r'./UI/assets/friendsbar/button_1.png'),
-            anchor = "nw",
+        self.unfr_img = PhotoImage(file=r'./UI/assets/friendsbar/button_1.png')
+        unfr = Button(
+            self.canvas,
+            text="Unfriend",
+            font=('Lato', 18 * -1),
+            fg = "#7F7F7F",
+            bg = "#DEDEDE",
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: onunfriendBtnClick(),
+            relief="flat"
         )
-        self.canvas.tag_bind(unfr, '<ButtonPress-1>',
-                             lambda _: onunfriendBtnClick())
-        global addbutton
-        #unfriend command
-        # def onunfriendBtnClick():
-        #     if (MessageBox.askyesno('Unfr', 'U sure?')):
-        #         print('Unfr succ')
-        #         self.canvas.delete(unfr)
-        #         addbutton = canvas.create_image(
-        #             662,
-        #             posy + 19,
-        #             image=PhotoImage(file=r'./UI/assets/friendsbar/button_2.png'),
-        #             anchor="nw",
-        #         )
-        #     else:
-        #         print('Unfr canceled')
+        unfr.place(
+            x=662,
+            y=posy + 19.0,
+            width=122.0,
+            height=27.98065185546875
+        )
+        addButton = Button(
+            self.canvas,
+            text="Add friend",
+            font=('Lato', 18 * -1),
+            fg="#E4E4E4",
+            bg="#676767",
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: onaddfriendBtnClick(),
+            relief="flat"
+        )
 
+        #unfriend command
+
+        def onaddfriendBtnClick():
+            #do sth
+            print("addfr succ")
+            addButton.place_forget()
+            unfr.place(
+                x=662,
+                y=posy + 19.0,
+                width=122.0,
+                height=27.98065185546875
+            )
+
+        def onunfriendBtnClick():
+            if (messagebox.askyesno('Unfriend', 'Are you sure to unfriend with ' + usr + '?')):
+                print('Unfr succ')
+                unfr.place_forget()
+                addButton.place(
+                    x=662,
+                    y=posy + 19.0,
+                    width=122.0,
+                    height=27.98065185546875
+                )
+            else:
+                print('Unfr canceled')
+        
         self.friendFrs.append(person)
+        self.unfr.append(unfr)
 
 
     def onLogoutClicked(self):
@@ -269,6 +306,6 @@ class Friendslist(Frame):
         # print('onFriends cliked')
         # self.friends.pack()
         self.parent.show_frame(UI.Homepage.homepage)
-        # self.destroy()
+        # self.grid_forget()
 
         
