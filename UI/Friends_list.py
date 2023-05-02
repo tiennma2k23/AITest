@@ -3,6 +3,7 @@ from pathlib import Path
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import UI.FriendsReq 
+import UI.Addfriend
 
 
 class Friendslist(Frame):
@@ -195,7 +196,7 @@ class Friendslist(Frame):
         )
         hovertxt(addfr_txt)
         self.canvas.tag_bind(addfr_txt, '<ButtonPress-1>',
-                             lambda _: print("addfr"))
+                             lambda _: self.onAddfrClick())
 
 
         
@@ -312,5 +313,8 @@ class Friendslist(Frame):
         # self.friends.pack()
         self.parent.show_frame(UI.FriendsReq.requests)
         # self.grid_forget()
+    
+    def onAddfrClick(self):
+        UI.Addfriend.Addfriend(self).update()
 
         
