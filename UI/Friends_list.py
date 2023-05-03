@@ -273,11 +273,13 @@ class Friendslist(Frame):
             #do sth
             print("addfr succ")
             addButton.place_forget()
-            unfr.place(
-                x=662,
-                y=posy + 19.0,
-                width=122.0,
-                height=27.98065185546875
+            self.canvas.create_text(
+                658,
+                posy + 21,
+                anchor="nw",
+                text="Request Sent",
+                fill="#FFFFFF",
+                font=("Lato Regular", 20 * -1, "bold")
             )
 
         def onunfriendBtnClick():

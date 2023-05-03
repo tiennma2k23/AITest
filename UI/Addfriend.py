@@ -100,7 +100,7 @@ class Addfriend(Toplevel):
     def onButtonClicked(self):
         # nếu sai tên thì cút, y hệt dưới nhưng text = "Username does not exist!""
         # nếu đúng tên
-        self.canvas.itemconfig(self.addFrtxt, text=self.username.get()+'req sent!')
+        self.canvas.itemconfig(self.addFrtxt, text=self.username.get()+' friend request sent!')
     
 
 
