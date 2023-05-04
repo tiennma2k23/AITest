@@ -2,26 +2,28 @@ from tkinter import *
 from pathlib import Path
 import UI.Homepage
 import tkinter.messagebox as messagebox
+import tkinter.filedialog as dialog
 import UI.Friends_list
-import UI.profile
+import UI.Rank
+from PIL import Image
 
 
-class rank(Frame):
+class profile(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
         OUTPUT_PATH = Path(__file__).parent
 
-        ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/friendslist")
+        ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/profile")
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
-        self.users = [
-            {'username': 'friend1', 'rank': 123, 'points': 123},
-            {'username': 'friend2', 'rank': 15, 'points': 1222},
-            {'username': 'friend3', 'rank': 727, 'points': 2422}
-        ]  # { {'username': <rank>} }
+        self.username = "ok"
+        self.streak = 22
+        self.email = ".@"
+        self.rank = 333
+        self.points = 3334
 
         self.canvas = Canvas(
             self,
@@ -89,14 +91,14 @@ class rank(Frame):
             27.0,
             anchor="nw",
             text="Profile",
-            fill="#FFFFFF",
-            font=("Lato Regular", 20 * -1)
+            fill="#5F5F5F",
+            font=("Lato Regular", 20 * -1, "underline")
         )
-        hovertxt(profile_txt)
-        self.canvas.tag_bind(profile_txt, '<ButtonPress-1>',
-                             lambda _: self.onProfileClick())
+        # hovertxt(profile_txt)
+        # self.canvas.tag_bind(profile_txt, '<ButtonPress-1>',
+        #                      lambda _: self.onRankClick())
 
-        # Logout text
+        #Logout text
         logout_txt = self.canvas.create_text(
             723.0,
             27.0,
@@ -115,12 +117,12 @@ class rank(Frame):
             27.0,
             anchor="nw",
             text="Ranking",
-            fill="#5F5F5F",
-            font=("Lato Regular", 20 * -1,"underline")
+            fill="#FFFFFF",
+            font=("Lato Regular", 20 * -1)
         )
-        # hovertxt(rank_txt)
-        # self.canvas.tag_bind(rank_txt, '<ButtonPress-1>',
-        #                      lambda _: print("ranking"))
+        hovertxt(rank_txt)
+        self.canvas.tag_bind(rank_txt, '<ButtonPress-1>',
+                             lambda _: self.onRankClick())
 
         # shop text
         shop_txt = self.canvas.create_text(
@@ -135,90 +137,113 @@ class rank(Frame):
         self.canvas.tag_bind(shop_txt, '<ButtonPress-1>',
                              lambda _: print("Shop"))
 
-        # rank text
-        self.canvas.create_text(
-            30,
-            91,
+        #
+        ava_txt = self.canvas.create_text(
+            65.0,
+            316.0,
             anchor="nw",
-            text="#",
+            text="Change Avatar",
             fill="#7C7C7C",
-            font=("Lato", 18 * -1, "bold")
+            font=("Lato Regular", 18 * -1, "underline")
         )
-        #Usrname txt
-        self.canvas.create_text(
-            97,
-            91,
-            anchor="nw",
-            text="Username",
-            fill="#7C7C7C",
-            font=("Lato", 18 * -1, "bold")
-        )
-        #Points txt
-        self.canvas.create_text(
-            679,
-            91,
-            anchor="nw",
-            text="Points",
-            fill="#7C7C7C",
-            font=("Lato", 18 * -1, "bold")
-        )
+        self.canvas.tag_bind(ava_txt, '<Enter>', lambda _: self.canvas.itemconfig(
+                ava_txt, fill="#CCCCCC"))
+        self.canvas.tag_bind(ava_txt, '<Leave>', lambda _: self.canvas.itemconfig(
+                ava_txt, fill="#7C7C7F"))
+        self.canvas.tag_bind(ava_txt, '<ButtonPress-1>',
+                             lambda _: onAvaClick())
 
-        #create line
-        self.canvas.create_line(
-            0,
-            127,
-            800,
-            127,
-            width=2,
-            fill = "#595959",
+        def create_ava():
+            filename = dialog.askopenfilename()
+            im = Image.open(filename)
+            resized_im = im.resize((161, 161))
+            resized_im.convert("RGB")
+            resized_im.save(relative_to_assets("resized_ava.png"))
+
+        def onAvaClick():
+            create_ava()
+            self.new_ava = PhotoImage(relative_to_assets("resized_ava.png"))
+            self.canvas.create_image(
+                122.0,
+                222.0,
+                image = self.new_ava
+            )
+
+        #profile img
+        self.avaimg = PhotoImage(file=relative_to_assets("image_3.png"))
+        ava_image = self.canvas.create_image(
+            122.0,
+            222.0,
+            image=self.avaimg
         )
         
 
+        #main info
+        self.canvas.create_text(
+            294.0,
+            129.0,
+            anchor="nw",
+            text="Username: " + self.username,
+            fill="#7C7C7C",
+            font=("Lato", 20 * -1, "bold")
+        )
 
+        self.canvas.create_text(
+            294.0,
+            179.0,
+            anchor="nw",
+            text="E-mail: " + self.email,
+            fill="#7C7C7C",
+            font=("Lato", 20 * -1, "bold")
+        )
+
+        self.canvas.create_text(
+            293.0,
+            228.0,
+            anchor="nw",
+            text="Ranks: " + str(self.rank),
+            fill="#7C7C7C",
+            font=("Lato ", 20 * -1, "bold")
+        )
+
+        self.canvas.create_text(
+            294.0,
+            277.0,
+            anchor="nw",
+            text="Points: " + str(self.points),
+            fill="#7C7C7C",
+            font=("Lato", 20 * -1, "bold")
+        )
+
+        self.canvas.create_text(
+            294.0,
+            327.0,
+            anchor="nw",
+            text="Streak: " + str(self.streak),
+            fill="#7C7C7C",
+            font=("Lato", 20 * -1, "bold")
+        )
+
+        self.button_image_1 = PhotoImage(
+            file=relative_to_assets("button_1.png"))
+        button_1 = self.canvas.create_image(
+            655,
+            87,
+            anchor = "nw",
+            image = self.button_image_1
+        )
+        self.canvas.tag_bind(button_1, '<ButtonPress-1>',
+                             lambda _: print('resetpass'))
+
+        self.button_image_2 = PhotoImage(
+            file=relative_to_assets("button_2.png"))
+        button_2 = self.canvas.create_image(
+            487,
+            87,
+            anchor = "nw",
+            image = self.button_image_2
+        )
         
-        self.usr = []  # List of friend frames
-        for users in self.users:
-            self.addUser(users['username'], users['rank'], users['points'])
-
-    def addUser(self, usr: str, ranks: int, pts: int):
-        posy = int(140 + 49*len(self.usr))
-        #rank
-        person = self.canvas.create_text(
-            31,
-            posy,
-            anchor="nw",
-            text=str(len(self.usr) + 1),
-            fill="#7C7C7C",
-            font=("Lato", 18 * -1)
-        )
-        #name
-        self.canvas.create_text(
-            97,
-            posy,
-            anchor="nw",
-            text=usr,
-            fill="#7C7C7C",
-            font=("Lato", 18 * -1)
-        )
-        #points
-        self.canvas.create_text(
-            679,
-            posy,
-            anchor="nw",
-            text=str(pts),
-            fill="#7C7C7C",
-            font=("Lato", 18 * -1)
-        )
-        # create line
-        self.canvas.create_line(
-            0,
-            posy + 36,
-            800,
-            posy + 36,
-            width=0.5,
-            fill="#B5B5B5",
-        )
-        self.usr.append(person)
 
     def onLogoutClicked(self):
         # Do sth with pickle
@@ -238,7 +263,8 @@ class rank(Frame):
         # self.friends.pack()
         self.parent.show_frame(UI.Friends_list.Friendslist)
         # self.destroy()
-    
-    def onProfileClick(self):
-        self.parent.show_frame(UI.profile.profile)
+      
+    def onRankClick(self):
+        self.parent.show_frame(UI.Rank.rank)
 
+    

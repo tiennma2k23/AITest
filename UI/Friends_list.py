@@ -8,6 +8,7 @@ import tkinter.messagebox as messagebox
 import UI.FriendsReq 
 import UI.Addfriend
 import UI.Rank
+import UI.profile
 from Utils.Sources.getdata_pickle import load_object
 
 
@@ -115,7 +116,7 @@ class Friendslist(Frame):
         )
         hovertxt(profile_txt)
         self.canvas.tag_bind(profile_txt, '<ButtonPress-1>',
-                             lambda _: print("profile"))
+                             lambda _: self.onProfileClick())
 
         # Logout text
         logout_txt = self.canvas.create_text(
@@ -335,5 +336,9 @@ class Friendslist(Frame):
     
     def onRankClick(self):
         self.parent.show_frame(UI.Rank.rank)
+
+    def onProfileClick(self):
+        self.parent.show_frame(UI.profile.profile)
+
 
         

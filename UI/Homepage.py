@@ -3,6 +3,7 @@ import UI.Friends
 import UI.Friends_list
 import UI.chooseEx
 import UI.Rank
+import UI.profile
 from pathlib import Path
 import os
 # Explicit imports to satisfy Flake8
@@ -91,7 +92,7 @@ class homepage(Frame):
         self.canvas.tag_bind(profile_txt, '<Leave>', lambda _: self.canvas.itemconfig(
             profile_txt, fill="#FFFFFF"))
         self.canvas.tag_bind(profile_txt, '<ButtonPress-1>',
-                        lambda _: print("profile"))
+                        lambda _: self.onProfileClick())
         
         #Logout text
         logout_txt = self.canvas.create_text(
@@ -216,6 +217,9 @@ class homepage(Frame):
 
     def onRankClick(self):
         self.parent.show_frame(UI.Rank.rank)
+
+    def onProfileClick(self):
+        self.parent.show_frame(UI.profile.profile)
 
 
 
