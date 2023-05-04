@@ -203,7 +203,7 @@ class homepage(Frame):
 
     def onLogoutClicked(self):
         #Do sth with pickle
-        # os.remove("Appdata/userData/data.pickle")
+        os.remove("Appdata/userData/data.pickle")
         self.parent.parent.Authed.set(False)
         self.parent.parent.run()
         self.parent.destroy()

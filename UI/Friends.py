@@ -1,20 +1,41 @@
 import tkinter as tk
+# <<<<<<< Updated upstream
 import tkinter.messagebox as MessageBox
+# =======
+from Database_processing.Friends_db.get_request_fr import get_fr_rq_by_username
+from Database_processing.Friends_db.get_friends import get_fr_by_username
+from Utils.Sources.getdata_pickle import load_object
+from Database_processing.Friends_db.ac_friend_rq import accept_fr
+from Database_processing.Friends_db.deny_friend_rq import deny_fr
+# >>>>>>> Stashed changes
 class Friends_frame(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-        # self.mainF = tk.Frame(self)
-        self.friendReqs = [
-            {'username': 'friendrq1', 'rank': 125},
-            {'username': 'friendrq2', 'rank': 69}
-        ]
-
-        self.friends = [
-            {'username': 'friend1', 'rank': 123},
-            {'username': 'friend2', 'rank': 15},
-            {'username': 'friend3', 'rank': 727}
-        ] #{ {'username': <rank>} }
+# <<<<<<< Updated upstream
+#         # self.mainF = tk.Frame(self)
+#         self.friendReqs = [
+#             {'username': 'friendrq1', 'rank': 125},
+#             {'username': 'friendrq2', 'rank': 69}
+#         ]
+# =======
+        self.mainF = tk.Frame(self)
+        _db=load_object("Appdata/userData/data.pickle")
+        _username="abc"
+        _friendReqs=[]
+        _friend=[]
+        if(_db['status']):
+            _username=_db['data']['username']
+            __rq=get_fr_rq_by_username(_username)
+            __fr=get_fr_by_username(_username)
+            for x in __rq:_friendReqs.append({'username':x,'rank':100})
+            for x in __fr:_friend.append({'username':x,'rank':100})
+        
+        print ("Da chay file Friend.py",_friendReqs)
+        self.friendReqs = _friendReqs
+# >>>>>>> Stashed changes
+        
+        self.friends = _friend
 
         self.listFriendFr = tk.LabelFrame(
             self,
@@ -92,10 +113,12 @@ class Friends_frame(tk.Frame):
 
         acpBtn = tk.Button(person, 
                            text='Accept',
-                           command=lambda: print('Acp clicked'+usr))
+                           command=lambda:accept_fr(usr),
+                            # method=self.addFriendFrame(usr,100)
+                           )
         denBtn = tk.Button(person, 
                            text='Deny',
-                           command=lambda: print('Den clicked'+usr))
+                           command=lambda: deny_fr(usr))
         acpBtn.grid(row=0, column=1)
         denBtn.grid(row=1, column=1)
         person.grid(row=len(self.friendReqFrs))

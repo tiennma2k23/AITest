@@ -9,9 +9,9 @@ uri = json.loads(open("adminAuth/adminAuth.json","r").read())["uri"]
 cluster=MongoClient(uri, server_api=ServerApi('1'))
 db=cluster['AI_db']
 
-def get_fr_rq_by_username(username):
+def update_fr_user(username,frlst):
     collection=db['User_db']
-    f=collection.find_one({'username':username})
-    return f['friend_request']
+    collection.update_one({'username':username},{'$set':{'friend_list':frlst}})
+    return True
 
 

@@ -111,4 +111,12 @@ def __main__(exType: str, webcam: bool, _fq: Queue):
     cap.release()
     _fq.put(_endOfQueue)
 
+
+    
+    __=load_object("Appdata/userData/data.pickle")
+    user_db=__['data']
+    _username=user_db['username']
+    print(_username,counter,exType)
+    update(_username,counter,exType)
+
 #__main__('pull-up')

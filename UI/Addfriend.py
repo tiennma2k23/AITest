@@ -1,6 +1,10 @@
 from pathlib import Path
 from tkinter import *
 
+from Database_processing.Friends_db.add_fr_request import add_fr_request, add_fr_requested
+from Database_processing.User_db.get import get_by_username
+from Utils.Sources.getdata_pickle import load_object
+
 class Addfriend(Toplevel):
     def __init__(self, parent):
         super().__init__()
@@ -88,6 +92,7 @@ class Addfriend(Toplevel):
             width=256.46632194519043,
             height=46.0
         )
+# <<<<<<< Updated upstream
         self.addFrtxt = self.canvas.create_text(
             31.0,
             150,
@@ -96,11 +101,34 @@ class Addfriend(Toplevel):
             fill="#FFFFFF",
             font=("Lato Regular", 14 * -1, "bold")
         )
+# =======
     
     def onButtonClicked(self):
+        __=load_object("Appdata/userData/data.pickle")
+        _username=__['data']['username']
+        _db=get_by_username(self.username.get())
         # nếu sai tên thì cút, y hệt dưới nhưng text = "Username does not exist!""
+        if (_db['status']==False):
+            
+            self.canvas.itemconfig(
+                self.addFrtxt,
+                text=self.username.get()+" does not exist!",
+            )
         # nếu đúng tên
-        self.canvas.itemconfig(self.addFrtxt, text=self.username.get()+' friend request sent!')
+        
+        else :
+            # _method=add_fr_request(_username,self.username.get())
+            
+            self.canvas.itemconfig(
+                self.addFrtxt,
+                text=add_fr_request(_username,self.username.get()),
+            )
+# >>>>>>> Stashed changes
+    
+    # def onButtonClicked(self):
+    #     # nếu sai tên thì cút, y hệt dưới nhưng text = "Username does not exist!""
+    #     # nếu đúng tên
+    #     self.canvas.itemconfig(self.addFrtxt, text=self.username.get()+'req sent!')
     
 
 

@@ -1,10 +1,14 @@
 from tkinter import *
 from pathlib import Path
+from Database_processing.Friends_db.ac_friend_rq import accept_fr
+from Database_processing.Friends_db.deny_friend_rq import deny_fr
+from Database_processing.Friends_db.get_request_fr import get_fr_rq_by_username
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import UI.Friends_list
 import UI.Addfriend 
 import UI.Rank
+from Utils.Sources.getdata_pickle import load_object
 
 
 class requests(Frame):
@@ -17,11 +21,15 @@ class requests(Frame):
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
-
-        self.friendReqs = [
-            {'username': 'friendrq1', 'rank': 125},
-            {'username': 'friendrq2', 'rank': 69}
-        ]
+        _db=load_object("Appdata/userData/data.pickle")
+        _username="abc"
+        _friendReqs=[]
+        if(_db['status']):
+            _username=_db['data']['username']
+            __rq=get_fr_rq_by_username(_username)
+            for x in __rq:_friendReqs.append({'username':x,'rank':100})
+        
+        self.friendReqs = _friendReqs
         self.reqsnum = str(self.friendReqs.__len__())
 
         self.canvas = Canvas(
@@ -237,7 +245,7 @@ class requests(Frame):
             bg="#DEDEDE",
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: onDenyBtnClick(),
+            command=lambda: onDenyBtnClick(usr),
             relief="flat"
         )
         deny.place(
@@ -254,7 +262,7 @@ class requests(Frame):
             bg="#676767",
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: onAcceptBtnClick(),
+            command=lambda: onAcceptBtnClick(usr),
             relief="flat"
         )
         accept.place(
@@ -266,8 +274,9 @@ class requests(Frame):
 
         # unfriend command
 
-        def onAcceptBtnClick():
+        def onAcceptBtnClick(usr):
             # do sth
+            accept_fr(usr)
             print("Accept")
             accept.place_forget()
             deny.place_forget()
@@ -280,8 +289,9 @@ class requests(Frame):
                 font=("Lato Regular", 20 * -1, "bold")
             )
 
-        def onDenyBtnClick():
+        def onDenyBtnClick(usr):
             # do sth
+            deny_fr(usr)
             print("Deny")
             accept.place_forget()
             deny.place_forget()

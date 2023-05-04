@@ -1,13 +1,20 @@
 from tkinter import *
 from pathlib import Path
+from Database_processing.Friends_db.delete_fr import delete_fr
+from Database_processing.Friends_db.get_friends import get_fr_by_username
+from Database_processing.Friends_db.update_fr import update_fr_user
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import UI.FriendsReq 
 import UI.Addfriend
 import UI.Rank
+from Utils.Sources.getdata_pickle import load_object
 
 
 class Friendslist(Frame):
+    
+    
+
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
@@ -20,12 +27,16 @@ class Friendslist(Frame):
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
         
+        
+        _friend=[]
+        _db=load_object("Appdata/userData/data.pickle")
+        _username="abc"
+        if(_db['status']):
+            _username=_db['data']['username']
+            __fr=get_fr_by_username(_username)
+            for x in __fr:_friend.append({'username':x,'rank':100})
 
-        self.friends = [
-            {'username': 'friend1', 'rank': 123},
-            {'username': 'friend2', 'rank': 15},
-            {'username': 'friend3', 'rank': 727}
-        ]  # { {'username': <rank>} }
+        self.friends = _friend
         self.friendsnum = str(self.friends.__len__())
 
 
@@ -246,7 +257,7 @@ class Friendslist(Frame):
             bg = "#DEDEDE",
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: onunfriendBtnClick(),
+            command=lambda: onunfriendBtnClick(usr),
             relief="flat"
         )
         unfr.place(
@@ -269,8 +280,9 @@ class Friendslist(Frame):
 
         #unfriend command
 
-        def onaddfriendBtnClick():
+        def onaddfriendBtnClick(usr):
             #do sth
+            
             print("addfr succ")
             addButton.place_forget()
             self.canvas.create_text(
@@ -282,9 +294,10 @@ class Friendslist(Frame):
                 font=("Lato Regular", 20 * -1, "bold")
             )
 
-        def onunfriendBtnClick():
+        def onunfriendBtnClick(usr):
             if (messagebox.askyesno('Unfriend', 'Are you sure to unfriend with ' + usr + '?')):
                 print('Unfr succ')
+                delete_fr(usr)
                 unfr.place_forget()
                 addButton.place(
                     x=662,
