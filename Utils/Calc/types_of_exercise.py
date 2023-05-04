@@ -8,14 +8,12 @@ class TypeOfExercise():
     def __init__(self):
         # super().__init__(landmarks)
         self.max_walk_dist = MIN_WALKING_DIST
-        
-        print('typeofEx inti')
+        print('typeofEx init')
 
     def push_up(self, counter, status):
         left_arm_angle = self.calcAngle.angle_of_the_left_arm()
-        right_arm_angle = self.calcAngle.angle_of_the_left_arm()
+        right_arm_angle = self.calcAngle.angle_of_the_right_arm()
         avg_arm_angle = (left_arm_angle + right_arm_angle) // 2
-
         if status:
             if avg_arm_angle < 70:
                 counter += 1
@@ -28,18 +26,20 @@ class TypeOfExercise():
 
 
     def pull_up(self, counter, status):
-        nose = detection_body_part(self.landmarks, "NOSE")
-        left_elbow = detection_body_part(self.landmarks, "LEFT_ELBOW")
-        right_elbow = detection_body_part(self.landmarks, "RIGHT_ELBOW")
-        avg_shoulder_y = (left_elbow[1] + right_elbow[1]) / 2
+        left_wrist = detection_body_part(self.landmarks, "LEFT_WRIST")
+        left_shoulder = detection_body_part(self.landmarks, "LEFT_SHOULDER")
+        if (left_wrist[1] > left_shoulder[1]): return [counter , status]
+
+        left_arm_angle = self.calcAngle.angle_of_the_left_arm()
+        right_arm_angle = self.calcAngle.angle_of_the_right_arm()
+        avg_arm_angle = (left_arm_angle + right_arm_angle) // 2
 
         if status:
-            if nose[1] > avg_shoulder_y:
+            if avg_arm_angle < 70:
                 counter += 1
                 status = False
-
         else:
-            if nose[1] < avg_shoulder_y:
+            if avg_arm_angle > 160:
                 status = True
 
         return [counter, status]
@@ -66,26 +66,17 @@ class TypeOfExercise():
         #Z: Depth Axis
         right_heel = get_body_part_cords(self.landmarks, "RIGHT_HEEL")
         left_heel = get_body_part_cords(self.landmarks, "LEFT_HEEL")
-        # print('R_x: ',right_heel[0])
-        # print('L_x:', left_heel[0])
         dist = abs(right_heel[0] - left_heel[0])
+
         if (dist < MIN_WALKING_DIST): return [counter, status]
 
-        if (dist > self.max_walk_dist): self.max_walk_dist = dist
-
-        if status:
-            if (left_heel[0] > right_heel[0]) &\
-            (aprox_same_plane(right_heel, left_heel, 'y', 0.1)):
-                counter += self.max_walk_dist
-                status = False
-                self.max_walk_dist = MIN_WALKING_DIST
-        else:
-            if (left_heel[0] < right_heel[0]) &\
-            (aprox_same_plane(right_heel, left_heel, 'y', 0.1)):
-                counter += self.max_walk_dist
-                status = True
-                self.max_walk_dist = MIN_WALKING_DIST
-
+        if aprox_same_plane(right_heel, left_heel, 'y', 0.05):
+            status = True
+            if (dist > self.max_walk_dist): self.max_walk_dist = dist
+        elif status:
+            counter += self.max_walk_dist
+            status = False
+            self.max_walk_dist = 0
         return [counter, status]
 
     def sit_up(self, counter, status):
