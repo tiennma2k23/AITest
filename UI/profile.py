@@ -9,6 +9,7 @@ import tkinter.messagebox as messagebox
 import tkinter.filedialog as dialog
 import UI.Friends_list
 import UI.Rank
+import UI.resendpass
 # from PIL import Image
 from PIL import Image, ImageTk
 
@@ -180,13 +181,8 @@ class profile(Frame):
             
 
 
-        # def onAvaClick():
-        #     create_ava()
-        #     new_ava = PhotoImage(relative_to_assets("resized_ava.png"))
-        #     self.canvas.itemconfig(ava_image, image = new_ava)
-
         #profile img
-        self.avaimg = PhotoImage(file=relative_to_assets("image_3.png"))
+        self.avaimg = PhotoImage(file=relative_to_assets("image_3.png")) #có thể là file khác nếu db đã có r
         ava_image = self.canvas.create_image(
             122.0,
             222.0,
@@ -249,9 +245,7 @@ class profile(Frame):
             image = self.button_image_1
         )
         self.canvas.tag_bind(button_1, '<ButtonPress-1>',
-                             lambda _: resetpass())
-        def resetpass(self):
-            print(self.email)
+                             lambda _: self.onResendClick())
         self.button_image_2 = PhotoImage(
             file=relative_to_assets("button_2.png"))
         button_2 = self.canvas.create_image(
@@ -284,6 +278,9 @@ class profile(Frame):
       
     def onRankClick(self):
         self.parent.show_frame(UI.Rank.rank)
+
+    def onResendClick(self):
+        UI.resendpass.resendpass(self).update()
     
 
     

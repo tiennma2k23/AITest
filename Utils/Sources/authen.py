@@ -48,8 +48,9 @@ class Auth():
                 
                 update_user(tmp['username'],tmp)
                 save_object(tmp)
-            print("Access Granted!")
-            return True
+                print("Access Granted!")
+                return True
+
         except HTTPError as e:
             print(json.loads(e.args[1]))
             return False

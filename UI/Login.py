@@ -11,6 +11,7 @@ from tkinter import *
 import UI.Register
 import UI.Resend_Password
 from Utils.Sources.authen import Auth
+from Database_processing.User_db.get import *
 # Explicit imports to satisfy Flake8
 #from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -170,7 +171,7 @@ class login_frame(Frame):
             183.09378051757812,
             image=self.entry_image_1
         )
-        entry_1 = Entry(
+        self.entry_1 = Entry(
             self,
             bd=0,
             bg="#FFFFFF",
@@ -179,7 +180,7 @@ class login_frame(Frame):
             font=("Lato"),
             textvariable=self.email
         )
-        entry_1.place(
+        self.entry_1.place(
             x=257.2668390274048,
             y=159.0,
             width=284.80079460144043,
@@ -193,7 +194,7 @@ class login_frame(Frame):
             261.1086120605469,
             image=self.entry_image_2
         )
-        entry_2 = Entry(
+        self.entry_2 = Entry(
             self,
             bd=0,
             bg="#FFFFFF",
@@ -203,12 +204,25 @@ class login_frame(Frame):
             textvariable=self.password,
             show="*"
         )
-        entry_2.place(
+        self.entry_2.place(
             x=257.2668390274048,
             y=237.01483154296875,
             width=284.8008556365967,
             height=46.18756103515625
         )
+
+        self.canvas = canvas
+
+        self.alert = self.canvas.create_text(
+            400,
+            440,
+            text = "io",
+            anchor = "center",
+            fill = "red",
+            font = ("Lato ", int(14) * -1),
+        )
+        self.canvas.pack()
+    
 
     def onLoginClick(self):
         if (Auth(self.email, self.password).UserAuth()):
@@ -216,3 +230,12 @@ class login_frame(Frame):
             self.parent.parent.geometry('800x480')
             self.parent.parent.main.pack()
             self.parent.destroy()
+        else:
+            usr = self.entry_1.get()
+            passs = self.entry_2.get()
+            fails = ""
+            if usr == "" or passs == "": fails = "You must enter your username/E-mail and password!"
+            elif find_user(usr)['status'] == False: fails = "Username/E-mail does not exist!" 
+            elif find_user(usr)['status'] == True: fails = "Wrong Password!"
+            self.canvas.itemconfig(self.alert, text = fails)
+
