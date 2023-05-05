@@ -12,7 +12,7 @@ import UI.Rank
 import UI.resendpass
 # from PIL import Image
 from PIL import Image, ImageTk
-
+import UI.Shop
 from Utils.Sources.getdata_pickle import load_object
 
 
@@ -56,8 +56,6 @@ class profile(Frame):
                 sometxt, fill="#CCCCCC"))
             self.canvas.tag_bind(sometxt, '<Leave>', lambda _: self.canvas.itemconfig(
                 sometxt, fill="#FFFFFF"))
-            self.canvas.tag_bind(sometxt, '<ButtonPress-1>',
-                                 lambda _: print("profile"))
 
         self.image_image_1 = PhotoImage(
             file=relative_to_assets("image_1.png"))
@@ -150,7 +148,7 @@ class profile(Frame):
         )
         hovertxt(shop_txt)
         self.canvas.tag_bind(shop_txt, '<ButtonPress-1>',
-                             lambda _: print("Shop"))
+                             lambda _: self.onShopClick())
 
         #
         ava_txt = self.canvas.create_text(
@@ -281,6 +279,9 @@ class profile(Frame):
 
     def onResendClick(self):
         UI.resendpass.resendpass(self).update()
+
+    def onShopClick(self):
+        self.parent.show_frame(UI.Shop.shop)
     
 
     

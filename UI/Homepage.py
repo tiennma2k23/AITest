@@ -4,6 +4,7 @@ import UI.Friends_list
 import UI.chooseEx
 import UI.Rank
 import UI.profile
+import UI.Shop
 from pathlib import Path
 import os
 # Explicit imports to satisfy Flake8
@@ -140,7 +141,7 @@ class homepage(Frame):
         self.canvas.tag_bind(shop_txt, '<Leave>', lambda _: self.canvas.itemconfig(
             shop_txt, fill="#FFFFFF"))
         self.canvas.tag_bind(shop_txt, '<ButtonPress-1>',
-                        lambda _: print("Shop"))
+                        lambda _: self.onShopClick())
         
         #create buttons
         #button1
@@ -220,6 +221,9 @@ class homepage(Frame):
 
     def onProfileClick(self):
         self.parent.show_frame(UI.profile.profile)
+    
+    def onShopClick(self):
+        self.parent.show_frame(UI.Shop.shop)
 
 
 
