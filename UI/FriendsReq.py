@@ -8,7 +8,6 @@ import tkinter.messagebox as messagebox
 import UI.Friends_list
 import UI.Addfriend 
 import UI.Rank
-import UI.profile
 from Utils.Sources.getdata_pickle import load_object
 
 

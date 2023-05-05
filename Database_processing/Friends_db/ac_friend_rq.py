@@ -28,7 +28,7 @@ def accept_fr(user):
     _rqt=__data['friend_requested']
     __fr.append(_username)
     _rqt.remove(_username)
-    collection.update_one({"username":user},{"$set":{"friend_list":__fr,'friend_request':_rqt}})
+    collection.update_one({"username":user},{"$set":{"friend_list":__fr,'friend_requested':_rqt}})
     # Friends_frame.addFriendFrame(user,100)
 
 

@@ -1,11 +1,18 @@
+import base64
+import os
 from tkinter import *
 from pathlib import Path
+from Database_processing.User_db.get_point_user import get_point_username
+from Database_processing.User_db.get_rank_user import get_rank_user
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import tkinter.filedialog as dialog
 import UI.Friends_list
 import UI.Rank
+# from PIL import Image
 from PIL import Image, ImageTk
+
+from Utils.Sources.getdata_pickle import load_object
 
 
 class profile(Frame):
@@ -18,12 +25,12 @@ class profile(Frame):
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
-
-        self.username = "ok"
-        self.streak = 22
-        self.email = ".@"
-        self.rank = 333
-        self.points = 3334
+        __=load_object("Appdata/userData/data.pickle")
+        self.username = __['data']['username']
+        self.streak = __['data']['login_days']
+        self.email = __['data']['email']
+        self.rank = get_rank_user(__['data']['username'])
+        self.points = get_point_username(__['data']['username'])
 
         self.canvas = Canvas(
             self,
@@ -157,10 +164,12 @@ class profile(Frame):
             filename = dialog.askopenfilename()
             im = Image.open(filename)
             resized_im = im.resize((161, 161))
-            resized_im.convert("RGB")
+            rr_im=resized_im.convert('RGB')
             self.new_im = ImageTk.PhotoImage(resized_im)
             self.canvas.itemconfig(ava_image, image = self.new_im)
-            resized_im.save(r'./Appdata/Userdata/usr_img.jpg')
+            rr_im.save('Appdata/userData/usr_img.jpg')
+            # my_string = base64.b64encode(self.new_im)
+            # print(my_string)
             
 
 
@@ -196,7 +205,7 @@ class profile(Frame):
             fill="#7C7C7C",
             font=("Lato", 20 * -1, "bold")
         )
-
+        # rank 
         self.canvas.create_text(
             293.0,
             228.0,
@@ -233,8 +242,9 @@ class profile(Frame):
             image = self.button_image_1
         )
         self.canvas.tag_bind(button_1, '<ButtonPress-1>',
-                             lambda _: print('resetpass'))
-
+                             lambda _: resetpass())
+        def resetpass(self):
+            print(self.email)
         self.button_image_2 = PhotoImage(
             file=relative_to_assets("button_2.png"))
         button_2 = self.canvas.create_image(
@@ -244,10 +254,11 @@ class profile(Frame):
             image = self.button_image_2
         )
         
+    
 
     def onLogoutClicked(self):
         # Do sth with pickle
-        # os.remove("Appdata/userData/data.pickle")
+        os.remove("Appdata/userData/data.pickle")
         self.parent.parent.Authed.set(False)
         self.parent.parent.run()
         self.parent.destroy()
@@ -266,5 +277,6 @@ class profile(Frame):
       
     def onRankClick(self):
         self.parent.show_frame(UI.Rank.rank)
+    
 
     

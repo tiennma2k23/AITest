@@ -1,5 +1,6 @@
 from tkinter import *
 from pathlib import Path
+from Database_processing.Friends_db.add_fr_request import add_fr_request
 from Database_processing.Friends_db.delete_fr import delete_fr
 from Database_processing.Friends_db.get_friends import get_fr_by_username
 from Database_processing.Friends_db.update_fr import update_fr_user
@@ -8,7 +9,6 @@ import tkinter.messagebox as messagebox
 import UI.FriendsReq 
 import UI.Addfriend
 import UI.Rank
-import UI.profile
 from Utils.Sources.getdata_pickle import load_object
 
 
@@ -275,7 +275,7 @@ class Friendslist(Frame):
             bg="#676767",
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: onaddfriendBtnClick(),
+            command=lambda: onaddfriendBtnClick(usr),
             relief="flat"
         )
 
@@ -285,6 +285,12 @@ class Friendslist(Frame):
             #do sth
             
             print("addfr succ")
+            _db=load_object("Appdata/userData/data.pickle")
+            _username="abc"
+            if(_db['status']):
+                _username=_db['data']['username']
+            add_fr_request(_username,usr)
+            
             addButton.place_forget()
             self.canvas.create_text(
                 658,

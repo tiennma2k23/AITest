@@ -4,6 +4,9 @@ import tkinter as tk
 from requests.exceptions import HTTPError
 from pathlib import Path
 from Database_processing.User_db.get import *
+from Database_processing.User_db.update import update_user
+from Time_processing.calc import calc_time
+from Time_processing.get_time import get_time
 from Utils.Sources.savedata_pickle import save_object
 from Database_processing.User_db.insert import insert
 CURRENT_WD = Path(__file__).parent.parent.parent
@@ -29,6 +32,21 @@ class Auth():
                 # email="abc@gmail.com"
                 _email=tmp["email"]
                 self.user = auth.sign_in_with_email_and_password(_email, self._password)
+                if (tmp['login_days']==0): 
+                    tmp['login_days']+=1
+                    tmp['login_time']=get_time()
+
+                else :
+                    _dis=calc_time(tmp['login_time'])
+                    if (_dis==1) :
+                        tmp['login_days']+=1
+                        tmp['login_time']=get_time()
+                    else:
+                        if (_dis>1):
+                            tmp['login_days']=0
+                            tmp['login_time']=get_time()
+                
+                update_user(tmp['username'],tmp)
                 save_object(tmp)
             print("Access Granted!")
             return True

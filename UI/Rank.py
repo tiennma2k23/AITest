@@ -1,5 +1,6 @@
 from tkinter import *
 from pathlib import Path
+from Database_processing.User_db.get_point_data import get_point_data
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import UI.Friends_list
@@ -17,11 +18,7 @@ class rank(Frame):
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
-        self.users = [
-            {'username': 'friend1', 'rank': 123, 'points': 123},
-            {'username': 'friend2', 'rank': 15, 'points': 1222},
-            {'username': 'friend3', 'rank': 727, 'points': 2422}
-        ]  # { {'username': <rank>} }
+        self.users = get_point_data()
 
         self.canvas = Canvas(
             self,
@@ -178,7 +175,7 @@ class rank(Frame):
         
         self.usr = []  # List of friend frames
         for users in self.users:
-            self.addUser(users['username'], users['rank'], users['points'])
+            self.addUser(users['username'], users['rank'], users['point'])
 
     def addUser(self, usr: str, ranks: int, pts: int):
         posy = int(140 + 49*len(self.usr))
