@@ -9,6 +9,9 @@ import UI.Friends_list
 import UI.Addfriend 
 import UI.Rank
 from Utils.Sources.getdata_pickle import load_object
+from PIL import Image, ImageTk
+import os
+
 
 
 class requests(Frame):
@@ -18,6 +21,7 @@ class requests(Frame):
         OUTPUT_PATH = Path(__file__).parent
 
         ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/friendslist")
+        
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
@@ -28,7 +32,12 @@ class requests(Frame):
             _username=_db['data']['username']
             __rq=get_fr_rq_by_username(_username)
             for x in __rq:_friendReqs.append({'username':x,'rank':100})
-        
+
+        im = Image.open(relative_to_assets("image_3.png"))
+        resized_im = im.resize((60, 60))
+        self.profile_im = ImageTk.PhotoImage(resized_im)
+
+
         self.friendReqs = _friendReqs
         self.reqsnum = str(self.friendReqs.__len__())
 
@@ -204,13 +213,13 @@ class requests(Frame):
 
         self.Reqs = []  # List of friend frames
         for friend in self.friendReqs:
-            self.addFriendFrame(friend['username'], friend['rank'])
+            self.addFriendFrame(friend['username'], friend['rank'], self.profile_im)
 
-    def addFriendFrame(self, usr: str, rank: int):
+    def addFriendFrame(self, usr: str, rank: int, im):
         posy = int(126 + 68*len(self.Reqs))
         # create rec
         person = self.canvas.create_rectangle(
-            117,
+            214,
             posy,
             800,
             posy + 67,
@@ -220,13 +229,21 @@ class requests(Frame):
         )
         # create username txt
         self.canvas.create_text(
-            134,
+            214,
             posy + 5,
             anchor="nw",
             text='Username: ' + usr,
             fill="#FFFFFF",
             font=("Lato Regular", 18 * -1, "bold")
         )
+        self.canvas.create_image(
+            126,
+            posy + 4.5,
+            anchor = "nw",
+            image = self.profile_im
+        )
+
+
         # create rank txt
         self.canvas.create_text(
             134,
@@ -310,7 +327,7 @@ class requests(Frame):
 
     def onLogoutClicked(self):
         # Do sth with pickle
-        # os.remove("Appdata/userData/data.pickle")
+        os.remove("Appdata/userData/data.pickle")
         self.parent.parent.Authed.set(False)
         self.parent.parent.run()
         self.parent.destroy()

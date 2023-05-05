@@ -10,6 +10,9 @@ import UI.FriendsReq
 import UI.Addfriend
 import UI.Rank
 from Utils.Sources.getdata_pickle import load_object
+from PIL import Image, ImageTk
+import os
+
 
 
 class Friendslist(Frame):
@@ -28,6 +31,10 @@ class Friendslist(Frame):
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
         
+        im = Image.open(relative_to_assets("image_3.png"))
+        resized_im = im.resize((60, 60))
+        self.profile_im = ImageTk.PhotoImage(resized_im)
+        
         
         _friend=[]
         _db=load_object("Appdata/userData/data.pickle")
@@ -35,7 +42,7 @@ class Friendslist(Frame):
         if(_db['status']):
             _username=_db['data']['username']
             __fr=get_fr_by_username(_username)
-            for x in __fr:_friend.append({'username':x,'rank':100})
+            for x in __fr:_friend.append({'username':x,'rank':100}) 
 
         self.friends = _friend
         self.friendsnum = str(self.friends.__len__())
@@ -215,11 +222,12 @@ class Friendslist(Frame):
         
         self.friendFrs = []  # List of friend frames
         self.unfr = []  # List of friendReq frames
+        
         for friend in self.friends:
-            self.addFriendFrame(friend['username'], friend['rank'])
+            self.addFriendFrame(friend['username'], friend['rank'], self.profile_im)
         
         
-    def addFriendFrame(self, usr: str, rank: int):
+    def addFriendFrame(self, usr: str, rank: int, im):
         posy = int(126 + 68*len(self.friendFrs))
         #create rec
         person = self.canvas.create_rectangle(
@@ -233,7 +241,7 @@ class Friendslist(Frame):
         )
         #create username txt
         self.canvas.create_text (
-            134,
+            214,
             posy + 5,
             anchor="nw",
             text='Username: '+ usr,
@@ -242,12 +250,18 @@ class Friendslist(Frame):
         )
         #create rank txt
         self.canvas.create_text(
-            134,
+            214,
             posy + 36,
             anchor="nw",
             text='Rank: '+str(rank),
             fill="#FFFFFF",
             font=("Lato Regular", 18 * -1)
+        )
+        self.canvas.create_image(
+            126,
+            posy + 4.5,
+            anchor = "nw",
+            image = self.profile_im
         )
         #create button
         unfr = Button(
@@ -320,7 +334,7 @@ class Friendslist(Frame):
 
     def onLogoutClicked(self):
         # Do sth with pickle
-        # os.remove("Appdata/userData/data.pickle")
+        os.remove("Appdata/userData/data.pickle")
         self.parent.parent.Authed.set(False)
         self.parent.parent.run()
         self.parent.destroy()

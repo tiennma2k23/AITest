@@ -216,7 +216,7 @@ class login_frame(Frame):
         self.alert = self.canvas.create_text(
             400,
             440,
-            text = "io",
+            text = "",
             anchor = "center",
             fill = "red",
             font = ("Lato ", int(14) * -1),
