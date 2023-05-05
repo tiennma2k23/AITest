@@ -5,7 +5,7 @@ import tkinter.messagebox as messagebox
 import tkinter.filedialog as dialog
 import UI.Friends_list
 import UI.Rank
-from PIL import Image
+from PIL import Image, ImageTk
 
 
 class profile(Frame):
@@ -152,22 +152,22 @@ class profile(Frame):
                 ava_txt, fill="#7C7C7F"))
         self.canvas.tag_bind(ava_txt, '<ButtonPress-1>',
                              lambda _: onAvaClick())
-
-        def create_ava():
+        #change img func
+        def onAvaClick():
             filename = dialog.askopenfilename()
             im = Image.open(filename)
             resized_im = im.resize((161, 161))
             resized_im.convert("RGB")
-            resized_im.save(relative_to_assets("resized_ava.png"))
+            self.new_im = ImageTk.PhotoImage(resized_im)
+            self.canvas.itemconfig(ava_image, image = self.new_im)
+            resized_im.save(r'./Appdata/Userdata/usr_img.jpg')
+            
 
-        def onAvaClick():
-            create_ava()
-            self.new_ava = PhotoImage(relative_to_assets("resized_ava.png"))
-            self.canvas.create_image(
-                122.0,
-                222.0,
-                image = self.new_ava
-            )
+
+        # def onAvaClick():
+        #     create_ava()
+        #     new_ava = PhotoImage(relative_to_assets("resized_ava.png"))
+        #     self.canvas.itemconfig(ava_image, image = new_ava)
 
         #profile img
         self.avaimg = PhotoImage(file=relative_to_assets("image_3.png"))
