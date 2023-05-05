@@ -26,11 +26,18 @@ class profile(Frame):
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
         __=load_object("Appdata/userData/data.pickle")
-        self.username = __['data']['username']
-        self.streak = __['data']['login_days']
-        self.email = __['data']['email']
-        self.rank = get_rank_user(__['data']['username'])
-        self.points = get_point_username(__['data']['username'])
+        if (__['status']==True):
+            self.username = __['data']['username']
+            self.streak = __['data']['login_days']
+            self.email = __['data']['email']
+            self.rank = get_rank_user(__['data']['username'])
+            self.points = get_point_username(__['data']['username'])
+        else:
+            self.username = "###"
+            self.streak = 0
+            self.email = "###"
+            self.rank = -9999
+            self.points = -9999
 
         self.canvas = Canvas(
             self,
