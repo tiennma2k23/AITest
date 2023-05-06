@@ -2,6 +2,7 @@ from tkinter import *
 from pathlib import Path
 from Database_processing.User_db.get_point_data import get_point_data
 import tkinter.messagebox as messagebox
+from Database_processing.User_db.get_point_user import get_point_username
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import UI.Friends_list
@@ -9,6 +10,8 @@ import UI.profile
 import UI.Rank
 import os
 from PIL import Image, ImageTk
+
+from Utils.Sources.getdata_pickle import load_object
 
 OUTPUT_PATH = Path(__file__).parent
 
@@ -19,18 +22,18 @@ class shop(Frame):
         super().__init__(parent)
         self.parent = parent
         self.loadData()
-
+        self.img_shop=[]
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
-        im = Image.open(relative_to_assets("image_3.png"))
-        resized_im = im.resize((40, 40))
-        self.profile_im = ImageTk.PhotoImage(resized_im)
-
-        self.points = 1012
+        
+        __=load_object('Appdata/userData/data.pickle')
+        __username=""
+        if (__['status']) :__username=__['data']['username']
+        self.points = get_point_username(__username)
         self.shops = [
-            {'image': self.profile_im, 'name': 'hieu', 'district': 'Ha Dong', 'city': 'Ha Noi', 'distance': 15, 'value': 15, 'points': 10},
-            {'image': self.profile_im, 'name': 'fog', 'district': 'Phan Rang - Thap Cham', 'city': 'Ninh Thuan', 'distance': 1500, 'value': 40, 'points': 20}
+            {'image': 'cali.png', 'name': 'California Fitness', 'district': 'Ha Dong', 'city': 'Ha Noi', 'distance': '300 m', 'value': 15, 'points': 10},
+            {'image': 'citygym.jpeg', 'name': 'CITYGYM', 'district': 'Le Loi', 'city': 'Ho Chi Minh', 'distance': '1700 km', 'value': 40, 'points': 20}
         ]
 
 
@@ -200,13 +203,14 @@ class shop(Frame):
         )       
 
         self.curshops = []  # List of friend frames
-        for users in self.shops:
-            self.addShop(users['image'], users['name'], users['district'], users['city'], users['distance'], users['value'], users['points'])
+        for x in range (len(self.shops)):
+            users=self.shops[x]
+            self.addShop(users['name'], users['district'], users['city'], users['distance'], users['value'], users['points'],users['image'],x)
 
     def loadData(self):
         pass
-
-    def addShop(self, im, name: str, distr: str, cit: str, dist: int, val: int, pts: int):
+    
+    def addShop(self, name: str, distr: str, cit: str, dist: str, val: int, pts: int,img_url:str,index:int):
         posy = int(127 + 49*len(self.curshops))
         #name
         cur = self.canvas.create_text(
@@ -238,7 +242,7 @@ class shop(Frame):
             208,
             posy + 26,
             anchor="nw",
-            text='Distance: ' + str(dist) + 'km',
+            text='Distance: ' + str(dist),
             fill="#7C7C7C",
             font=("Lato", 12 * -1, "italic")
         )
@@ -270,11 +274,16 @@ class shop(Frame):
             fill="#B5B5B5",
         )
         # create img
-        self.canvas.create_image(
+        strr='UI/assets/shop/'+img_url
+        im = Image.open(strr)
+        resized_im = im.resize((40, 40))
+        self.img_shop.append(ImageTk.PhotoImage(resized_im))
+        self.canvas.create_image (
+            
             10,
             posy + 4,
             anchor = "nw",
-            image = im
+            image = self.img_shop[index]
         )
         #button
         exch = Button(

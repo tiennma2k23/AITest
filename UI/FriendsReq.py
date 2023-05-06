@@ -4,6 +4,7 @@ from Database_processing.Friends_db.ac_friend_rq import accept_fr
 from Database_processing.Friends_db.deny_friend_rq import deny_fr
 from Database_processing.Friends_db.get_request_fr import get_fr_rq_by_username
 from Database_processing.User_db.get_img_profile import get_img_profile
+from Database_processing.User_db.get_rank_user import get_rank_user
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import UI.Friends_list
@@ -211,7 +212,7 @@ class requests(Frame):
         if(_db['status']):
             _username=_db['data']['username']
             __rq=get_fr_rq_by_username(_username)
-            for x in __rq:_friendReqs.append({'username':x,'rank':100})
+            for x in __rq:_friendReqs.append({'username':x,'rank':get_rank_user(x)})
 
         # im = Image.open(relative_to_assets("image_3.png"))
         # resized_im = im.resize((60, 60))
