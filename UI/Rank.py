@@ -180,6 +180,7 @@ class rank(Frame):
         )
         
         self.usr = []  # List of friend frames
+        self.profile_im = []
         for x in range (len(self.users)):
             users=self.users[x]
             self.addUser(users['username'], users['rank'], users['point'],x)
@@ -195,7 +196,7 @@ class rank(Frame):
         im = Image.open('./Appdata/userData/fr_img'+str(index)+'.jpg')
         
         resized_im = im.resize((40, 40))
-        self.profile_im = ImageTk.PhotoImage(resized_im)
+        self.profile_im.append(ImageTk.PhotoImage(resized_im))
         posy = int(127 + 49*len(self.usr))
 
         #rank
@@ -239,7 +240,7 @@ class rank(Frame):
             88,
             posy + 4,
             anchor = "nw",
-            image = self.profile_im
+            image = self.profile_im[index]
         )
         # os.remove('Appdata/userData/fr_img.jpg')
         self.usr.append(person)
