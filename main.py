@@ -1,15 +1,15 @@
 import tkinter as tk
 import tkinter.messagebox as messagebox
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-import json
-import pickle
-
-from UI.UI_fewercode import UserHandle
+# from pymongo.mongo_client import MongoClient
+# from pymongo.server_api import ServerApi
+# import json
+# import pickle
 from Utils.Sources.getdata_pickle import load_object
 from Database_processing.Exercise_db.update import update
+
 # from UI.chooseEx import chooseEx
-from UI.Homepage import homepage
+# from UI.Homepage import homepage
+from UI.UI_fewercode import UserHandle
 from UI.Tabs import Tabs
 """
 uri = json.loads(open("adminAuth/adminAuth.json","r").read())["uri"]
@@ -23,7 +23,6 @@ except Exception as e:
     print(e)
 """
 
-_db=load_object("Appdata/userData/data.pickle")
 # user_db=_db['data']
 # print(user_db)
 
@@ -40,7 +39,7 @@ class App(tk.Tk):
     def run(self):
         self.auth = UserHandle(self)
         self.main = Tabs(self)
-
+        _db=load_object("Appdata/userData/data.pickle")
         if(_db['status']==False): #Not pre-login
             self.Authed.set(False)
             self.auth.pack()

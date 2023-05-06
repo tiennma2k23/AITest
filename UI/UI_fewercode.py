@@ -69,17 +69,17 @@ class UserHandle(Frame):
 
             # the windows class acts as the root window for the frames.
             self.frames[F] = frame
-            frame.grid(row=0, column=0, sticky="nsew")
 
         # Using a method to switch frames
         self.show_frame(login_frame)
 
     def show_frame(self, cont):
         frame = self.frames[cont]
+        frame.grid(row=0, column=0, sticky="nsew")
         # raises the current frame to the top
         frame.tkraise()
 
 
-if __name__ == "__main__":
-    testObj = root()
-    testObj.mainloop()
+# if __name__ == "__main__":
+#     testObj = root()
+#     testObj.mainloop()

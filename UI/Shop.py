@@ -10,15 +10,15 @@ import UI.Rank
 import os
 from PIL import Image, ImageTk
 
+OUTPUT_PATH = Path(__file__).parent
 
+ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/shop")
 
 class shop(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-        OUTPUT_PATH = Path(__file__).parent
-
-        ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/shop")
+        self.loadData()
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
@@ -203,6 +203,9 @@ class shop(Frame):
         for users in self.shops:
             self.addShop(users['image'], users['name'], users['district'], users['city'], users['distance'], users['value'], users['points'])
 
+    def loadData(self):
+        pass
+
     def addShop(self, im, name: str, distr: str, cit: str, dist: int, val: int, pts: int):
         posy = int(127 + 49*len(self.curshops))
         #name
@@ -319,6 +322,7 @@ class shop(Frame):
     def onLogoutClicked(self):
         # Do sth with pickle
         os.remove("Appdata/userData/data.pickle")
+        os.remove("Appdata/userData/usr_img.jpg")
         self.parent.parent.Authed.set(False)
         self.parent.parent.run()
         self.parent.destroy()

@@ -29,7 +29,7 @@ class Auth():
             f=find_user(self._username)
             if (f['status']):
                 tmp=f['data']
-                print(tmp)
+                # print(tmp)
                 # email="abc@gmail.com"
                 _email=tmp["email"]
                 self.user = auth.sign_in_with_email_and_password(_email, self._password)
@@ -49,6 +49,7 @@ class Auth():
                 
                 update_user(tmp['username'],tmp)
                 save_object(tmp)
+                
                 base64_img()
                 print("Access Granted!")
                 return True

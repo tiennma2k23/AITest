@@ -18,30 +18,26 @@ from Utils.Sources.getdata_pickle import load_object
 from img_processing.base64_img import base64_img
 from img_processing.img_base64 import img_base64
 
+OUTPUT_PATH = Path(__file__).parent
+
+ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/profile")
 
 class profile(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-        OUTPUT_PATH = Path(__file__).parent
-
-        ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/profile")
+        self.userDataFieldID = {
+            'username': 0,
+            'email': 0,
+            'rank': 0,
+            'points': 0,
+            'streak': 0,
+            'pfp': 0
+        }
+        self.loadData()
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
-        __=load_object("Appdata/userData/data.pickle")
-        if (__['status']==True):
-            self.username = __['data']['username']
-            self.streak = __['data']['login_days']
-            self.email = __['data']['email']
-            self.rank = get_rank_user(__['data']['username'])
-            self.points = get_point_username(__['data']['username'])
-        else:
-            self.username = "###"
-            self.streak = 0
-            self.email = "###"
-            self.rank = -9999
-            self.points = -9999
 
         self.canvas = Canvas(
             self,
@@ -175,7 +171,7 @@ class profile(Frame):
             resized_im = im.resize((161, 161))
             rr_im=resized_im.convert('RGB')
             self.new_im = ImageTk.PhotoImage(resized_im)
-            self.canvas.itemconfig(ava_image, image = self.new_im)
+            self.canvas.itemconfig(self.userDataFieldID['pfp'], image = self.new_im)
             rr_im.save('Appdata/userData/usr_img.jpg')
             update_img_profile_user(self.username,img_base64('Appdata/userData/usr_img.jpg'))
             # my_string = base64.b64encode(self.new_im)
@@ -185,16 +181,20 @@ class profile(Frame):
 
         #profile img
         # base64_img()
-        self.avaimg = PhotoImage(file=base64_img()) #có thể là file khác nếu db đã có r
-        ava_image = self.canvas.create_image(
-            122.0,
-            222.0,
-            image=self.avaimg
-        )
+        try:
+            self.avaimg = ImageTk.PhotoImage(Image.open('./Appdata/userData/usr_img.jpg')) #có thể là file khác nếu db đã có r
+        except:
+            self.avaimg = ImageTk.PhotoImage(Image.open('./Appdata/userData/default.jpg'))
+
+        self.userDataFieldID['pfp'] = self.canvas.create_image(
+                122.0,
+                222.0,
+                image=self.avaimg
+            )
         
 
         #main info
-        self.canvas.create_text(
+        self.userDataFieldID['username'] = self.canvas.create_text(
             294.0,
             129.0,
             anchor="nw",
@@ -203,7 +203,7 @@ class profile(Frame):
             font=("Lato", 20 * -1, "bold")
         )
 
-        self.canvas.create_text(
+        self.userDataFieldID['email'] = self.canvas.create_text(
             294.0,
             179.0,
             anchor="nw",
@@ -212,7 +212,7 @@ class profile(Frame):
             font=("Lato", 20 * -1, "bold")
         )
         # rank 
-        self.canvas.create_text(
+        self.userDataFieldID['rank'] = self.canvas.create_text(
             293.0,
             228.0,
             anchor="nw",
@@ -221,7 +221,7 @@ class profile(Frame):
             font=("Lato ", 20 * -1, "bold")
         )
 
-        self.canvas.create_text(
+        self.userDataFieldID['points'] = self.canvas.create_text(
             294.0,
             277.0,
             anchor="nw",
@@ -230,7 +230,7 @@ class profile(Frame):
             font=("Lato", 20 * -1, "bold")
         )
 
-        self.canvas.create_text(
+        self.userDataFieldID['streak'] = self.canvas.create_text(
             294.0,
             327.0,
             anchor="nw",
@@ -258,11 +258,35 @@ class profile(Frame):
             image = self.button_image_2
         )
         
-    
+    def loadData(self):
+        __=load_object("Appdata/userData/data.pickle")
+        if (__['status']==True):
+            self.username = __['data']['username']
+            self.streak = __['data']['login_days']
+            self.email = __['data']['email']
+            self.rank = get_rank_user(__['data']['username'])
+            self.points = get_point_username(__['data']['username'])
+        else:
+            self.username = "###"
+            self.streak = 0
+            self.email = "###"
+            self.rank = -9999
+            self.points = -9999
+    #     self.updateData()
 
+
+    # def updateData(self):
+    #     self.canvas.itemconfig(self.userDataFieldID['username'], text='Username: '+self.username)
+    #     self.canvas.itemconfig(self.userDataFieldID['email'], text='Email: '+self.email)
+    #     self.canvas.itemconfig(self.userDataFieldID['rank'], text='Rank: '+self.rank)
+    #     self.canvas.itemconfig(self.userDataFieldID['points'], text='Points: '+self.points)
+    #     self.canvas.itemconfig(self.userDataFieldID['streak'], text='Streak: '+self.streak)
+    #     self.canvas.itemconfig(self.userDataFieldID['pfp'], image=self.avaimg)
+    
     def onLogoutClicked(self):
         # Do sth with pickle
         os.remove("Appdata/userData/data.pickle")
+        os.remove("Appdata/userData/usr_img.jpg")
         self.parent.parent.Authed.set(False)
         self.parent.parent.run()
         self.parent.destroy()

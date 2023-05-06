@@ -81,7 +81,7 @@ class Addfriend(Toplevel):
             self,
             bd=0,
             bg="#FFFFFF",
-            fg="#00000",
+            fg="#000000",
             highlightthickness=0,
             font=('Lato'),
             textvariable = self.username
@@ -92,7 +92,7 @@ class Addfriend(Toplevel):
             width=256.46632194519043,
             height=46.0
         )
-# <<<<<<< Updated upstream
+
         self.addFrtxt = self.canvas.create_text(
             31.0,
             150,
@@ -101,7 +101,6 @@ class Addfriend(Toplevel):
             fill="#FFFFFF",
             font=("Lato Regular", 14 * -1, "bold")
         )
-# =======
     
     def onButtonClicked(self):
         __=load_object("Appdata/userData/data.pickle")
@@ -123,7 +122,6 @@ class Addfriend(Toplevel):
                 self.addFrtxt,
                 text=add_fr_request(_username,self.username.get()),
             )
-# >>>>>>> Stashed changes
     
     # def onButtonClicked(self):
     #     # nếu sai tên thì cút, y hệt dưới nhưng text = "Username does not exist!""

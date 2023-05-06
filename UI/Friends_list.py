@@ -14,40 +14,21 @@ from PIL import Image, ImageTk
 import os
 import UI.Shop
 
+OUTPUT_PATH = Path(__file__).parent
+
+
+ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/friendslist")
+
 
 
 class Friendslist(Frame):
-    
-    
-
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-        OUTPUT_PATH = Path(__file__).parent
-
-
-        ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/friendslist")
-
-
+        self.loadData()
+        
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
-        
-        im = Image.open(relative_to_assets("image_3.png"))
-        resized_im = im.resize((60, 60))
-        self.profile_im = ImageTk.PhotoImage(resized_im)
-        
-        
-        _friend=[]
-        _db=load_object("Appdata/userData/data.pickle")
-        _username="abc"
-        if(_db['status']):
-            _username=_db['data']['username']
-            __fr=get_fr_by_username(_username)
-            for x in __fr:_friend.append({'username':x,'rank':100}) 
-
-        self.friends = _friend
-        self.friendsnum = str(self.friends.__len__())
-
 
         self.canvas = Canvas(
             self,
@@ -224,7 +205,25 @@ class Friendslist(Frame):
         for friend in self.friends:
             self.addFriendFrame(friend['username'], friend['rank'], self.profile_im)
         
+    def loadData(self):
+        def relative_to_assets(path: str) -> Path:
+            return ASSETS_PATH / Path(path)
         
+        _friend=[]
+        _db=load_object("Appdata/userData/data.pickle")
+        _username="abc"
+        if(_db['status']):
+            _username=_db['data']['username']
+            __fr=get_fr_by_username(_username)
+            for x in __fr:_friend.append({'username':x,'rank':100}) 
+
+        self.friends = _friend
+        self.friendsnum = str(self.friends.__len__())
+                
+        im = Image.open(relative_to_assets("image_3.png"))
+        resized_im = im.resize((60, 60))
+        self.profile_im = ImageTk.PhotoImage(resized_im)
+
     def addFriendFrame(self, usr: str, rank: int, im):
         posy = int(126 + 68*len(self.friendFrs))
         #create rec
@@ -333,6 +332,7 @@ class Friendslist(Frame):
     def onLogoutClicked(self):
         # Do sth with pickle
         os.remove("Appdata/userData/data.pickle")
+        os.remove("Appdata/userData/usr_img.jpg")
         self.parent.parent.Authed.set(False)
         self.parent.parent.run()
         self.parent.destroy()

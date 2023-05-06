@@ -10,19 +10,18 @@ import os
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
+OUTPUT_PATH = Path(__file__).parent
+
+ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/homepage")
 
 class homepage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+        self.loadData()
 
         self.mainF = Frame(self)
         # self.friends = Friends_frame(self)
-
-        OUTPUT_PATH = Path(__file__).parent
-
-        ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/homepage")
-
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
@@ -203,9 +202,13 @@ class homepage(Frame):
 
         # self.mainF.pack()
 
+    def loadData(self):
+        pass
+    
     def onLogoutClicked(self):
         #Do sth with pickle
         os.remove("Appdata/userData/data.pickle")
+        os.remove("Appdata/userData/usr_img.jpg")
         self.parent.parent.Authed.set(False)
         self.parent.parent.run()
         self.parent.destroy()

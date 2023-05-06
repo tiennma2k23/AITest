@@ -13,34 +13,18 @@ from PIL import Image, ImageTk
 import os
 import UI.Shop
 
+OUTPUT_PATH = Path(__file__).parent
 
+ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/friendslist")
 
 class requests(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-        OUTPUT_PATH = Path(__file__).parent
-
-        ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/friendslist")
+        self.loadData()
         
-
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
-        _db=load_object("Appdata/userData/data.pickle")
-        _username="abc"
-        _friendReqs=[]
-        if(_db['status']):
-            _username=_db['data']['username']
-            __rq=get_fr_rq_by_username(_username)
-            for x in __rq:_friendReqs.append({'username':x,'rank':100})
-
-        im = Image.open(relative_to_assets("image_3.png"))
-        resized_im = im.resize((60, 60))
-        self.profile_im = ImageTk.PhotoImage(resized_im)
-
-
-        self.friendReqs = _friendReqs
-        self.reqsnum = str(self.friendReqs.__len__())
 
         self.canvas = Canvas(
             self,
@@ -214,6 +198,27 @@ class requests(Frame):
         for friend in self.friendReqs:
             self.addFriendFrame(friend['username'], friend['rank'], self.profile_im)
 
+    def loadData(self):
+        def relative_to_assets(path: str) -> Path:
+            return ASSETS_PATH / Path(path)
+
+        _db=load_object("Appdata/userData/data.pickle")
+        _username="abc"
+        _friendReqs=[]
+        if(_db['status']):
+            _username=_db['data']['username']
+            __rq=get_fr_rq_by_username(_username)
+            for x in __rq:_friendReqs.append({'username':x,'rank':100})
+
+        im = Image.open(relative_to_assets("image_3.png"))
+        resized_im = im.resize((60, 60))
+        self.profile_im = ImageTk.PhotoImage(resized_im)
+
+
+        self.friendReqs = _friendReqs
+        self.reqsnum = str(self.friendReqs.__len__())
+
+
     def addFriendFrame(self, usr: str, rank: int, im):
         posy = int(126 + 68*len(self.Reqs))
         # create rec
@@ -327,6 +332,7 @@ class requests(Frame):
     def onLogoutClicked(self):
         # Do sth with pickle
         os.remove("Appdata/userData/data.pickle")
+        os.remove("Appdata/userData/usr_img.jpg")
         self.parent.parent.Authed.set(False)
         self.parent.parent.run()
         self.parent.destroy()
