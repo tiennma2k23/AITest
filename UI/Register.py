@@ -1,7 +1,10 @@
 
 #import Login
+from tkinter import messagebox
 import UI.Login
 from tkinter import *
+
+from Utils.Sources.authen import Auth
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -215,11 +218,11 @@ class sign_up_frame(Frame):
 
     def onRegisterClick(self):
         if (self.password.get() != self.repeated_pass.get()):
-            MessageBox.showerror('Please retry!',
+            messagebox.showerror('Please retry!',
                                  'Repeated password mismatch!')
             return
 
-        if (Auth(self.Email, self.password).UserReg()):
-            MessageBox.showinfo('Register Successfully!',
+        if (Auth(self.Email, self.password,self.username).UserReg()):
+            messagebox.showinfo('Register Successfully!',
                                 'Please check your email for confirmation!')
             self.parent.show_frame(UI.Login.login_frame)

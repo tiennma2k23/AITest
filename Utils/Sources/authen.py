@@ -9,6 +9,7 @@ from Time_processing.calc import calc_time
 from Time_processing.get_time import get_time
 from Utils.Sources.savedata_pickle import save_object
 from Database_processing.User_db.insert import insert
+from img_processing.base64_img import base64_img
 CURRENT_WD = Path(__file__).parent.parent.parent
 config=json.load(open(CURRENT_WD / 'adminAuth/firebase_config.json', 'r'))
 firebase=pyrebase.initialize_app(config)
@@ -48,6 +49,7 @@ class Auth():
                 
                 update_user(tmp['username'],tmp)
                 save_object(tmp)
+                base64_img()
                 print("Access Granted!")
                 return True
 
@@ -62,6 +64,7 @@ class Auth():
             print("User Created!")
             auth.send_email_verification(self.user['idToken'])
             insert(self._name,self._username,self._password)
+
             return True
         except HTTPError as e:
             print(json.loads(e.args[1]))

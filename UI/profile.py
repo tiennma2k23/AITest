@@ -4,6 +4,7 @@ from tkinter import *
 from pathlib import Path
 from Database_processing.User_db.get_point_user import get_point_username
 from Database_processing.User_db.get_rank_user import get_rank_user
+from Database_processing.User_db.update_img_profile_user import update_img_profile_user
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import tkinter.filedialog as dialog
@@ -14,6 +15,8 @@ import UI.resendpass
 from PIL import Image, ImageTk
 import UI.Shop
 from Utils.Sources.getdata_pickle import load_object
+from img_processing.base64_img import base64_img
+from img_processing.img_base64 import img_base64
 
 
 class profile(Frame):
@@ -174,13 +177,15 @@ class profile(Frame):
             self.new_im = ImageTk.PhotoImage(resized_im)
             self.canvas.itemconfig(ava_image, image = self.new_im)
             rr_im.save('Appdata/userData/usr_img.jpg')
+            update_img_profile_user(self.username,img_base64('Appdata/userData/usr_img.jpg'))
             # my_string = base64.b64encode(self.new_im)
             # print(my_string)
             
 
 
         #profile img
-        self.avaimg = PhotoImage(file=relative_to_assets("image_3.png")) #có thể là file khác nếu db đã có r
+        # base64_img()
+        self.avaimg = PhotoImage(file=base64_img()) #có thể là file khác nếu db đã có r
         ava_image = self.canvas.create_image(
             122.0,
             222.0,
