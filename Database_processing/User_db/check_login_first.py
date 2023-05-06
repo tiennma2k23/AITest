@@ -5,6 +5,4 @@ def check_login_first(usr):
     __=find_user(usr)
     if (__['status']==False): return True
     else:
-        login_days=__['data']['login_days']
-        if (login_days==1):return True
-        return False
+        return __['data']['first_login']
