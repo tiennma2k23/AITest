@@ -81,9 +81,9 @@ class Addfriend(Toplevel):
             self,
             bd=0,
             bg="#FFFFFF",
-            fg="#000716",
+            fg="#00000",
             highlightthickness=0,
-            font=('Lato', 14 * -1),
+            font=('Lato'),
             textvariable = self.username
         )
         entry_1.place(

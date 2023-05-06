@@ -7,6 +7,8 @@ import UI.Friends_list
 import UI.profile
 import os
 import UI.Shop
+from PIL import Image, ImageTk
+
 
 
 class rank(Frame):
@@ -17,8 +19,13 @@ class rank(Frame):
 
         ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/friendslist")
 
+
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
+
+        im = Image.open(relative_to_assets("image_3.png"))
+        resized_im = im.resize((40, 40))
+        self.profile_im = ImageTk.PhotoImage(resized_im)
 
         self.users = get_point_data()
 
@@ -143,7 +150,7 @@ class rank(Frame):
         )
         #Usrname txt
         self.canvas.create_text(
-            97,
+            88,
             91,
             anchor="nw",
             text="Username",
@@ -175,11 +182,11 @@ class rank(Frame):
             self.addUser(users['username'], users['rank'], users['point'])
 
     def addUser(self, usr: str, ranks: int, pts: int):
-        posy = int(140 + 49*len(self.usr))
+        posy = int(127 + 49*len(self.usr))
         #rank
         person = self.canvas.create_text(
             31,
-            posy,
+            posy + 16,
             anchor="nw",
             text=str(len(self.usr) + 1),
             fill="#7C7C7C",
@@ -187,8 +194,8 @@ class rank(Frame):
         )
         #name
         self.canvas.create_text(
-            97,
-            posy,
+            140,
+            posy + 16,
             anchor="nw",
             text=usr,
             fill="#7C7C7C",
@@ -197,7 +204,7 @@ class rank(Frame):
         #points
         self.canvas.create_text(
             679,
-            posy,
+            posy + 16,
             anchor="nw",
             text=str(pts),
             fill="#7C7C7C",
@@ -206,11 +213,18 @@ class rank(Frame):
         # create line
         self.canvas.create_line(
             0,
-            posy + 36,
+            posy + 49,
             800,
-            posy + 36,
+            posy + 49,
             width=0.5,
             fill="#B5B5B5",
+        )
+        # create img
+        self.canvas.create_image(
+            88,
+            posy + 4,
+            anchor = "nw",
+            image = self.profile_im
         )
         self.usr.append(person)
 
