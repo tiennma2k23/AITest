@@ -1,13 +1,10 @@
 from tkinter import *
 from pathlib import Path
-from Database_processing.Friends_db.add_fr_request import add_fr_request
-from Database_processing.Friends_db.delete_fr import delete_fr
-from Database_processing.Friends_db.get_friends import get_fr_by_username
-from Database_processing.Friends_db.update_fr import update_fr_user
-from Database_processing.User_db.get_img_profile import get_img_profile
-from Database_processing.User_db.get_rank_user import get_rank_user
+from Database_processing.User_db.update_login_first import *
 from Utils.Sources.getdata_pickle import load_object
 import UI.q5
+from Utils.Sources.getdata_pickle import load_object
+from Utils.Sources.savedata_pickle import save_object
 import tkinter.messagebox as messagebox
 
 OUTPUT_PATH = Path(__file__).parent
@@ -20,6 +17,7 @@ class q6(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+        self.username = ""
         self.loadData()
 
 
@@ -133,7 +131,12 @@ class q6(Frame):
         except:
             flag = False
         if (flag): 
-            self.parent.show_frame(UI.q5.q5)
+            print(self.username)
+            update_login_first(self.username, False)
+            self.parent.parent.Authed.set(True)
+            self.parent.parent.geometry('800x480')
+            self.parent.parent.main.pack()
+            self.parent.destroy()
         else:
             messagebox.showerror('Error', 'You must enter a number!')
 
@@ -151,4 +154,6 @@ class q6(Frame):
             messagebox.showerror('Error', 'You must enter a number!')
 
     def loadData(self):
-        pass
+        __=load_object("Appdata/userData/data.pickle")
+        if (__['status']==True):
+            self.username = __['data']['username']

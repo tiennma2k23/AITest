@@ -11,6 +11,7 @@ from Database_processing.Exercise_db.update import update
 # from UI.Homepage import homepage
 from UI.UI_fewercode import UserHandle
 from UI.Tabs import Tabs
+from UI.Questions import question
 """
 uri = json.loads(open("adminAuth/adminAuth.json","r").read())["uri"]
 cluster=MongoClient(uri, server_api=ServerApi('1'))
@@ -39,6 +40,7 @@ class App(tk.Tk):
     def run(self):
         self.auth = UserHandle(self)
         self.main = Tabs(self)
+        self.questions = question(self)
         _db=load_object("Appdata/userData/data.pickle")
         if(_db['status']==False): #Not pre-login
             self.Authed.set(False)

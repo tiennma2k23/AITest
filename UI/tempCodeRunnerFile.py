@@ -1,2 +1,4 @@
-def onShopClick(self):
-        self.parent.show_frame(UI.Shop.shop)
+self.parent.parent.Authed.set(True)
+                self.parent.parent.geometry('800x480')
+                self.parent.parent.main.pack()
+                self.parent.destroy()

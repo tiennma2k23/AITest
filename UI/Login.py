@@ -12,6 +12,7 @@ import UI.Register
 import UI.Resend_Password
 from Utils.Sources.authen import Auth
 from Database_processing.User_db.get import *
+from Database_processing.User_db.check_login_first import check_login_first
 # Explicit imports to satisfy Flake8
 #from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -225,11 +226,18 @@ class login_frame(Frame):
     
 
     def onLoginClick(self):
+        print(check_login_first(self.entry_1.get()))
         if (Auth(self.email, self.password).UserAuth()):
-            self.parent.parent.Authed.set(True)
-            self.parent.parent.geometry('800x480')
-            self.parent.parent.main.pack()
-            self.parent.destroy()
+            if (check_login_first(self.entry_1.get())):
+                self.parent.parent.Authed.set(True)
+                self.parent.parent.geometry('800x480')
+                self.parent.parent.questions.pack()
+                self.parent.destroy()
+            else:
+                self.parent.parent.Authed.set(True)
+                self.parent.parent.geometry('800x480')
+                self.parent.parent.main.pack()
+                self.parent.destroy()
         else:
             usr = self.entry_1.get()
             passs = self.entry_2.get()
