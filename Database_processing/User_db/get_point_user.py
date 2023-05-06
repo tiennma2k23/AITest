@@ -10,6 +10,7 @@ exType=['squat','pull-up','sit-up','push-up','walk']
 def get_point_username(info):
     User_db=db['User_db']
     xx=User_db.find_one({'username':info})
+    if (xx is None): return 0
     point=0
     for x in exType:
         __=_dbex[x]
