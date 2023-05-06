@@ -29,8 +29,8 @@ class shop(Frame):
 
         self.points = 1012
         self.shops = [
-            {'image': self.profile_im, 'name': 'hieu', 'district': 'Ha Dong', 'city': 'Ha Noi', 'distance': 15, 'value': 15, 'points': 1000},
-            {'image': self.profile_im, 'name': 'fog', 'district': 'Phan Rang - Thap Cham', 'city': 'Ninh Thuan', 'distance': 1500, 'value': 40, 'points': 2000}
+            {'image': self.profile_im, 'name': 'hieu', 'district': 'Ha Dong', 'city': 'Ha Noi', 'distance': 15, 'value': 15, 'points': 10},
+            {'image': self.profile_im, 'name': 'fog', 'district': 'Phan Rang - Thap Cham', 'city': 'Ninh Thuan', 'distance': 1500, 'value': 40, 'points': 20}
         ]
 
 

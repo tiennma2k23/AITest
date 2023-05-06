@@ -29,7 +29,7 @@ class Friendslist(Frame):
         super().__init__(parent)
         self.parent = parent
         self.loadData()
-        
+        self.profile_im=[]
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
@@ -205,8 +205,9 @@ class Friendslist(Frame):
         self.friendFrs = []  # List of friend frames
         self.unfr = []  # List of friendReq frames
         
-        for friend in self.friends:
-            self.addFriendFrame(friend['username'], friend['rank'], friend['img_url'])
+        for x in range (len(self.friends)):
+            friend=self.friends[x]
+            self.addFriendFrame(friend['username'], friend['rank'], friend['img_url'],x)
         
     def loadData(self):
         def relative_to_assets(path: str) -> Path:
@@ -224,12 +225,12 @@ class Friendslist(Frame):
         self.friendsnum = str(self.friends.__len__())
         
         
-
-    def addFriendFrame(self, usr: str, rank: int, im_url):
+    
+    def addFriendFrame(self, usr: str, rank: int, im_url:str,index:int):
         base64_img_with_base64url(im_url,'fr_img.jpg')
         im = Image.open('./Appdata/userData/fr_img.jpg')
         resized_im = im.resize((60, 60))
-        self.profile_im = ImageTk.PhotoImage(resized_im)
+        self.profile_im.append(ImageTk.PhotoImage(resized_im))
         posy = int(126 + 68*len(self.friendFrs))
         #create rec
         person = self.canvas.create_rectangle(
@@ -263,7 +264,7 @@ class Friendslist(Frame):
             126,
             posy + 4.5,
             anchor = "nw",
-            image = self.profile_im
+            image = self.profile_im[index]
         )
         #create button
         unfr = Button(

@@ -3,6 +3,7 @@ from pathlib import Path
 from Database_processing.Friends_db.ac_friend_rq import accept_fr
 from Database_processing.Friends_db.deny_friend_rq import deny_fr
 from Database_processing.Friends_db.get_request_fr import get_fr_rq_by_username
+from Database_processing.User_db.get_img_profile import get_img_profile
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import UI.Friends_list
@@ -12,6 +13,7 @@ from Utils.Sources.getdata_pickle import load_object
 from PIL import Image, ImageTk
 import os
 import UI.Shop
+from img_processing.base64_img import base64_img_with_base64url
 
 OUTPUT_PATH = Path(__file__).parent
 
@@ -195,8 +197,9 @@ class requests(Frame):
                              lambda _: self.onAddfrClick())
 
         self.Reqs = []  # List of friend frames
-        for friend in self.friendReqs:
-            self.addFriendFrame(friend['username'], friend['rank'], self.profile_im)
+        for x in range (len(self.friendReqs)):
+            friend=self.friendReqs[x]
+            self.addFriendFrame(friend['username'], friend['rank'], get_img_profile(friend['username']),x)
 
     def loadData(self):
         def relative_to_assets(path: str) -> Path:
@@ -210,17 +213,21 @@ class requests(Frame):
             __rq=get_fr_rq_by_username(_username)
             for x in __rq:_friendReqs.append({'username':x,'rank':100})
 
-        im = Image.open(relative_to_assets("image_3.png"))
-        resized_im = im.resize((60, 60))
-        self.profile_im = ImageTk.PhotoImage(resized_im)
+        # im = Image.open(relative_to_assets("image_3.png"))
+        # resized_im = im.resize((60, 60))
+        self.profile_im = []
 
 
         self.friendReqs = _friendReqs
         self.reqsnum = str(self.friendReqs.__len__())
 
 
-    def addFriendFrame(self, usr: str, rank: int, im):
+    def addFriendFrame(self, usr: str, rank: int, im_url:str,index:int):
         posy = int(126 + 68*len(self.Reqs))
+        base64_img_with_base64url(im_url,'fr_img.jpg')
+        im = Image.open('./Appdata/userData/fr_img.jpg')
+        resized_im = im.resize((60, 60))
+        self.profile_im.append(ImageTk.PhotoImage(resized_im))
         # create rec
         person = self.canvas.create_rectangle(
             117,
@@ -244,7 +251,7 @@ class requests(Frame):
             126,
             posy + 4.5,
             anchor = "nw",
-            image = self.profile_im
+            image = self.profile_im[index]
         )
 
 
