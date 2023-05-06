@@ -4,6 +4,8 @@ import tkinter.messagebox as MessageBox
 # =======
 from Database_processing.Friends_db.get_request_fr import get_fr_rq_by_username
 from Database_processing.Friends_db.get_friends import get_fr_by_username
+from Database_processing.User_db.get_img_profile import get_img_profile
+from Database_processing.User_db.get_rank_user import get_rank_user
 from Utils.Sources.getdata_pickle import load_object
 from Database_processing.Friends_db.ac_friend_rq import accept_fr
 from Database_processing.Friends_db.deny_friend_rq import deny_fr
@@ -28,8 +30,8 @@ class Friends_frame(tk.Frame):
             _username=_db['data']['username']
             __rq=get_fr_rq_by_username(_username)
             __fr=get_fr_by_username(_username)
-            for x in __rq:_friendReqs.append({'username':x,'rank':100})
-            for x in __fr:_friend.append({'username':x,'rank':100})
+            for x in __rq:_friendReqs.append({'username':x,'rank':get_rank_user(x),'img_profile':get_img_profile(x)})
+            for x in __fr:_friend.append({'username':x,'rank':get_rank_user(x),'img_profile':get_img_profile(x)})
         
         print ("Da chay file Friend.py",_friendReqs)
         self.friendReqs = _friendReqs

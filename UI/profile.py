@@ -15,6 +15,7 @@ import UI.resendpass
 from PIL import Image, ImageTk
 import UI.Shop
 from Utils.Sources.getdata_pickle import load_object
+from Utils.Sources.savedata_pickle import save_object
 from img_processing.base64_img import base64_img
 from img_processing.img_base64 import img_base64
 
@@ -174,6 +175,10 @@ class profile(Frame):
             self.canvas.itemconfig(self.userDataFieldID['pfp'], image = self.new_im)
             rr_im.save('Appdata/userData/usr_img.jpg')
             update_img_profile_user(self.username,img_base64('Appdata/userData/usr_img.jpg'))
+            __=load_object("Appdata/userData/data.pickle")
+            tmp=__['data']
+            tmp['img_profile']=img_base64('Appdata/userData/usr_img.jpg')
+            save_object(tmp)
             # my_string = base64.b64encode(self.new_im)
             # print(my_string)
             

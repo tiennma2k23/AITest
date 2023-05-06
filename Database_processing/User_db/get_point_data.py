@@ -13,7 +13,7 @@ def get_point_data():
     User_db=db['User_db']
     _userdb=User_db.find({})
     for x in _userdb:
-        arr.append({'username':x['username'],'point':get_point_username(x['username'])})
+        arr.append({'username':x['username'],'point':get_point_username(x['username']),'img_url':x['img_profile']})
     arr.sort(key=lambda x: x['point'], reverse=True)
     for i in range(len(arr)):
         arr[i]['rank']=i+1

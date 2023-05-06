@@ -1,5 +1,6 @@
 from tkinter import *
 from pathlib import Path
+from Database_processing.User_db.get_img_profile import get_img_profile
 from Database_processing.User_db.get_point_data import get_point_data
 import UI.Homepage
 import tkinter.messagebox as messagebox
@@ -8,6 +9,8 @@ import UI.profile
 import os
 import UI.Shop
 from PIL import Image, ImageTk
+
+from img_processing.base64_img import base64_img_with_base64url
 
 OUTPUT_PATH = Path(__file__).parent
 
@@ -22,9 +25,9 @@ class rank(Frame):
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
-        im = Image.open(relative_to_assets("image_3.png"))
-        resized_im = im.resize((40, 40))
-        self.profile_im = ImageTk.PhotoImage(resized_im)
+        # im = Image.open(relative_to_assets("image_3.png"))
+        # resized_im = im.resize((40, 40))
+        # self.profile_im = ImageTk.PhotoImage(resized_im)
 
         self.users = get_point_data()
 
@@ -177,14 +180,24 @@ class rank(Frame):
         )
         
         self.usr = []  # List of friend frames
-        for users in self.users:
-            self.addUser(users['username'], users['rank'], users['point'])
+        for x in range (len(self.users)):
+            users=self.users[x]
+            self.addUser(users['username'], users['rank'], users['point'],x)
 
     def loadData(self):
         pass
     
-    def addUser(self, usr: str, ranks: int, pts: int):
+    def addUser(self, usr: str, ranks: int, pts: int,index:int):
+        img_url=get_img_profile(usr)
+        # print(usr)
+        # __url=str(index)
+        base64_img_with_base64url(img_url,'fr_img'+str(index)+'.jpg')
+        im = Image.open('./Appdata/userData/fr_img'+str(index)+'.jpg')
+        
+        resized_im = im.resize((40, 40))
+        self.profile_im = ImageTk.PhotoImage(resized_im)
         posy = int(127 + 49*len(self.usr))
+
         #rank
         person = self.canvas.create_text(
             31,
@@ -228,6 +241,7 @@ class rank(Frame):
             anchor = "nw",
             image = self.profile_im
         )
+        # os.remove('Appdata/userData/fr_img.jpg')
         self.usr.append(person)
 
     def onLogoutClicked(self):

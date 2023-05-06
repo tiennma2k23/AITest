@@ -50,7 +50,7 @@ class Auth():
                 update_user(tmp['username'],tmp)
                 save_object(tmp)
                 
-                base64_img()
+                base64_img('usr_img.jpg')
                 print("Access Granted!")
                 return True
 

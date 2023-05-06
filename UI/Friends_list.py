@@ -4,6 +4,8 @@ from Database_processing.Friends_db.add_fr_request import add_fr_request
 from Database_processing.Friends_db.delete_fr import delete_fr
 from Database_processing.Friends_db.get_friends import get_fr_by_username
 from Database_processing.Friends_db.update_fr import update_fr_user
+from Database_processing.User_db.get_img_profile import get_img_profile
+from Database_processing.User_db.get_rank_user import get_rank_user
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import UI.FriendsReq 
@@ -13,6 +15,7 @@ from Utils.Sources.getdata_pickle import load_object
 from PIL import Image, ImageTk
 import os
 import UI.Shop
+from img_processing.base64_img import base64_img_with_base64url
 
 OUTPUT_PATH = Path(__file__).parent
 
@@ -203,7 +206,7 @@ class Friendslist(Frame):
         self.unfr = []  # List of friendReq frames
         
         for friend in self.friends:
-            self.addFriendFrame(friend['username'], friend['rank'], self.profile_im)
+            self.addFriendFrame(friend['username'], friend['rank'], friend['img_url'])
         
     def loadData(self):
         def relative_to_assets(path: str) -> Path:
@@ -215,16 +218,18 @@ class Friendslist(Frame):
         if(_db['status']):
             _username=_db['data']['username']
             __fr=get_fr_by_username(_username)
-            for x in __fr:_friend.append({'username':x,'rank':100}) 
+            for x in __fr:_friend.append({'username':x,'rank':get_rank_user(x),'img_url':get_img_profile(x)}) 
 
         self.friends = _friend
         self.friendsnum = str(self.friends.__len__())
-                
-        im = Image.open(relative_to_assets("image_3.png"))
+        
+        
+
+    def addFriendFrame(self, usr: str, rank: int, im_url):
+        base64_img_with_base64url(im_url,'fr_img.jpg')
+        im = Image.open('./Appdata/userData/fr_img.jpg')
         resized_im = im.resize((60, 60))
         self.profile_im = ImageTk.PhotoImage(resized_im)
-
-    def addFriendFrame(self, usr: str, rank: int, im):
         posy = int(126 + 68*len(self.friendFrs))
         #create rec
         person = self.canvas.create_rectangle(
