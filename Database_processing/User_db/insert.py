@@ -18,7 +18,7 @@ def insert(username,email,password):
     
     if(collection.count_documents({"username":username})==0):
         collection.insert_one({'username':username,'email':email,'password':password,'friend_list':[],'friend_request':[],'friend_requested':[],'login_time':'','login_days':0,'img_profile':img_base64("UI/assets/profile/image_3.png"),
-                               'gendermale':True,'first_login':False,'activate':False,'locate':''})
+                               'gendermale':True,'first_login':True,'activate':False,'locate':''})
         # True la Nam False la Nu 
         return {'status':"OK"}
     else:
