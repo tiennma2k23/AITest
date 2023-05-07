@@ -12,6 +12,7 @@ from Database_processing.User_db.update_active import *
 from Database_processing.User_db.ispremium import *
 from pathlib import Path
 import os
+import UI.Guide
 # Explicit imports to satisfy Flake8
 # from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -58,7 +59,7 @@ class homepage(Frame):
             78.0,
             fill="#ADAAAA",
             outline="")
-
+        #logo
         self.logo_img = PhotoImage(file = relative_to_assets("logo.png"))
         self.logo = self.canvas.create_image(
             24,
@@ -303,8 +304,8 @@ class homepage(Frame):
     def onGuideclick(self):
         if not self.ispremium: 
             messagebox.showerror('Free Account, so poor!', 'Please upgrade to premium account to get access to this feature')
-
-
+        else:
+            UI.Guide.guide(self).update()
             
 
 

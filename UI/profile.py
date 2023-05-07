@@ -5,6 +5,8 @@ from pathlib import Path
 from Database_processing.User_db.get_point_user import get_point_username
 from Database_processing.User_db.get_rank_user import get_rank_user
 from Database_processing.User_db.update_img_profile_user import update_img_profile_user
+from Database_processing.User_db.ispremium import *
+from Database_processing.User_db.update_active import *
 import UI.Homepage
 import tkinter.messagebox as messagebox
 import tkinter.filedialog as dialog
@@ -73,6 +75,15 @@ class profile(Frame):
             78.0,
             fill="#ADAAAA",
             outline="")
+
+        #logo tsao lại bay ??
+        self.logo_img = PhotoImage(file = relative_to_assets('logo.png'))
+        self.logo = self.canvas.create_image(
+            24,
+            23,
+            image=self.logo_img,
+            anchor="nw",
+        )
         # home text
         home_txt = self.canvas.create_text(
             287.0,
@@ -262,6 +273,34 @@ class profile(Frame):
             anchor = "nw",
             image = self.button_image_2
         )
+        self.account = "Premium" if ispremium(self.username) else "Free"
+        #account text
+        self.canvas.create_text(
+            294,
+            377,
+            anchor="nw",
+            text="Account: " + self.account,
+            fill="#7C7C7C",
+            font=("Lato Regular", 20 * -1, "bold")
+        )
+        if not ispremium(self.username):
+            unfr = Button(
+                self.canvas,
+                text="Upgrade to Premium",
+                font=('Lato', 18 * -1),
+                fg = "#E4E4E4",
+                bg = "#676767",
+                borderwidth=0,
+                highlightthickness=0,
+                command=lambda: print(1),
+                relief="flat"
+            )
+            unfr.place(
+                x=487,
+                y=375,
+                width=173,
+                height=28
+            )
         
     def loadData(self):
         __=load_object("Appdata/userData/data.pickle")

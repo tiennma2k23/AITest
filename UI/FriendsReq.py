@@ -62,6 +62,14 @@ class requests(Frame):
             78.0,
             fill="#ADAAAA",
             outline="")
+        #logo
+        self.logo_img = PhotoImage(file = relative_to_assets("logo.png"))
+        self.logo = self.canvas.create_image(
+            24,
+            23,
+            image=self.logo_img,
+            anchor="nw",
+        )
         # home text
         home_txt = self.canvas.create_text(
             287.0,
