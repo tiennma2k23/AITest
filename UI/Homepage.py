@@ -5,6 +5,11 @@ import UI.chooseEx
 import UI.Rank
 import UI.profile
 import UI.Shop
+import tkinter.messagebox as messagebox
+from Utils.Sources.getdata_pickle import load_object
+from Utils.Sources.savedata_pickle import save_object
+from Database_processing.User_db.update_active import *
+from Database_processing.User_db.ispremium import *
 from pathlib import Path
 import os
 # Explicit imports to satisfy Flake8
@@ -13,18 +18,16 @@ import os
 OUTPUT_PATH = Path(__file__).parent
 
 ASSETS_PATH = OUTPUT_PATH / Path(r"./assets/homepage")
+def relative_to_assets(path: str) -> Path:
+            return ASSETS_PATH / Path(path)
 
 class homepage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+        self.username = ""
+        self.ispremium = False
         self.loadData()
-
-        self.mainF = Frame(self)
-        # self.friends = Friends_frame(self)
-
-        def relative_to_assets(path: str) -> Path:
-            return ASSETS_PATH / Path(path)
 
         #create BG
         self.canvas = Canvas(
@@ -37,6 +40,8 @@ class homepage(Frame):
             relief="ridge"
         )
         self.canvas.pack()
+
+
         self.image_image_1 = PhotoImage(
             file=relative_to_assets("image_1.png"))
         image_1 = self.canvas.create_image(
@@ -53,6 +58,15 @@ class homepage(Frame):
             78.0,
             fill="#ADAAAA",
             outline="")
+
+        self.logo_img = PhotoImage(file = relative_to_assets("logo.png"))
+        self.logo = self.canvas.create_image(
+            24,
+            23,
+            image=self.logo_img,
+            anchor="nw",
+        )
+
         #home text
         self.canvas.create_text(
             287.0,
@@ -146,20 +160,20 @@ class homepage(Frame):
         #button1
         self.button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))
-        button_1 = self.canvas.create_image(
-            65, 
-            132,
+        self.button_1 = self.canvas.create_image(
+            545, 
+            282,
             image=self.button_image_1,
             anchor = "nw",
         )
-        self.canvas.tag_bind(button_1, '<ButtonPress-1>',
-                        lambda _: UI.chooseEx.chooseEx(self, 'pull-up').update())
+        self.canvas.tag_bind(self.button_1, '<ButtonPress-1>',
+                        lambda _: self.onpullupclick())
         #button2
         self.button_image_2 = PhotoImage(
             file=relative_to_assets("button_2.png"))
         button_2 = self.canvas.create_image(
-            341,
-            177,
+            240,
+            181,
             image=self.button_image_2,
             anchor="nw",
         )
@@ -170,8 +184,8 @@ class homepage(Frame):
         self.button_image_3 = PhotoImage(
             file=relative_to_assets("button_3.png"))
         button_3 = self.canvas.create_image(
-            586,
-            151,
+            440,
+            155,
             image=self.button_image_3,
             anchor="nw",
         )
@@ -181,8 +195,8 @@ class homepage(Frame):
         self.button_image_4 = PhotoImage(
             file=relative_to_assets("button_4.png"))
         button_4 = self.canvas.create_image(
-            204,
-            286,
+            42,
+            153,
             image=self.button_image_4,
             anchor="nw",
         )
@@ -192,18 +206,65 @@ class homepage(Frame):
         self.button_image_5 = PhotoImage(
             file=relative_to_assets("button_5.png"))
         button_5 = self.canvas.create_image(
-            478,
-            273,
+            125,
+            287,
             image=self.button_image_5,
             anchor="nw",
         )
         self.canvas.tag_bind(button_5, '<ButtonPress-1>',
                         lambda _: UI.chooseEx.chooseEx(self, 'walk').update())
 
-        # self.mainF.pack()
+        #plank
+        self.img_plank = PhotoImage(
+            file=relative_to_assets("plank.png"))
+        self.button_plank = self.canvas.create_image(
+            648,
+            143,
+            image=self.img_plank,
+            anchor="nw",
+        )
+        self.canvas.tag_bind(self.button_plank, '<ButtonPress-1>',
+                        lambda _: UI.chooseEx.chooseEx(self, 'push-up').update())
+        
+        #lunges
+        self.img_lunges = PhotoImage(
+            file=relative_to_assets("lunges.png"))
+        self.button_lunges = self.canvas.create_image(
+            335,
+            296,
+            image=self.img_lunges,
+            anchor="nw",
+        )
+        self.canvas.tag_bind(self.button_lunges, '<ButtonPress-1>',
+                        lambda _: self.onLungesclick())
+        
+        self.guide_image = PhotoImage(
+            file=relative_to_assets("guide.png"))
+        self.guide = self.canvas.create_image(
+            578,
+            78,
+            anchor = "nw",
+            image = self.guide_image
+        )
+        self.canvas.tag_bind(self.guide, '<ButtonPress-1>',
+                             lambda _: self.onGuideclick())
+
+        def Lock():
+            self.im_guide_lock = PhotoImage(file = relative_to_assets("guide_lock.png"))
+            self.im_pullup_lock = PhotoImage(file = relative_to_assets("pullup_lock.png"))
+            self.im_lunges_lock = PhotoImage(file = relative_to_assets("lunges_lock.png"))
+            self.canvas.itemconfig(self.guide, image = self.im_guide_lock)
+            self.canvas.itemconfig(self.button_1, image = self.im_pullup_lock)
+            self.canvas.itemconfig(self.button_lunges, image = self.im_lunges_lock)
+
+        if not self.ispremium: Lock()
 
     def loadData(self):
-        pass
+        __=load_object("Appdata/userData/data.pickle")
+        if (__['status']==True):
+            self.username = __['data']['username']
+            # update_active(self.username, True)
+            self.ispremium = ispremium(self.username)
     
     def onLogoutClicked(self):
         #Do sth with pickle
@@ -227,6 +288,24 @@ class homepage(Frame):
     
     def onShopClick(self):
         self.parent.show_frame(UI.Shop.shop)
+    
+    def onpullupclick(self):
+        if not self.ispremium: 
+            messagebox.showerror('Free Account, so poor!', 'Please upgrade to premium account to get access to this feature')
+        else:
+            UI.chooseEx.chooseEx(self, 'pull-up').update()
+    
+    def onLungesclick(self):
+        if not self.ispremium: 
+            messagebox.showerror('Free Account, so poor!', 'Please upgrade to premium account to get access to this feature')
+        else:
+            UI.chooseEx.chooseEx(self, 'push-up').update()
+    def onGuideclick(self):
+        if not self.ispremium: 
+            messagebox.showerror('Free Account, so poor!', 'Please upgrade to premium account to get access to this feature')
+
+
+            
 
 
 
