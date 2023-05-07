@@ -20,5 +20,5 @@ def get_point_username(info):
                 point+=0.01*_dt['counter']
             else : point+=_dt['counter']
     point*=(xx['login_days']*0.01+1)
-    return point
+    return round(point,2)
 

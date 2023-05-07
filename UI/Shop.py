@@ -194,7 +194,7 @@ class shop(Frame):
         )
         #Current point txt
         self.curpoint = self.canvas.create_text(
-            627.0,
+            20,
             448.0,
             anchor="nw",
             text="Current Point - " + str(self.points),
@@ -298,7 +298,7 @@ class shop(Frame):
             relief="flat"
         )
         exch.place(
-            x=705,
+            x=700,
             y=posy + 12,
             width=95,
             height=27.98
