@@ -79,10 +79,10 @@ def __main__(exType: str, webcam: bool, _fq: Queue):
 
     global fr, counter, status, isRunning
     isRunning = True
-    # if (webcam):
-    cap = cv2.VideoCapture(0)  # webcam
-    # else:
-        # cap = cv2.VideoCapture('_test/videos/'+exType+'.mp4')
+    if (webcam):
+        cap = cv2.VideoCapture(0)  # webcam
+    else:
+        cap = cv2.VideoCapture('_test/videos/'+exType+'.mp4')
     cap.set(3, 800)  # width
     cap.set(4, 480)  # height
 

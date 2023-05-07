@@ -12,6 +12,7 @@ class chooseEx(tk.Toplevel):
         super().__init__()
         self.parent = parent
         self.geometry('800x480')
+        self.title('EXERA Camera')
         self.eType = ('pull-up', 'push-up', 'sit-up', 'squat', 'walk')
         self.tkStr = tk.StringVar(self)
         self.tkStr.set(exType)

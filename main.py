@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.messagebox as messagebox
+from PIL import Image, ImageTk
 # from pymongo.mongo_client import MongoClient
 # from pymongo.server_api import ServerApi
 # import json
@@ -31,8 +32,9 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.geometry("800x480")
+        self.iconphoto(True, ImageTk.PhotoImage(Image.open('logo.png')))
         # self.resizable(False, False)
-        self.title('Demo')
+        self.title('EXERA')
         self.protocol("WM_DELETE_WINDOW", self.onClose)
         self.Authed = tk.BooleanVar(self, True)
         self.run()
