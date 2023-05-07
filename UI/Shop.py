@@ -1,10 +1,13 @@
 from tkinter import *
 from pathlib import Path
 from Database_processing.User_db.get_point_data import get_point_data
-import tkinter.messagebox as messagebox
 from Database_processing.User_db.get_point_user import get_point_username
-import UI.Homepage
+from Database_processing.locate_db.get_shop import get_shop
+from Database_processing.locate_db.maps import *
+from Database_processing.locate_db.get_location_arr import *
+from img_processing.base64_img import base64_img_with_base64url
 import tkinter.messagebox as messagebox
+import UI.Homepage
 import UI.Friends_list
 import UI.profile
 import UI.Rank
@@ -31,10 +34,7 @@ class shop(Frame):
         __username=""
         if (__['status']) :__username=__['data']['username']
         self.points = get_point_username(__username)
-        self.shops = [
-            {'image': 'cali.png', 'name': 'California Fitness', 'district': 'Ha Dong', 'city': 'Ha Noi', 'distance': '300 m', 'value': 15, 'points': 10},
-            {'image': 'citygym.jpeg', 'name': 'CITYGYM', 'district': 'Le Loi', 'city': 'Ho Chi Minh', 'distance': '1700 km', 'value': 40, 'points': 20}
-        ]
+        self.shops = get_shop()
 
 
         self.canvas = Canvas(
@@ -208,17 +208,87 @@ class shop(Frame):
             text="Current Point - " + str(self.points),
             fill="#7C7C7C",
             font=("Lato", 18 * -1,"bold")
-        )       
+        )
 
         self.curshops = []  # List of friend frames
-        for x in range (len(self.shops)):
-            users=self.shops[x]
-            self.addShop(users['name'], users['district'], users['city'], users['distance'], users['value'], users['points'],users['image'],x)
+        self.shopDistances = []
+        id = 0
+        for shop in self.shops: #MongoDB's Cursor type
+            shopImg = base64_img_with_base64url(shop['img'], 'shop_im'+str(id)+'.jpg')
+            self.addShop(shop['name'], shop['addr'], -1, shop['value'], shop['cost'], shopImg, id)
+            id += 1
+
+        self.city = StringVar()
+        self.commune = StringVar()
+        self.district = StringVar()
+
+        distrList = []
+        comnList = []
+
+        def onCityChange():
+            distrList.clear()
+            self.districtOptMenu['menu'].delete(0, 'end')
+            comnList.clear()
+            self.communeOptMenu['menu'].delete(0, 'end')
+            distrList.extend(get_arr_district(self.city.get()))
+            for distr in distrList:
+                self.districtOptMenu['menu'].add_command(
+                    label=distr,
+                    command=lambda value=distr: self.district.set(value) or onDistrictChange()
+                )
+            self.commune.set('')
+            self.district.set('')
+
+        self.cityOptMenu = OptionMenu(
+            self,
+            self.city,'',
+            *get_arr_province(),
+            command=lambda _: onCityChange()
+        )
+        self.cityOptMenu.pack()
+
+        def onDistrictChange():
+            comnList.clear();
+            comnList.extend(get_arr_commune(self.city.get(), self.district.get()))
+            self.communeOptMenu['menu'].delete(0, 'end')
+            for comn in comnList:
+                self.communeOptMenu['menu'].add_command(
+                    label=comn,
+                    command=lambda value=comn: self.commune.set(value) or self.updateData()
+                )
+            self.commune.set('')
+
+        self.districtOptMenu = OptionMenu(
+            self,
+            self.district, '',
+            *distrList,
+            command= lambda _: onDistrictChange()
+        )
+        self.districtOptMenu.pack()
+
+        self.communeOptMenu = OptionMenu(
+            self,
+            self.commune, '',
+            *comnList
+        )
+        self.communeOptMenu.pack()
 
     def loadData(self):
         pass
+
+    def updateData(self):
+        self.addr = self.commune.get() + ', ' +\
+                    self.district.get() + ', '+\
+                    self.city.get() + ', ' + 'Việt Nam'
+        currentCords = get_cords(self.addr)
+        id = 0
+        for shopDistance in self.shopDistances:
+            self.canvas.itemconfig(shopDistance, 
+            text='Distance: ' + str(distBetween_cords(currentCords, self.shops[id]['cords'])) + 'km')
+            id += 1
+
     
-    def addShop(self, name: str, distr: str, cit: str, dist: str, val: int, pts: int,img_url:str,index:int):
+    def addShop(self, name: str, addr: str, dist: str, val: int, pts: int,img_url:str,index:int):
         posy = int(127 + 49*len(self.curshops))
         #name
         cur = self.canvas.create_text(
@@ -241,19 +311,20 @@ class shop(Frame):
             208,
             posy + 3,
             anchor="nw",
-            text=distr + ', ' + cit,
+            text=addr,
             fill="#7C7C7C",
             font=("Lato", 16 * -1)
         )
         #distance
-        self.canvas.create_text(
+        shopDist = self.canvas.create_text(
             208,
             posy + 26,
             anchor="nw",
-            text='Distance: ' + str(dist),
+            text='Distance: ' + str(dist) + 'km',
             fill="#7C7C7C",
             font=("Lato", 12 * -1, "italic")
         )
+        self.shopDistances.append(shopDist)
         #value
         self.canvas.create_text(
             490,
@@ -282,7 +353,7 @@ class shop(Frame):
             fill="#B5B5B5",
         )
         # create img
-        strr='UI/assets/shop/'+img_url
+        strr=img_url
         im = Image.open(strr)
         resized_im = im.resize((40, 40))
         self.img_shop.append(ImageTk.PhotoImage(resized_im))
