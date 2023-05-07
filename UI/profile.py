@@ -20,6 +20,7 @@ from Utils.Sources.getdata_pickle import load_object
 from Utils.Sources.savedata_pickle import save_object
 from img_processing.base64_img import base64_img
 from img_processing.img_base64 import img_base64
+from UI.upgr_premium import Premium
 
 OUTPUT_PATH = Path(__file__).parent
 
@@ -284,7 +285,7 @@ class profile(Frame):
             font=("Lato Regular", 20 * -1, "bold")
         )
         if not ispremium(self.username):
-            unfr = Button(
+            upgr = Button(
                 self.canvas,
                 text="Upgrade to Premium",
                 font=('Lato', 18 * -1),
@@ -292,10 +293,10 @@ class profile(Frame):
                 bg = "#676767",
                 borderwidth=0,
                 highlightthickness=0,
-                command=lambda: print(1),
+                command=lambda: Premium(self).update(),
                 relief="flat"
             )
-            unfr.place(
+            upgr.place(
                 x=487,
                 y=375,
                 width=173,
