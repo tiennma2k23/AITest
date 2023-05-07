@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 from pathlib import Path
 from Database_processing.User_db.get_point_data import get_point_data
 from Database_processing.User_db.get_point_user import get_point_username
@@ -202,12 +203,39 @@ class shop(Frame):
         )
         #Current point txt
         self.curpoint = self.canvas.create_text(
-            20,
-            448.0,
+            7,
+            458.0,
             anchor="nw",
             text="Current Point - " + str(self.points),
             fill="#7C7C7C",
             font=("Lato", 18 * -1,"bold")
+        )
+
+        self.canvas.create_text(
+            320,
+            438,
+            anchor="nw",
+            text="City:",
+            fill="#7C7C7C",
+            font=("Lato", 14 * -1)
+        )
+
+        self.canvas.create_text(
+            490,
+            438,
+            anchor="nw",
+            text="District:",
+            fill="#7C7C7C",
+            font=("Lato", 14 * -1)
+        )
+
+        self.canvas.create_text(
+            660,
+            438,
+            anchor="nw",
+            text="Ward:",
+            fill="#7C7C7C",
+            font=("Lato", 14 * -1)
         )
 
         self.curshops = []  # List of friend frames
@@ -240,12 +268,13 @@ class shop(Frame):
             self.district.set('')
 
         self.cityOptMenu = OptionMenu(
-            self,
+            self.canvas,
             self.city,'',
             *get_arr_province(),
             command=lambda _: onCityChange()
         )
-        self.cityOptMenu.pack()
+        self.cityOptMenu.config(width = 15, font=("Lato", 10), fg = "#323232", bg = "#A3A3A3", highlightthickness= 0, bd=0)
+        self.cityOptMenu.place(x = 320, y = 457)
 
         def onDistrictChange():
             comnList.clear();
@@ -259,19 +288,27 @@ class shop(Frame):
             self.commune.set('')
 
         self.districtOptMenu = OptionMenu(
-            self,
+            self.canvas,
             self.district, '',
             *distrList,
             command= lambda _: onDistrictChange()
         )
-        self.districtOptMenu.pack()
+        self.districtOptMenu.config(width = 15, font=("Lato", 10), fg = "#323232", bg = "#A3A3A3", highlightthickness= 0, bd=0)
+        self.districtOptMenu.place(x = 490, y = 457)
+        # self.districtOptMenu = ttk.Combobox(self, state='readonly')
+        # self.districtOptMenu['values'] = distrList
+        # print(distrList)
+        # self.districtOptMenu.bind('<<ComboboxSelected>>', onDistrictChange)
+        # self.districtOptMenu.pack()
 
         self.communeOptMenu = OptionMenu(
-            self,
+            self.canvas,
             self.commune, '',
             *comnList
         )
-        self.communeOptMenu.pack()
+        self.communeOptMenu.config(width = 15, font=("Lato", 10), fg = "#323232", bg = "#A3A3A3", highlightthickness= 0, bd=0)
+        self.communeOptMenu.place(x = 660, y = 457)
+        # self.communeOptMenu.pack()
 
     def loadData(self):
         pass
@@ -280,6 +317,7 @@ class shop(Frame):
         self.addr = self.commune.get() + ', ' +\
                     self.district.get() + ', '+\
                     self.city.get() + ', ' + 'Việt Nam'
+        # print(self.addr)
         currentCords = get_cords(self.addr)
         id = 0
         for shopDistance in self.shopDistances:
@@ -287,7 +325,6 @@ class shop(Frame):
             text='Distance: ' + str(distBetween_cords(currentCords, self.shops[id]['cords'])) + 'km')
             id += 1
 
-    
     def addShop(self, name: str, addr: str, dist: str, val: int, pts: int,img_url:str,index:int):
         posy = int(127 + 49*len(self.curshops))
         #name
@@ -432,5 +469,6 @@ class shop(Frame):
 
     def onRankClick(self):
         self.parent.show_frame(UI.Rank.rank)
+
 
     

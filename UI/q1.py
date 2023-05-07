@@ -6,7 +6,9 @@ from Database_processing.Friends_db.get_friends import get_fr_by_username
 from Database_processing.Friends_db.update_fr import update_fr_user
 from Database_processing.User_db.get_img_profile import get_img_profile
 from Database_processing.User_db.get_rank_user import get_rank_user
+from Database_processing.User_db.update_gendermale import *
 from Utils.Sources.getdata_pickle import load_object
+from Utils.Sources.savedata_pickle import save_object
 import UI.q2
 
 
@@ -22,7 +24,7 @@ class q1(Frame):
         self.parent = parent
         self.loadData()
         self.gendermale = True # chắc là up lên db
-
+        self.username = ""
 
         self.canvas = Canvas(
             self,
@@ -130,7 +132,9 @@ class q1(Frame):
                         lambda _: self.onFemaleClick())
     
     def loadData(self):
-        pass
+        __=load_object("Appdata/userData/data.pickle")
+        if (__['status']==True):
+            self.username = __['data']['username']
     def onMaleClick(self):
         self.canvas.itemconfig(self.male_txt, fill = "#BBBBBB")
         self.canvas.itemconfig(self.male_txt, font = ("Lato", int(30) * -1, "underline"))
@@ -145,6 +149,7 @@ class q1(Frame):
         self.canvas.itemconfig(self.male_txt, font=("Lato", int(30) * -1))
     
     def onNextClick(self):
+        update_gendermale(self.username, self.gendermale)
         self.parent.show_frame(UI.q2.q2)
     def onBackClick(self):
         pass
