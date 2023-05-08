@@ -9,7 +9,7 @@ db=cluster['locate_db']
 _data=db['data']
 def unique(lst):
     # x=numpy.array(lst)
-    return sorted(set(lst))
+    return set(lst)
 
 def get_arr_province():
     __=_data.find({})

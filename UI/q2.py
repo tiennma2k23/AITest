@@ -96,8 +96,8 @@ class q2(Frame):
         #entry
         self.entry_image_1 = PhotoImage(file=relative_to_assets("entry_1.png"))
         entry_bg_1 = self.canvas.create_image(
-            490,
-            216,
+            353,
+            255,
             image=self.entry_image_1,
             anchor = "nw"
         )
@@ -110,16 +110,16 @@ class q2(Frame):
             font = ("Lato")
         )
         self.entry_1.place(
-            x=496,
-            y=216.0,
+            x=359,
+            y=255,
             width=75,
             height=42.0
         )
         #question txt
         q_txt=self.canvas.create_text(
-            198, 
-            219,
-            anchor="nw",
+            400, 
+            205,
+            anchor="center",
             text="Your Weight (kg):",
             fill="#646464",
             font=("Lato", int(35) * -1, "bold")

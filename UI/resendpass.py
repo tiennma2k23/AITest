@@ -105,7 +105,7 @@ class resendpass(Toplevel):
         self.password = ""
     def onButtonClicked(self):
         # nếu sai pass thì alert
-        if (_db['status']==False):
+        # if (__['status']==False):
             
             self.canvas.itemconfig(
                 self.addFrtxt,
@@ -113,14 +113,19 @@ class resendpass(Toplevel):
             )
         # nếu đúng pass
         
-        else :
+        # else :
             # _method=add_fr_request(_username,self.username.get())
+            
+            # self.canvas.itemconfig(
+                # self.addFrtxt,
+                # text=add_fr_request(_username,self.username.get()),
+            # )
+# >>>>>>> Stashed changesif (__['status']==False):
             
             self.canvas.itemconfig(
                 self.addFrtxt,
-                text=add_fr_request(_username,self.username.get()),
+                text="Wrong Password",
             )
-# >>>>>>> Stashed changes
     
     # def onButtonClicked(self):
     #     # nếu sai tên thì cút, y hệt dưới nhưng text = "Username does not exist!""

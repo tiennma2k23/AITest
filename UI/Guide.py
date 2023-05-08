@@ -125,7 +125,7 @@ class guide(Toplevel):
         )
         #Plank
         self.canvas.create_text(
-            542,
+            532,
             458,
             anchor="nw",
             text="*Suggested exercises could change per day",

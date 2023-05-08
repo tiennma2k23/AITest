@@ -22,7 +22,7 @@ _geocoder=Nominatim(user_agent="Exera")
 
 def get_cords(addr: str) -> tuple:
     cords = _geocoder.geocode(addr, exactly_one=True, language='vi', country_codes='vn')
-    print(cords.raw)
+    # print(cords.raw)
     return (cords.latitude, cords.longitude)
 
 def distBetween(p1: str, p2: str):

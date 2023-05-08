@@ -52,7 +52,7 @@ class login_frame(Frame):
 
         # create hyperlink
         txt = canvas.create_text(
-            435,
+            450,
             397.0,
             anchor="nw",
             text="Register here",

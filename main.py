@@ -31,7 +31,7 @@ except Exception as e:
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("800x480")
+        self.geometry("%dx%d+%d+%d" % (800, 480, (1920/2 - 800/2), (1080/2-400/2)))
         self.iconphoto(True, ImageTk.PhotoImage(Image.open('logo.png')))
         # self.resizable(False, False)
         self.title('EXERA')
