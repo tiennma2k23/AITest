@@ -299,7 +299,7 @@ class profile(Frame):
             upgr.place(
                 x=487,
                 y=375,
-                width=173,
+                width=190,
                 height=28
             )
         
