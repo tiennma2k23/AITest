@@ -1,16 +1,28 @@
+![image](https://user-images.githubusercontent.com/40479420/236877420-6f506879-6a3d-4227-9517-6662e0b265ce.png)
 
+# EXERA
+
+Upgrade your body at home with the support of EXERA, presented to you by team NEURA of [HUST-TECHSTART 2023](https://techstart.hiec.vn/)
+
+## Versions
+- Python 3.10.x
+- Any implementation that supports Python 3.10.x
+
+## Installation
+
+- Install required libraries with [pip](https://pip.pypa.io/en/stable/):
+
+```bash
+pip install -r requirements.txt
 ```
-main.py -t pull-up -vs pull-up.mp4
-main.py -t push-up -vs push-up.mp4
-main.py -t squat -vs squat.mp4
-```
+- Run `main.py`
 
-python main.py -t sit-up
-# or python main.py -t pull-up
-# or python main.py -t push-up
-# or python main.py -t squat
-# or python main.py -t walk
-```
+## Contributing
+Product is still in pre-alpha so some features might not work as expected.
 
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
 
-Hee hee
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
