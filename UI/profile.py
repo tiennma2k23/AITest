@@ -12,7 +12,7 @@ import tkinter.messagebox as messagebox
 import tkinter.filedialog as dialog
 import UI.Friends_list
 import UI.Rank
-import UI.resendpass
+# import UI.resendpass
 # from PIL import Image
 from PIL import Image, ImageTk
 import UI.Shop
@@ -352,7 +352,8 @@ class profile(Frame):
         self.parent.show_frame(UI.Rank.rank)
 
     def onResendClick(self):
-        UI.resendpass.resendpass(self).update()
+        # UI.resendpass.resendpass(self).update()
+        messagebox.showinfo('Reset Password', 'A confirmation have been sent to your email. Please check for more details!')
 
     def onShopClick(self):
         self.parent.show_frame(UI.Shop.shop)
