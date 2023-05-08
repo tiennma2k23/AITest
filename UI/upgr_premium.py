@@ -18,7 +18,7 @@ class Premium(Toplevel):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
-        self.geometry("800x480")
+        self.geometry("%dx%d+%d+%d" % (800, 480, (1920/2 - 800/2), (1080/2-400/2)))
         self.title = ("Suggested Exercises")
         self.loadData()
 
